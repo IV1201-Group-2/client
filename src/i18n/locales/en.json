@@ -1,0 +1,53 @@
+{
+    "languages": {
+        "en": "English",
+        "sv": "Swedish"
+    },
+    "navigation": {
+        "login": "Login",
+        "register": "Register"
+    },
+    "validation-util": {
+        "mandatory": {
+            "first-name": "first name",
+            "last-name": "last name",
+            "username": "username",
+            "password": "password"
+        }
+    },
+    "applicant": {
+        "login-page": {
+            "header": "Welcome",
+            "form": {
+                "fields": {
+                    "username": "Username",
+                    "password": "Password"
+                },
+                "buttons": {
+                    "login": "Log in"
+                }
+            }
+        },
+        "registration-page": {
+            "header": "Sign up",
+            "form": {
+                "fields": {
+                    "first-name": "First Name",
+                    "last-name": "Last Name",
+                    "email": "Email",
+                    "person-number": "Person Number",
+                    "username": "Username",
+                    "password": "Password"
+                },
+                "validations": {
+                    "mandatory": "You must enter a {fieldName}",
+                    "email": "Invalid email",
+                    "person-number": "Invalid person number"
+                },
+                "buttons": {
+                    "submit": "Submit"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "languages": {
+        "en": "Engelska",
+        "sv": "Svenska"
+    },
+    "navigation": {
+        "login": "Logga in",
+        "register": "Skapa konto"
+    },
+    "validation-util": {
+        "mandatory": {
+            "first-name": "förnamn",
+            "last-name": "efternamn",
+            "username": "användarnamn",
+            "password": "lösenord"
+        }
+    },
+    "applicant": {
+        "login-page": {
+            "header": "Välkommen",
+            "form": {
+                "fields": {
+                    "username": "Användarnamn",
+                    "password": "Lösenord"
+                },
+                "buttons": {
+                    "login": "Logga in"
+                }
+            }
+        },
+        "registration-page": {
+            "header": "Skapa nytt konto",
+            "form": {
+                "fields": {
+                    "first-name": "Förnamn",
+                    "last-name": "Efternamn",
+                    "email": "E-postadress",
+                    "person-number": "Personnummer",
+                    "username": "Användarnamn",
+                    "password": "Lösenord"
+                },
+                "validations": {
+                    "mandatory": "Du måste ange ett {fieldName}",
+                    "email": "Ogiltig e-postadress",
+                    "person-number": "Ogiltigt personnummer"
+                },
+                "buttons": {
+                    "submit": "Skicka"
+                }
+            }
+        }
+    }
+}
