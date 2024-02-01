@@ -10,6 +10,7 @@ import {
 } from "./custom_test_utils/enums"
 import { extractLabelTranslation, getSelector } from "./custom_test_utils/functions";
 import i18n from "@/i18n";
+import type WrapperLike from "node_modules/@vue/test-utils/dist/interfaces/wrapperLike";
 
 describe("Applicant Registration View", () => {
     let wrapper: VueWrapper | null; 
@@ -274,14 +275,32 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows + " when no input", () => {
+                it(Verb.Shows + When.NoInput, () => {
                     expect(inputIs!('')).toEqual('You must enter a username');
                 })
 
-                it(Verb.Hides + " when input is given", () => {
+                it(Verb.Hides + When.InputIsGiven, () => {
                     expect(inputIs!('test')).toBe(true);
                 })
             })
+        })
+    })
+
+    describe(GenericComponent.SubmitButton, () => {
+        let buttonEl: any | null;
+
+        beforeAll(() => {
+            setup()
+            buttonEl = wrapper!.find(getSelector(RegistrationTestId.Submit));
+        })
+
+        afterAll(() => {
+            teardown()
+            buttonEl = null
+        })
+
+        it(Verb.IsDisabled + " when form is not filled", () => {
+            expect(buttonEl!.attributes('disabled')).not.toBeUndefined();
         })
     })
 }) 

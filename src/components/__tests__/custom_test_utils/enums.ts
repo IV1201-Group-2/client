@@ -25,6 +25,7 @@ export enum GenericComponent {
 export enum Verb {
     HasEnglishTranslation = "has English translation",
     HasSwedishTranslation = "has Swedish translation",
+    IsDisabled = "is disabled",
     Shows = "shows",
     Hides = "hides"
 }

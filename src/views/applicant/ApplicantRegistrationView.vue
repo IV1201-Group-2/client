@@ -5,6 +5,8 @@ import { RegistrationTestId } from '@/util/enums';
 import { useI18n } from 'vue-i18n';
 const i18n = useI18n();
 
+const isFormValid = ref(false);
+
 const { 
     registrationPath,
     formPath, 
@@ -83,15 +85,15 @@ function initValidationRules() {
 
 <template>
     <v-sheet width="300" class="mx-auto">
-        <v-form @submit.prevent>
+        <v-form v-model="isFormValid" @submit.prevent>
             <h1 style="text-align: center">{{ $t(registrationPath + "header") }}</h1>
             <v-text-field :data-test="RegistrationTestId.FirstName" v-model="firstName" :rules="firstNameRules" :label="$t(fieldsPath + 'first-name')" />
             <v-text-field :data-test="RegistrationTestId.LastName" v-model="lastName" :rules="lastNameRules" :label="$t(fieldsPath + 'last-name')" />
             <v-text-field :data-test="RegistrationTestId.Email" v-model="email" :rules="emailRules" :label="$t(fieldsPath + 'email')" />
             <v-text-field :data-test="RegistrationTestId.PersonNumber" v-model="personNumber" :rules="personNumberRules" :label="$t(fieldsPath + 'person-number')" />
-            <v-text-field :data-test="RegistrationTestId.Username" id="username" v-model="username" :rules="usernameRules" :label="$t(fieldsPath + 'username')" />
+            <v-text-field :data-test="RegistrationTestId.Username" v-model="username" :rules="usernameRules" :label="$t(fieldsPath + 'username')" />
             <v-text-field :data-test="RegistrationTestId.Password" v-model="password" :rules="passwordRules" type="password" :label="$t(fieldsPath + 'password')" />
-            <v-btn type="submit" block>{{ $t(buttonsPath + 'submit') }}</v-btn>
+            <v-btn :data-test="RegistrationTestId.Submit" :disabled="!isFormValid" type="submit" block>{{ $t(buttonsPath + 'submit') }}</v-btn>
         </v-form>
     </v-sheet>
-</template>@/util/tests/Enums
+</template>

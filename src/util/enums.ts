@@ -4,5 +4,6 @@ export enum RegistrationTestId {
    Email = "email",
    PersonNumber = "person-number",
    Username = "username",
-   Password = "password"
+   Password = "password",
+   Submit = "submit"
 }
