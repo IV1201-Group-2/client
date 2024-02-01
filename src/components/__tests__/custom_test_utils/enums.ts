@@ -19,7 +19,7 @@ export enum GenericComponent {
 /**
  * DESCRIPTION: The verb that is performed by a component or {@link GenericComponent}.
  * WHERE TO USE: Should be passed as the 1st argument to "vitest#it()" or "vitest#test()".
- * EXAMPLE: it(Verb.HasEnglishTranslation, () => { ... })
+ * EXAMPLE: it(Action.HasEnglishTranslation, () => { ... })
  * RULES WHEN ADDING MORE PROPERTIES: First letter should be lowercase.
  */
 export enum Action {
@@ -32,8 +32,8 @@ export enum Action {
 
 /**
  * DESCRIPTION: When the {@link Action} is performed.
- * WHERE TO USE: Should be concatenated with the verb.
- * EXAMPLE: it(Verb.Shows + When.NoInput, () => { ... })
+ * WHERE TO USE: Should be concatenated with the action.
+ * EXAMPLE: it(Action.Shows + When.NoInput, () => { ... })
  * RULES WHEN ADDING MORE PROPERTIES: 1) first character is a space 2) first letter is lowercase
  */
 export enum When {
