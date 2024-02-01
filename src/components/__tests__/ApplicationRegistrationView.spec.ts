@@ -4,7 +4,7 @@ import ApplicantRegistrationView from "@/views/applicant/ApplicantRegistrationVi
 import { RegistrationTestId } from "@/util/enums";
 import {
     GenericComponent,
-    Verb,
+    Action,
     When,
     Language
 } from "./custom_test_utils/enums"
@@ -37,12 +37,12 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.Label, () => {
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.FirstName))
                     expect(extractLabelTranslation(labelEl)).toBe('First Name')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish                
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.FirstName))
                     expect(extractLabelTranslation(labelEl)).toBe('Förnamn')
@@ -51,19 +51,19 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows + When.NoInput, () => {
+                it(Action.Shows + When.NoInput, () => {
                     expect(inputIs!('')).not.toBe(true);
                 })
 
-                it(Verb.Hides + When.InputIsGiven, () => {
+                it(Action.Hides + When.InputIsGiven, () => {
                     expect(inputIs!('test')).toBe(true);
                 })
 
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     expect(inputIs!('')).toContain('You must enter a ');
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish
                     expect(inputIs!('')).toContain('Du måste ange ett ')
                     i18n.global.locale.value = Language.English
@@ -83,12 +83,12 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.Label, () => {
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.LastName))
                     expect(extractLabelTranslation(labelEl)).toBe('Last Name')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish                
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.LastName))
                     expect(extractLabelTranslation(labelEl)).toBe('Efternamn')
@@ -97,19 +97,19 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows, () => {
+                it(Action.Shows, () => {
                     expect(inputIs!('')).not.toBe(true);
                 })
 
-                it(Verb.Hides, () => {
+                it(Action.Hides, () => {
                     expect(inputIs!('test')).toBe(true);
                 })
 
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     expect(inputIs!('')).toContain('You must enter a ')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish
                     expect(inputIs!('')).toContain('Du måste ange ett ')
                     i18n.global.locale.value = Language.English
@@ -129,12 +129,12 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.Label, () => {
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Email))
                     expect(extractLabelTranslation(labelEl)).toBe('Email')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish                
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Email))
                     expect(extractLabelTranslation(labelEl)).toBe('E-postadress')
@@ -143,39 +143,39 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows + When.NoInput, () => {
+                it(Action.Shows + When.NoInput, () => {
                     expect(inputIs!('')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when only local-part is given but no @ nor domain", () => {
+                it(Action.Shows + " when only local-part is given but no @ nor domain", () => {
                     expect(inputIs!('test')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when only @ is given but no local-part nor domain", () => {
+                it(Action.Shows + " when only @ is given but no local-part nor domain", () => {
                     expect(inputIs!('@')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when only domain is given but no local-part nor domain", () => {
+                it(Action.Shows + " when only domain is given but no local-part nor domain", () => {
                     expect(inputIs!('test.com')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when only local-part and @ are given but no domain", () => {
+                it(Action.Shows + " when only local-part and @ are given but no domain", () => {
                     expect(inputIs!('test@')).not.toBe(true)
                 })
 
-                it(Verb.Shows + " when only @ and domain are given but no local-part", () => {
+                it(Action.Shows + " when only @ and domain are given but no local-part", () => {
                     expect(inputIs!('@test.com')).not.toBe(true)
                 })
 
-                it(Verb.Hides + " when local-part, @ and domain are present in email address", () => {
+                it(Action.Hides + " when local-part, @ and domain are present in email address", () => {
                     expect(inputIs!('test@test.com')).toBe(true);
                 })
 
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     expect(inputIs!('')).toEqual('Invalid email')
                 })
 
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish
                     expect(inputIs!('')).toEqual('Ogiltig e-postadress')
                     i18n.global.locale.value = Language.English
@@ -195,12 +195,12 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.Label, () => {
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Email))
                     expect(extractLabelTranslation(labelEl)).toBe('Email')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish                
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Email))
                     expect(extractLabelTranslation(labelEl)).toBe('E-postadress')
@@ -209,39 +209,39 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows + When.NoInput, () => {
+                it(Action.Shows + When.NoInput, () => {
                     expect(inputIs!('')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when containing letters", () => {
+                it(Action.Shows + " when containing letters", () => {
                     expect(inputIs!('2001010112a')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when less than 10 digits", () => {
+                it(Action.Shows + " when less than 10 digits", () => {
                     expect(inputIs!('200101011')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when being 11 digits", () => {
+                it(Action.Shows + " when being 11 digits", () => {
                     expect(inputIs!('20010101123')).not.toBe(true);
                 })
 
-                it(Verb.Shows + " when more 12 digits", () => {
+                it(Action.Shows + " when more 12 digits", () => {
                     expect(inputIs!('2001010112345')).not.toBe(true);
                 })
 
-                it(Verb.Hides + " when exactly 12 digits", () => {
+                it(Action.Hides + " when exactly 12 digits", () => {
                     expect(inputIs!('200101011234')).toEqual(true);
                 })
 
-                it(Verb.Hides + " when exactly 10 digits", () => {
+                it(Action.Hides + " when exactly 10 digits", () => {
                     expect(inputIs!('0101011234')).toBe(true);
                 })
 
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     expect(inputIs!('')).toEqual('Invalid person number');
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish;
                     expect(inputIs!('')).toEqual('Ogiltigt personnummer');
                     i18n.global.locale.value = Language.English;
@@ -261,12 +261,12 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.Label, () => {
-                it(Verb.HasEnglishTranslation, () => {
+                it(Action.HasEnglishTranslation, () => {
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Username))
                     expect(extractLabelTranslation(labelEl)).toBe('Username')
                 })
 
-                it(Verb.HasSwedishTranslation, () => {
+                it(Action.HasSwedishTranslation, () => {
                     i18n.global.locale.value = Language.Swedish                
                     const labelEl = wrapper!.findComponent(getSelector(RegistrationTestId.Username))
                     expect(extractLabelTranslation(labelEl)).toBe('Användarnamn')
@@ -275,11 +275,11 @@ describe("Applicant Registration View", () => {
             })
 
             describe(GenericComponent.ValidationMessage, () => {
-                it(Verb.Shows + When.NoInput, () => {
+                it(Action.Shows + When.NoInput, () => {
                     expect(inputIs!('')).toEqual('You must enter a username');
                 })
 
-                it(Verb.Hides + When.InputIsGiven, () => {
+                it(Action.Hides + When.InputIsGiven, () => {
                     expect(inputIs!('test')).toBe(true);
                 })
             })
@@ -299,7 +299,7 @@ describe("Applicant Registration View", () => {
             buttonEl = null
         })
 
-        it(Verb.IsDisabled + " when form is not filled", () => {
+        it(Action.IsDisabled + " when form is not filled", () => {
             expect(buttonEl!.attributes('disabled')).not.toBeUndefined();
         })
     })

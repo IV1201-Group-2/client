@@ -22,7 +22,7 @@ export enum GenericComponent {
  * EXAMPLE: it(Verb.HasEnglishTranslation, () => { ... })
  * RULES WHEN ADDING MORE PROPERTIES: First letter should be lowercase.
  */
-export enum Verb {
+export enum Action {
     HasEnglishTranslation = "has English translation",
     HasSwedishTranslation = "has Swedish translation",
     IsDisabled = "is disabled",
@@ -31,7 +31,7 @@ export enum Verb {
 }
 
 /**
- * DESCRIPTION: When the {@link Verb} is performed.
+ * DESCRIPTION: When the {@link Action} is performed.
  * WHERE TO USE: Should be concatenated with the verb.
  * EXAMPLE: it(Verb.Shows + When.NoInput, () => { ... })
  * RULES WHEN ADDING MORE PROPERTIES: 1) first character is a space 2) first letter is lowercase
