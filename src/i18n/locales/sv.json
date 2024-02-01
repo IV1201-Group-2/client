@@ -4,6 +4,7 @@
         "sv": "Svenska"
     },
     "navigation": {
+        "logout": "Logga ut",
         "login": "Logga in",
         "register": "Skapa konto"
     },

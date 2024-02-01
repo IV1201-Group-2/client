@@ -4,7 +4,8 @@
         "sv": "Swedish"
     },
     "navigation": {
-        "login": "Login",
+        "logout": "Log out",
+        "login": "Log in",
         "register": "Register"
     },
     "validation-util": {
