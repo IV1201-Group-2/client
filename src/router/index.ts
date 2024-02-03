@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/applicant/ApplicantLoginView.vue'
 import ApplicantRegistrationView from '../views/applicant/ApplicantRegistrationView.vue'
-import ApplicationView from '@/views/applicant/ApplicationView.vue'
+import ApplicationFormView from '@/views/applicant/application_form/ApplicationFormView.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 
@@ -27,7 +27,7 @@ const router = createRouter({
     {
       path: '/application',
       name: 'application',
-      component: ApplicationView,
+      component: ApplicationFormView,
       meta: {
         requiresAuth: true,
         requiredRole: "Applicant"

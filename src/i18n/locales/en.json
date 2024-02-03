@@ -49,6 +49,40 @@
                     "submit": "Submit"
                 }
             }
+        },
+        "application-form-page": {
+            "header": "Application Form",
+            "personal-information": {
+                "header": "Personal Information",
+                "first-name": "First Name",
+                "last-name": "Last Name",
+                "person-number":"Person Number",
+                "email":"E-postadress"
+            },
+            "competence": {
+                "header": "Competence Profile",
+                "area-of-expertise": "Area of Expertise",
+                "years-of-experience": "Years of Experience",
+                "selectables": {
+                    "ticket-sales": "Ticket Sales",
+                    "lotteries": "Lotteries",
+                    "roller-coaster-operations": "Roller Coaster Operations"
+                }
+            },
+            "availability": {
+                "header": "Available Through:",
+                "start-date": "Start Date",
+                "end-date": "End Date"
+            },
+            "item-list": {
+                "third-column": "Actions",
+                "competence-header": "Competence List",
+                "availability-header": "Availability List"
+            },
+            "buttons": {
+                "add": "Add",
+                "submit": "Submit"
+            }
         }
     }
 }

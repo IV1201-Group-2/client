@@ -49,6 +49,40 @@
                     "submit": "Skicka"
                 }
             }
+        },
+        "application-form-page": {
+            "header": "Ansökningsformulär",
+            "personal-information": {
+                "header": "Personlig information",
+                "first-name": "Förnamn",
+                "last-name": "Efternamn",
+                "person-number":"Personnummer",
+                "email":"E-postadress"
+            },
+            "competence": {
+                "header": "Kompetensprofil",
+                "area-of-expertise": "Yrkesområde",
+                "years-of-experience": "Antal arbetsår",
+                "selectables": {
+                    "ticket-sales": "Biljettförsäljning",
+                    "lotteries": "Lotteriförsäljning",
+                    "roller-coaster-operations": "Berg-och-dalbana-operatör"
+                }
+            },
+            "availability": {
+                "header": "Tillgänglig mellan:",
+                "start-date": "Startdatum",
+                "end-date": "Slutdatum"
+            },
+            "item-list": {
+                "third-column": "Handlingar",
+                "competence-header": "Kompetenslista",
+                "availability-header": "Tillgänglighetslista"
+            },
+            "buttons": {
+                "add": "Lägg till",
+                "submit": "Skicka"
+            }
         }
     }
 }
