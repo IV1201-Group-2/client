@@ -63,7 +63,7 @@
                 "header": "Competence Profile",
                 "area-of-expertise": "Area of Expertise",
                 "years-of-experience": "Years of Experience",
-                "selectables": {
+                "options": {
                     "ticket-sales": "Ticket Sales",
                     "lotteries": "Lotteries",
                     "roller-coaster-operations": "Roller Coaster Operations"

@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import type { ModelRef } from 'vue';
+import { watch } from 'vue';
 import type { Competence, CompetenceList, Availability, AvailabilityList } from './types'
 import type { Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+const i18n = useI18n();
+const { t } = i18n;
 defineProps<{
     headerI18nKey: string,
     firstColumnI18nKey: string,
@@ -13,18 +16,26 @@ interface CompetenceOrAvailability {
     data: Array<Availability | Competence>
 }
 
-const model: ModelRef<CompetenceOrAvailability | undefined, string> = defineModel();
+const list = defineModel<CompetenceOrAvailability>('list', { required: true });
+const areasOfExpertise = defineModel<Array<string>>('areasOfExpertise');
 
-function removeItem(removedItem: Availability | Competence) {
-    model.value!.data = model.value!.data.filter(item => item !== removedItem);
+const expertiseOptionsPath = "applicant.application-form-page.competence.options."
+
+function removeItemFromList(removedItem: Availability | Competence) {
+    console.log(list.value);
+    list.value.data = list.value.data.filter(item => item !== removedItem);
+    const expertises = areasOfExpertise.value;
+    if('areaOfExpertise' in removedItem && expertises) {
+        areasOfExpertise.value = [ ...expertises, t(expertiseOptionsPath + removedItem.areaOfExpertise)].sort()
+    }
 }
 
-function isCompetenceList(model: CompetenceOrAvailability | undefined): model is CompetenceList {
-    return model!.__typename === 'CompetenceList';
+function isCompetenceList(itemList: CompetenceOrAvailability): itemList is CompetenceList {
+    return itemList.__typename === 'CompetenceList';
 }
 
-function isAvailabilityList(model: CompetenceOrAvailability | undefined): model is AvailabilityList {
-    return model!.__typename === 'AvailabilityList';
+function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is AvailabilityList {
+    return itemList.__typename === 'AvailabilityList';
 }
 </script>
 
@@ -41,15 +52,15 @@ function isAvailabilityList(model: CompetenceOrAvailability | undefined): model 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="isAvailabilityList(model)" v-for="(availability, index) in model!.data" :key="index">
+                    <tr v-if="isAvailabilityList(list)" v-for="(availability, index) in list.data" :key="index">
                         <td>{{ availability.start }}</td>
                         <td>{{ availability.end }}</td>
-                        <td><v-icon icon="mdi-delete" @click="removeItem(availability)" /></td>
+                        <td><v-icon icon="mdi-delete" @click="removeItemFromList(availability)" /></td>
                     </tr>
-                    <tr v-if="isCompetenceList(model)" v-for="(competence, index) in model!.data" :key="index">
-                        <td>{{ competence.areaOfExpertise }}</td>
+                    <tr v-if="isCompetenceList(list)" v-for="(competence, index) in list!.data" :key="index">
+                        <td>{{ $t(expertiseOptionsPath + competence.areaOfExpertise) }}</td>
                         <td>{{ competence.yearsOfExperience }}</td>
-                        <td><v-icon icon="mdi-delete" @click="removeItem(competence)" /></td>
+                        <td><v-icon icon="mdi-delete" @click="removeItemFromList(competence)" /></td>
                     </tr>
                 </tbody>
             </v-table>

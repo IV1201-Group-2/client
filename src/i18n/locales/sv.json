@@ -63,7 +63,7 @@
                 "header": "Kompetensprofil",
                 "area-of-expertise": "Yrkesområde",
                 "years-of-experience": "Antal arbetsår",
-                "selectables": {
+                "options": {
                     "ticket-sales": "Biljettförsäljning",
                     "lotteries": "Lotteriförsäljning",
                     "roller-coaster-operations": "Berg-och-dalbana-operatör"

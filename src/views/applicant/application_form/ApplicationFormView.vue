@@ -7,18 +7,12 @@ import ItemList from './ItemList.vue';
 const i18n = useI18n();
 const { t } = i18n;
 
-const areaOfExpertiseKeys = [
-    'ticket-sales',
-    'lotteries',
-    'roller-coaster-operations'
-]
-
 const {
     basePath,
     personalInformationPath,
     competencePath,
     availabilityPath,
-    selectableExpertisesPath,
+    expertiseOptionsPath,
     buttonsPath,
     itemListPath
 } = initPaths();
@@ -32,6 +26,7 @@ const {
 
 const {
     areasOfExpertise,
+    areasOfExpertiseReverseMap,
     selectedExpertise,
     yearsOfExperience,
     competenceList
@@ -55,11 +50,16 @@ watch(endDateStr, () => {
 })
 
 watch(i18n.locale, () => {
-    areasOfExpertise.value = areaOfExpertiseKeys.map(key => t(selectableExpertisesPath + key));
+    areasOfExpertise.value = areasOfExpertise.value.map(expertise => t(expertiseOptionsPath + areasOfExpertiseReverseMap.value[expertise]));
+    const expertiseKey = areasOfExpertiseReverseMap.value?.[selectedExpertise.value];
+    areasOfExpertiseReverseMap.value = initExpertiseReverseMap();
+    if(expertiseKey) selectedExpertise.value = t(expertiseOptionsPath + expertiseKey)
 })
 
 function addCompetence() {
-    competenceList.value.data.push({ areaOfExpertise: selectedExpertise.value, yearsOfExperience: yearsOfExperience.value })
+    competenceList.value.data.push({ areaOfExpertise: areasOfExpertiseReverseMap.value[selectedExpertise.value], yearsOfExperience: yearsOfExperience.value })
+    areasOfExpertise.value = areasOfExpertise.value.filter(areaOfExpertise => areaOfExpertise !== selectedExpertise.value);
+    selectedExpertise.value = "";
 }
 
 function addAvailability() {
@@ -73,7 +73,7 @@ function initPaths() {
         basePath,
         personalInformationPath: basePath + "personal-information.",
         competencePath,
-        selectableExpertisesPath: competencePath + 'selectables.',
+        expertiseOptionsPath: competencePath + 'options.',
         availabilityPath: basePath + "availability.",
         buttonsPath: basePath + "buttons.",
         itemListPath: basePath + "item-list."
@@ -91,12 +91,15 @@ function initPersonalInformation() {
 
 function initCompetence(): {
     areasOfExpertise: Ref<string[]>,
+    areasOfExpertiseReverseMap: Ref<any>,
     selectedExpertise: Ref<string>,
     yearsOfExperience: Ref<number>,
     competenceList: Ref<CompetenceList>
 } {
+
     return {
-        areasOfExpertise: ref(areaOfExpertiseKeys.map(key => t(selectableExpertisesPath + key))),
+        areasOfExpertise: ref(Object.keys(initExpertiseReverseMap()).sort()),
+        areasOfExpertiseReverseMap: ref(initExpertiseReverseMap()),
         selectedExpertise: ref(""),
         yearsOfExperience: ref(0),
         competenceList: ref({ __typename: "CompetenceList", data: [] })
@@ -116,8 +119,26 @@ function initAvailability(): {
         endDate: ref(new Date()),
         startDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateStr: ref(new Date().toISOString().substring(0, 10)),
-        endDateIsPastStartDate: computed(() => startDate.value.getTime() >= endDate.value.getTime()),
-        availabilityList: ref({ __typename: "AvailabilityList", data: []})
+        endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
+        availabilityList: ref({ __typename: "AvailabilityList", data: []}),
+    }
+}
+
+function initExpertiseReverseMap() {
+    enum ExpertiseKeys {
+        Lotteries = 'lotteries',
+        RollerCoasterOperations = 'roller-coaster-operations',
+        TicketSales = 'ticket-sales'
+    }
+
+    const ticketSales = t(expertiseOptionsPath + ExpertiseKeys.TicketSales);
+    const lotteries = t(expertiseOptionsPath + ExpertiseKeys.Lotteries);
+    const rollerCoasterOperations = t(expertiseOptionsPath + ExpertiseKeys.RollerCoasterOperations);
+
+    return {
+        [ticketSales]: ExpertiseKeys.TicketSales,
+        [lotteries]: ExpertiseKeys.Lotteries,
+        [rollerCoasterOperations]: ExpertiseKeys.RollerCoasterOperations
     }
 }
 </script>
@@ -150,7 +171,7 @@ function initAvailability(): {
                             <v-col cols="4">
                                 <v-text-field :data-test="ApplicationTestId.YearsOfExperience" :label="$t(competencePath + 'years-of-experience')" type="number" min="0" v-model="yearsOfExperience" />
                             </v-col>
-                            <v-col cols="1" class="d-flex align-center">
+                            <v-col cols="3" class="d-flex align-center">
                                 <v-btn :data-test="ApplicationTestId.AddCompetence" :disabled="!selectedExpertise" @click="addCompetence">{{ $t(buttonsPath + 'add') }}</v-btn>
                             </v-col>
                         </v-row>
@@ -167,7 +188,7 @@ function initAvailability(): {
                             <v-col cols="4">
                                 <v-text-field :data-test="ApplicationTestId.EndDate" :label="$t(availabilityPath + 'end-date')" type="date" :min="startDateStr" v-model="endDateStr" />
                             </v-col>
-                            <v-col cols="1" class="d-flex align-center">
+                            <v-col cols="3" class="d-flex align-center">
                                 <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="endDateIsPastStartDate">{{ $t(buttonsPath + "add") }}</v-btn>
                             </v-col>
                         </v-row>
@@ -180,12 +201,13 @@ function initAvailability(): {
                         :header-i18n-key="itemListPath + 'competence-header'" 
                         :first-column-i18n-key="competencePath + 'area-of-expertise'"
                         :second-column-i18n-key="competencePath + 'years-of-experience'"
-                        v-model="competenceList  " />
+                        v-model:areasOfExpertise="areasOfExpertise"
+                        v-model:list="competenceList" />
                     <ItemList
                         :header-i18n-key="itemListPath + 'availability-header'"
                         :first-column-i18n-key="availabilityPath + 'start-date'"
                         :second-column-i18n-key="availabilityPath + 'end-date'"
-                        v-model="availabilityList" />
+                        v-model:list="availabilityList" />
                 </v-sheet>
                 <v-btn 
                     :data-test="ApplicationTestId.Submit"
