@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, type Ref, type ComputedRef } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { CompetenceList, AvailabilityList } from './types'
+import type { CompetenceList, AvailabilityList } from './types';
+import { ApplicationTestId } from '@/util/enums';
 import ItemList from './ItemList.vue';
 const i18n = useI18n();
 const { t } = i18n;
@@ -130,12 +131,12 @@ function initAvailability(): {
                     <div class="text-h5 ">{{ $t(personalInformationPath + 'header') }}</div>
                     <v-container>
                         <v-row no-gutters>
-                            <v-text-field :label="$t(personalInformationPath + 'first-name')" v-model="firstNameInput" readonly />
-                            <v-text-field :label="$t(personalInformationPath + 'last-name')" v-model="lastNameInput" readonly />
+                            <v-text-field :data-test="ApplicationTestId.FirstName" :label="$t(personalInformationPath + 'first-name')" v-model="firstNameInput" readonly />
+                            <v-text-field :data-test="ApplicationTestId.LastName" :label="$t(personalInformationPath + 'last-name')" v-model="lastNameInput" readonly />
                         </v-row>
                         <v-row no-gutters>
-                            <v-text-field :label="$t(personalInformationPath + 'person-number')" v-model="personNumberInput" readonly />
-                            <v-text-field :label="$t(personalInformationPath + 'email')" v-model="emailInput" readonly />
+                            <v-text-field :data-test="ApplicationTestId.PersonNumber" :label="$t(personalInformationPath + 'person-number')" v-model="personNumberInput" readonly />
+                            <v-text-field :data-test="ApplicationTestId.Email" :label="$t(personalInformationPath + 'email')" v-model="emailInput" readonly />
                         </v-row>
                     </v-container>
                 </v-sheet>
@@ -144,13 +145,13 @@ function initAvailability(): {
                     <v-container>
                         <v-row>
                             <v-col cols="5">
-                                <v-select :label="$t(competencePath + 'area-of-expertise')" :items="areasOfExpertise" v-model="selectedExpertise" />
+                                <v-select :data-test="ApplicationTestId.AreaOfExpertise" :label="$t(competencePath + 'area-of-expertise')" :items="areasOfExpertise" v-model="selectedExpertise" />
                             </v-col>
                             <v-col cols="4">
-                                <v-text-field :label="$t(competencePath + 'years-of-experience')" type="number" min="0" v-model="yearsOfExperience" />
+                                <v-text-field :data-test="ApplicationTestId.YearsOfExperience" :label="$t(competencePath + 'years-of-experience')" type="number" min="0" v-model="yearsOfExperience" />
                             </v-col>
-                            <v-col class="d-flex align-center">
-                                <v-btn cols="1" :disabled="!selectedExpertise" @click="addCompetence">{{ $t(buttonsPath + 'add') }}</v-btn>
+                            <v-col cols="1" class="d-flex align-center">
+                                <v-btn :data-test="ApplicationTestId.AddCompetence" :disabled="!selectedExpertise" @click="addCompetence">{{ $t(buttonsPath + 'add') }}</v-btn>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -161,13 +162,13 @@ function initAvailability(): {
                     <v-container>
                         <v-row>
                             <v-col cols="4">
-                                <v-text-field :label="$t(availabilityPath + 'start-date')" type="date" :min="new Date()" v-model="startDateStr" />
+                                <v-text-field :data-test="ApplicationTestId.StartDate" :label="$t(availabilityPath + 'start-date')" type="date" :min="new Date()" v-model="startDateStr" />
                             </v-col>
                             <v-col cols="4">
-                                <v-text-field :label="$t(availabilityPath + 'end-date')" type="date" :min="startDateStr" v-model="endDateStr" />
+                                <v-text-field :data-test="ApplicationTestId.EndDate" :label="$t(availabilityPath + 'end-date')" type="date" :min="startDateStr" v-model="endDateStr" />
                             </v-col>
-                            <v-col class="d-flex align-center">
-                                <v-btn cols="1" @click="addAvailability" :disabled="endDateIsPastStartDate">{{ $t(buttonsPath + "add") }}</v-btn>
+                            <v-col cols="1" class="d-flex align-center">
+                                <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="endDateIsPastStartDate">{{ $t(buttonsPath + "add") }}</v-btn>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -187,6 +188,7 @@ function initAvailability(): {
                         v-model="availabilityList" />
                 </v-sheet>
                 <v-btn 
+                    :data-test="ApplicationTestId.Submit"
                     :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
                     class="mt-4">{{ $t(buttonsPath + 'submit') }}</v-btn>
             </v-sheet>

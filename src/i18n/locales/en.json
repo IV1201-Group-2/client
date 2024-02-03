@@ -57,7 +57,7 @@
                 "first-name": "First Name",
                 "last-name": "Last Name",
                 "person-number":"Person Number",
-                "email":"E-postadress"
+                "email":"Email"
             },
             "competence": {
                 "header": "Competence Profile",
