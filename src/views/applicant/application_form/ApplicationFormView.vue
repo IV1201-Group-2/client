@@ -38,22 +38,28 @@ const {
     startDateStr,
     endDateStr,
     endDateIsPastStartDate,
-    availabilityList
+    availabilityList,
+    conflictingDateIndices,
+    conflictsWithOtherAvailability
 } = initAvailability();
 
 watch(startDateStr, () => {
-    startDate.value = new Date(Date.parse(startDateStr.value))
+    startDate.value = parseDate(startDateStr.value)
 })
 
 watch(endDateStr, () => {
-    endDate.value = new Date(Date.parse(endDateStr.value))
+    endDate.value = parseDate(endDateStr.value)
 })
 
 watch(i18n.locale, () => {
     areasOfExpertise.value = areasOfExpertise.value.map(expertise => t(expertiseOptionsPath + areasOfExpertiseReverseMap.value[expertise]));
     const expertiseKey = areasOfExpertiseReverseMap.value?.[selectedExpertise.value];
-    areasOfExpertiseReverseMap.value = initExpertiseReverseMap();
+    areasOfExpertiseReverseMap.value = getExpertiseReverseMap();
     if(expertiseKey) selectedExpertise.value = t(expertiseOptionsPath + expertiseKey)
+})
+
+watch(endDateIsPastStartDate, () => {
+    if(endDateIsPastStartDate) conflictingDateIndices.value = [];
 })
 
 function addCompetence() {
@@ -69,6 +75,7 @@ function addAvailability() {
 function initPaths() {
     const basePath = "applicant.application-form-page.";
     const competencePath = basePath + "competence.";
+    
     return {
         basePath,
         personalInformationPath: basePath + "personal-information.",
@@ -96,10 +103,11 @@ function initCompetence(): {
     yearsOfExperience: Ref<number>,
     competenceList: Ref<CompetenceList>
 } {
+    const expertiseReverseMap = getExpertiseReverseMap();
 
     return {
-        areasOfExpertise: ref(Object.keys(initExpertiseReverseMap()).sort()),
-        areasOfExpertiseReverseMap: ref(initExpertiseReverseMap()),
+        areasOfExpertise: ref(Object.keys(expertiseReverseMap).sort()),
+        areasOfExpertiseReverseMap: ref(expertiseReverseMap),
         selectedExpertise: ref(""),
         yearsOfExperience: ref(0),
         competenceList: ref({ __typename: "CompetenceList", data: [] })
@@ -112,7 +120,9 @@ function initAvailability(): {
     startDateStr: Ref<string>,
     endDateStr: Ref<string>,
     endDateIsPastStartDate: ComputedRef<boolean>,
-    availabilityList: Ref<AvailabilityList>
+    availabilityList: Ref<AvailabilityList>,
+    conflictingDateIndices: Ref<Array<number>>
+    conflictsWithOtherAvailability: ComputedRef<boolean>
 } {
     return {
         startDate: ref(new Date()),
@@ -120,11 +130,68 @@ function initAvailability(): {
         startDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
-        availabilityList: ref({ __typename: "AvailabilityList", data: []}),
+        availabilityList: ref({ __typename: "AvailabilityList", data: [] }),
+        conflictingDateIndices: ref([]),
+        conflictsWithOtherAvailability: computed(() => {
+            interface AvailabilityPeriod {
+                start: Date,
+                end: Date
+            }
+
+            function contains(period: AvailabilityPeriod) {
+                return startsBeforeStart(period) && endsAfterEnd(period);
+                
+                function startsBeforeStart(period: AvailabilityPeriod) {
+                    return startDate.value.getDate() < period.start.getDate();
+                }
+
+                function endsAfterEnd(period: AvailabilityPeriod) {
+                    return endDate.value.getDate() > period.end.getDate();
+                }
+            }
+
+            function startConflicts(period: AvailabilityPeriod) {
+                return startsAfterStart(period) && startsBeforeEnd(period);
+                
+                function startsAfterStart(period: AvailabilityPeriod) {
+                    return startDate.value.getDate() >= period.start.getDate();
+                }
+
+                function startsBeforeEnd(period: AvailabilityPeriod) {
+                    return startDate.value.getDate() <= period.end.getDate();
+                }
+            }
+
+            function endConflicts(period: AvailabilityPeriod) {
+                return endsAfterStart(period) && endsBeforeEnd(period);
+                
+                function endsAfterStart(period: AvailabilityPeriod) {
+                    return endDate.value.getDate() >= period.start.getDate();
+                }
+
+                function endsBeforeEnd(period: AvailabilityPeriod) {
+                    return endDate.value.getDate() <= period.end.getDate();
+                }
+            }
+
+            function isConflicting(period: AvailabilityPeriod) {
+                return contains(period) || startConflicts(period) || endConflicts(period);
+            }
+
+            conflictingDateIndices.value = [];
+
+            const availabilityPeriods: AvailabilityPeriod[] = availabilityList.value.data.map(period => ({ start: parseDate(period.start), end: parseDate(period.end) }));
+
+            availabilityPeriods.forEach((period, index) => {
+                if(isConflicting(period)) conflictingDateIndices.value.push(index);
+            })
+
+            return availabilityPeriods.some(period => isConflicting(period))
+        })
     }
 }
 
-function initExpertiseReverseMap() {
+function getExpertiseReverseMap() {
     enum ExpertiseKeys {
         Lotteries = 'lotteries',
         RollerCoasterOperations = 'roller-coaster-operations',
@@ -141,13 +208,17 @@ function initExpertiseReverseMap() {
         [rollerCoasterOperations]: ExpertiseKeys.RollerCoasterOperations
     }
 }
+
+function parseDate(dateStr: string) {
+    return new Date(Date.parse(dateStr));
+}
 </script>
 
 <template>
     <main>
         <div class="text-h3 text-center mb-10">{{ $t(basePath + 'header') }}</div>
         <v-sheet class="d-flex w-100 h-100">
-            <v-sheet>
+            <v-sheet class="">
                 <v-sheet width="600">
                     <div class="text-h5 ">{{ $t(personalInformationPath + 'header') }}</div>
                     <v-container>
@@ -189,7 +260,7 @@ function initExpertiseReverseMap() {
                                 <v-text-field :data-test="ApplicationTestId.EndDate" :label="$t(availabilityPath + 'end-date')" type="date" :min="startDateStr" v-model="endDateStr" />
                             </v-col>
                             <v-col cols="3" class="d-flex align-center">
-                                <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="endDateIsPastStartDate">{{ $t(buttonsPath + "add") }}</v-btn>
+                                <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="endDateIsPastStartDate || conflictsWithOtherAvailability">{{ $t(buttonsPath + "add") }}</v-btn>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -207,6 +278,7 @@ function initExpertiseReverseMap() {
                         :header-i18n-key="itemListPath + 'availability-header'"
                         :first-column-i18n-key="availabilityPath + 'start-date'"
                         :second-column-i18n-key="availabilityPath + 'end-date'"
+                        v-model:conflictingDateIndices="conflictingDateIndices"
                         v-model:list="availabilityList" />
                 </v-sheet>
                 <v-btn 

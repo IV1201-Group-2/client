@@ -18,6 +18,7 @@ interface CompetenceOrAvailability {
 
 const list = defineModel<CompetenceOrAvailability>('list', { required: true });
 const areasOfExpertise = defineModel<Array<string>>('areasOfExpertise');
+const conflictingDateIndices = defineModel<Array<number>>('conflictingDateIndices');
 
 const expertiseOptionsPath = "applicant.application-form-page.competence.options."
 
@@ -53,8 +54,8 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
                 </thead>
                 <tbody>
                     <tr v-if="isAvailabilityList(list)" v-for="(availability, index) in list.data" :key="index">
-                        <td>{{ availability.start }}</td>
-                        <td>{{ availability.end }}</td>
+                        <td :style="{ color: conflictingDateIndices?.includes(index) ? 'red' : '' }">{{ availability.start }}</td>
+                        <td :style="{ color: conflictingDateIndices?.includes(index) ? 'red' : '' }">{{ availability.end }}</td>
                         <td><v-icon icon="mdi-delete" @click="removeItemFromList(availability)" /></td>
                     </tr>
                     <tr v-if="isCompetenceList(list)" v-for="(competence, index) in list!.data" :key="index">
