@@ -9,6 +9,7 @@ const { t } = i18n;
 
 const {
     basePath,
+    messagesPath,
     personalInformationPath,
     competencePath,
     availabilityPath,
@@ -42,6 +43,13 @@ const {
     conflictingDateIndices,
     conflictsWithOtherAvailability
 } = initAvailability();
+
+const {
+    competenceListEmpty,
+    availabilityListEmpty,
+    expertiseMsg,
+    availabilityMsg
+} = initMessages();
 
 watch(startDateStr, () => {
     startDate.value = parseDate(startDateStr.value)
@@ -78,6 +86,7 @@ function initPaths() {
     
     return {
         basePath,
+        messagesPath: basePath + "messages.",
         personalInformationPath: basePath + "personal-information.",
         competencePath,
         expertiseOptionsPath: competencePath + 'options.',
@@ -142,11 +151,11 @@ function initAvailability(): {
                 return startsBeforeStart(period) && endsAfterEnd(period);
                 
                 function startsBeforeStart(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() < period.start.getDate();
+                    return startDate.value.getTime() < period.start.getTime();
                 }
 
                 function endsAfterEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() > period.end.getDate();
+                    return endDate.value.getTime() > period.end.getTime();
                 }
             }
 
@@ -154,11 +163,11 @@ function initAvailability(): {
                 return startsAfterStart(period) && startsBeforeEnd(period);
                 
                 function startsAfterStart(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() >= period.start.getDate();
+                    return startDate.value.getTime() >= period.start.getTime();
                 }
 
                 function startsBeforeEnd(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() <= period.end.getDate();
+                    return startDate.value.getTime() <= period.end.getTime();
                 }
             }
 
@@ -166,11 +175,11 @@ function initAvailability(): {
                 return endsAfterStart(period) && endsBeforeEnd(period);
                 
                 function endsAfterStart(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() >= period.start.getDate();
+                    return endDate.value.getTime() >= period.start.getTime();
                 }
 
                 function endsBeforeEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() <= period.end.getDate();
+                    return endDate.value.getTime() <= period.end.getTime();
                 }
             }
 
@@ -188,6 +197,20 @@ function initAvailability(): {
 
             return availabilityPeriods.some(period => isConflicting(period))
         })
+    }
+}
+
+function initMessages(): {
+    competenceListEmpty: ComputedRef<boolean>,
+    availabilityListEmpty: ComputedRef<boolean>,
+    expertiseMsg: ComputedRef<string>,
+    availabilityMsg: ComputedRef<string>
+} {
+    return {
+        competenceListEmpty: computed(() => competenceList.value.data.length === 0),
+        availabilityListEmpty: computed(() => availabilityList.value.data.length === 0),
+        expertiseMsg: computed(() => competenceListEmpty.value ? t(messagesPath + "add-expertise") : t(messagesPath + "expertise-added")),
+        availabilityMsg: computed(() => availabilityListEmpty.value ? t(messagesPath + "add-availability") : t(messagesPath + "availability-added"))
     }
 }
 
@@ -212,13 +235,14 @@ function getExpertiseReverseMap() {
 function parseDate(dateStr: string) {
     return new Date(Date.parse(dateStr));
 }
+
 </script>
 
 <template>
-    <main>
+    <main style="height: 30rem">
         <div class="text-h3 text-center mb-10">{{ $t(basePath + 'header') }}</div>
         <v-sheet class="d-flex w-100 h-100">
-            <v-sheet class="">
+            <v-sheet>
                 <v-sheet width="600">
                     <div class="text-h5 ">{{ $t(personalInformationPath + 'header') }}</div>
                     <v-container>
@@ -266,7 +290,7 @@ function parseDate(dateStr: string) {
                     </v-container>
                 </v-sheet>
             </v-sheet>
-            <v-sheet class="d-flex flex-column align-end">
+            <v-sheet class="d-flex flex-column justify-space-between">
                 <v-sheet class="d-flex">
                     <ItemList 
                         :header-i18n-key="itemListPath + 'competence-header'" 
@@ -281,10 +305,23 @@ function parseDate(dateStr: string) {
                         v-model:conflictingDateIndices="conflictingDateIndices"
                         v-model:list="availabilityList" />
                 </v-sheet>
-                <v-btn 
-                    :data-test="ApplicationTestId.Submit"
-                    :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
-                    class="mt-4">{{ $t(buttonsPath + 'submit') }}</v-btn>
+                <v-sheet class="d-flex justify-space-between" elevation="2" style="min-height: 10rem;">
+                    <v-sheet class="pa-4">
+                        <div class="text-h5 font-weight-bold">Message:</div>
+                        <ul class="pl-10 pt-1">
+                            <li :style="{ color: !competenceListEmpty ? 'green' : '' }">{{ expertiseMsg }}</li>
+                            <li :style="{ color: !availabilityListEmpty ? 'green' : '' }">{{ availabilityMsg }}</li>
+                        </ul>
+                    </v-sheet>
+                    <v-sheet class="pa-4" style="height: 100%; display: flex; align-items: end">
+                        <v-btn 
+                            :data-test="ApplicationTestId.Submit"
+                            :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
+                            >
+                            {{ $t(buttonsPath + 'next') }}
+                        </v-btn>
+                    </v-sheet>
+                </v-sheet>
             </v-sheet>
         </v-sheet>
     </main>

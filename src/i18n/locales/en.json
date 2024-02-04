@@ -52,6 +52,12 @@
         },
         "application-form-page": {
             "header": "Application Form",
+            "messages": {
+                "add-expertise": "Please add one or multiple of your areas of expertise.",
+                "add-availability": "Please add the periods you will be available.",
+                "expertise-added": "Expertise successfully added!",
+                "availability-added": "Availability successfully added!"
+            },
             "personal-information": {
                 "header": "Personal Information",
                 "first-name": "First Name",
@@ -81,6 +87,7 @@
             },
             "buttons": {
                 "add": "Add",
+                "next": "Next",
                 "submit": "Submit"
             }
         }

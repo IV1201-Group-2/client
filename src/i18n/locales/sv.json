@@ -52,6 +52,12 @@
         },
         "application-form-page": {
             "header": "Ansökningsformulär",
+            "messages": {
+                "add-expertise": "Vänligen lägg till ett eller fler av dina yrkesområden.",
+                "add-availability": "Vänligen lägg till dina tillgänglighetstider.",
+                "expertise-added": "Yrkesområde tillagt!",
+                "availability-added": "Tillgänglighetstid tillagd!"
+            },
             "personal-information": {
                 "header": "Personlig information",
                 "first-name": "Förnamn",
@@ -81,6 +87,7 @@
             },
             "buttons": {
                 "add": "Lägg till",
+                "next": "Nästa",
                 "submit": "Skicka"
             }
         }
