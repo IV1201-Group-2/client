@@ -4,26 +4,19 @@ import { useI18n } from 'vue-i18n';
 import type { CompetenceList, AvailabilityList } from './types';
 import { ApplicationTestId } from '@/util/enums';
 import ItemList from './ItemList.vue';
+import PersonalInformation from './PersonalInformation.vue';
 const i18n = useI18n();
 const { t } = i18n;
 
 const {
     basePath,
     messagesPath,
-    personalInformationPath,
     competencePath,
     availabilityPath,
     expertiseOptionsPath,
     buttonsPath,
     itemListPath
 } = initPaths();
-
-const {
-    firstNameInput,
-    lastNameInput,
-    personNumberInput,
-    emailInput
-} = initPersonalInformation();
 
 const {
     areasOfExpertise,
@@ -89,21 +82,11 @@ function initPaths() {
     return {
         basePath,
         messagesPath: basePath + "messages.",
-        personalInformationPath: basePath + "personal-information.",
         competencePath,
         expertiseOptionsPath: competencePath + 'options.',
         availabilityPath: basePath + "availability.",
         buttonsPath: basePath + "buttons.",
         itemListPath: basePath + "item-list."
-    }
-}
-
-function initPersonalInformation() {
-    return {
-        firstNameInput: ref("Sven"),
-        lastNameInput: ref("Svensson"),
-        personNumberInput: ref("930101-xxxx"),
-        emailInput: ref("test@exempel.com")
     }
 }
 
@@ -249,19 +232,7 @@ function parseDate(dateStr: string) {
         <div class="text-h3 text-center mb-10">{{ $t(basePath + 'header') }}</div>
         <v-sheet class="d-flex w-100 h-100">
             <v-sheet>
-                <v-sheet width="600">
-                    <div class="text-h5 ">{{ $t(personalInformationPath + 'header') }}</div>
-                    <v-container>
-                        <v-row no-gutters>
-                            <v-text-field :data-test="ApplicationTestId.FirstName" :label="$t(personalInformationPath + 'first-name')" v-model="firstNameInput" readonly />
-                            <v-text-field :data-test="ApplicationTestId.LastName" :label="$t(personalInformationPath + 'last-name')" v-model="lastNameInput" readonly />
-                        </v-row>
-                        <v-row no-gutters>
-                            <v-text-field :data-test="ApplicationTestId.PersonNumber" :label="$t(personalInformationPath + 'person-number')" v-model="personNumberInput" readonly />
-                            <v-text-field :data-test="ApplicationTestId.Email" :label="$t(personalInformationPath + 'email')" v-model="emailInput" readonly />
-                        </v-row>
-                    </v-container>
-                </v-sheet>
+                <PersonalInformation :base-path="basePath" />
                 <v-sheet width="600">
                     <div class="text-h5 ">{{ $t(competencePath + 'header') }}</div>
                     <v-container>
@@ -326,7 +297,7 @@ function parseDate(dateStr: string) {
                             :data-test="ApplicationTestId.Submit"
                             :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
                             >
-                            {{ $t(buttonsPath + 'next') }}
+                            {{ $t(buttonsPath + 'review') }}
                         </v-btn>
                     </v-sheet>
                 </v-sheet>

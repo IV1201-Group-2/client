@@ -90,7 +90,7 @@
             },
             "buttons": {
                 "add": "Add",
-                "next": "Next",
+                "review": "Review Application",
                 "submit": "Submit"
             }
         }
