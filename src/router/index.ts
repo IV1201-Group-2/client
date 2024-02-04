@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/applicant/ApplicantLoginView.vue'
-import ApplicantRegistrationView from '../views/applicant/ApplicantRegistrationView.vue'
+import HomeView from '@/views/applicant/ApplicantLoginView.vue'
+import ApplicantRegistrationView from '@/views/applicant/ApplicantRegistrationView.vue'
 import ApplicationFormView from '@/views/applicant/ApplicationFormView.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
+import ApplicationConfirmationView from '@/views/applicant/ApplicationConfirmationView.vue'
 
 
 const router = createRouter({
@@ -27,11 +28,14 @@ const router = createRouter({
     {
       path: '/application',
       name: 'application',
-      component: ApplicationFormView,
       meta: {
         requiresAuth: true,
         requiredRole: "Applicant"
-      }
+      },
+      children: [
+        { path: '', component: ApplicationFormView },
+        { path: 'confirmation', component: ApplicationConfirmationView}
+      ]
     },
     {
       path: '/recruitment',
@@ -58,9 +62,9 @@ router.beforeEach((to, from, next) => {
     }
   } else {
       if(isRecruiter()) {
-        next('/recruitment')
+        next('recruitment')
       } else if(isApplicant()) {
-        next('/application')
+        next('application')
       } else {
         next()
       }
