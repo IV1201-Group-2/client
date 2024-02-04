@@ -48,7 +48,9 @@ const {
     competenceListEmpty,
     availabilityListEmpty,
     expertiseMsg,
-    availabilityMsg
+    availabilityMsg,
+    reverseDatesErrMsg,
+    conflictingPeriodsErrMsg
 } = initMessages();
 
 watch(startDateStr, () => {
@@ -138,7 +140,7 @@ function initAvailability(): {
         endDate: ref(new Date()),
         startDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateStr: ref(new Date().toISOString().substring(0, 10)),
-        endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
+        endDateIsPastStartDate: computed(() => startDate.value.getDate() > endDate.value.getDate()),
         availabilityList: ref({ __typename: "AvailabilityList", data: [] }),
         conflictingDateIndices: ref([]),
         conflictsWithOtherAvailability: computed(() => {
@@ -151,11 +153,11 @@ function initAvailability(): {
                 return startsBeforeStart(period) && endsAfterEnd(period);
                 
                 function startsBeforeStart(period: AvailabilityPeriod) {
-                    return startDate.value.getTime() < period.start.getTime();
+                    return startDate.value.getDate() < period.start.getDate();
                 }
 
                 function endsAfterEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getTime() > period.end.getTime();
+                    return endDate.value.getDate() > period.end.getDate();
                 }
             }
 
@@ -163,11 +165,11 @@ function initAvailability(): {
                 return startsAfterStart(period) && startsBeforeEnd(period);
                 
                 function startsAfterStart(period: AvailabilityPeriod) {
-                    return startDate.value.getTime() >= period.start.getTime();
+                    return startDate.value.getDate() >= period.start.getDate();
                 }
 
                 function startsBeforeEnd(period: AvailabilityPeriod) {
-                    return startDate.value.getTime() <= period.end.getTime();
+                    return startDate.value.getDate() <= period.end.getDate();
                 }
             }
 
@@ -175,11 +177,11 @@ function initAvailability(): {
                 return endsAfterStart(period) && endsBeforeEnd(period);
                 
                 function endsAfterStart(period: AvailabilityPeriod) {
-                    return endDate.value.getTime() >= period.start.getTime();
+                    return endDate.value.getDate() >= period.start.getDate();
                 }
 
                 function endsBeforeEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getTime() <= period.end.getTime();
+                    return endDate.value.getDate() <= period.end.getDate();
                 }
             }
 
@@ -195,7 +197,7 @@ function initAvailability(): {
                 if(isConflicting(period)) conflictingDateIndices.value.push(index);
             })
 
-            return availabilityPeriods.some(period => isConflicting(period))
+            return conflictingDateIndices.value.length !== 0
         })
     }
 }
@@ -204,13 +206,17 @@ function initMessages(): {
     competenceListEmpty: ComputedRef<boolean>,
     availabilityListEmpty: ComputedRef<boolean>,
     expertiseMsg: ComputedRef<string>,
-    availabilityMsg: ComputedRef<string>
+    availabilityMsg: ComputedRef<string>,
+    reverseDatesErrMsg: ComputedRef<string>,
+    conflictingPeriodsErrMsg: ComputedRef<string>
 } {
     return {
         competenceListEmpty: computed(() => competenceList.value.data.length === 0),
         availabilityListEmpty: computed(() => availabilityList.value.data.length === 0),
         expertiseMsg: computed(() => competenceListEmpty.value ? t(messagesPath + "add-expertise") : t(messagesPath + "expertise-added")),
-        availabilityMsg: computed(() => availabilityListEmpty.value ? t(messagesPath + "add-availability") : t(messagesPath + "availability-added"))
+        availabilityMsg: computed(() => availabilityListEmpty.value ? t(messagesPath + "add-availability") : t(messagesPath + "availability-added")),
+        reverseDatesErrMsg: computed(() => t(messagesPath + "start-date-after-end-date")),
+        conflictingPeriodsErrMsg: computed(() => t(messagesPath + "conflicting-periods"))
     }
 }
 
@@ -239,7 +245,7 @@ function parseDate(dateStr: string) {
 </script>
 
 <template>
-    <main style="height: 30rem">
+    <v-sheet style="height: 30rem">
         <div class="text-h3 text-center mb-10">{{ $t(basePath + 'header') }}</div>
         <v-sheet class="d-flex w-100 h-100">
             <v-sheet>
@@ -259,7 +265,7 @@ function parseDate(dateStr: string) {
                 <v-sheet width="600">
                     <div class="text-h5 ">{{ $t(competencePath + 'header') }}</div>
                     <v-container>
-                        <v-row>
+                        <v-row class="d-flex justify-space-between">
                             <v-col cols="5">
                                 <v-select :data-test="ApplicationTestId.AreaOfExpertise" :label="$t(competencePath + 'area-of-expertise')" :items="areasOfExpertise" v-model="selectedExpertise" />
                             </v-col>
@@ -276,7 +282,7 @@ function parseDate(dateStr: string) {
                 <v-sheet width="600">
                     <div class="text-h5 ">{{ $t(availabilityPath + 'header') }}</div>
                     <v-container>
-                        <v-row>
+                        <v-row class="d-flex justify-space-between">
                             <v-col cols="4">
                                 <v-text-field :data-test="ApplicationTestId.StartDate" :label="$t(availabilityPath + 'start-date')" type="date" :min="new Date()" v-model="startDateStr" />
                             </v-col>
@@ -305,12 +311,14 @@ function parseDate(dateStr: string) {
                         v-model:conflictingDateIndices="conflictingDateIndices"
                         v-model:list="availabilityList" />
                 </v-sheet>
-                <v-sheet class="d-flex justify-space-between" elevation="2" style="min-height: 10rem;">
+                <v-sheet class="d-flex justify-space-between" elevation="2" style="min-height: 13rem;">
                     <v-sheet class="pa-4">
-                        <div class="text-h5 font-weight-bold">Message:</div>
+                        <div class="text-h5 font-weight-bold">{{ $t(messagesPath + "header") }}</div>
                         <ul class="pl-10 pt-1">
                             <li :style="{ color: !competenceListEmpty ? 'green' : '' }">{{ expertiseMsg }}</li>
                             <li :style="{ color: !availabilityListEmpty ? 'green' : '' }">{{ availabilityMsg }}</li>
+                            <li v-if="endDateIsPastStartDate" style="color: red">{{ reverseDatesErrMsg }}</li>
+                            <li v-if="conflictsWithOtherAvailability" style="color: red">{{ conflictingPeriodsErrMsg }}</li>
                         </ul>
                     </v-sheet>
                     <v-sheet class="pa-4" style="height: 100%; display: flex; align-items: end">
@@ -324,5 +332,5 @@ function parseDate(dateStr: string) {
                 </v-sheet>
             </v-sheet>
         </v-sheet>
-    </main>
+    </v-sheet>
 </template>

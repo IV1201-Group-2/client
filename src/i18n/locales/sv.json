@@ -53,10 +53,13 @@
         "application-form-page": {
             "header": "Ansökningsformulär",
             "messages": {
+                "header": "Meddelanden:",
                 "add-expertise": "Vänligen lägg till ett eller fler av dina yrkesområden.",
                 "add-availability": "Vänligen lägg till dina tillgänglighetstider.",
                 "expertise-added": "Yrkesområde tillagt!",
-                "availability-added": "Tillgänglighetstid tillagd!"
+                "availability-added": "Tillgänglighetstid tillagd!",
+                "start-date-after-end-date": "Vänligen sätt startdatumet före slutdatumet för att lägga till fler tider.",
+                "conflicting-periods": "Vänligen välj start- och slutdatum som inte krockar med redan tillagda tider för att lägga till fler tider."
             },
             "personal-information": {
                 "header": "Personlig information",

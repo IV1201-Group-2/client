@@ -1,6 +1,6 @@
 import { describe, it, expect, afterAll, beforeAll } from "vitest";
 import { mount, VueWrapper } from '@vue/test-utils'
-import ApplicationFormView from '@/views/applicant/application_form/ApplicationFormView.vue'
+import ApplicationFormView from '@/components/application_form/ApplicationForm.vue'
 import { ApplicationTestId } from "@/util/enums";
 import {
     GenericComponent,

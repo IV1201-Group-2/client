@@ -53,10 +53,13 @@
         "application-form-page": {
             "header": "Application Form",
             "messages": {
+                "header": "Messages:",
                 "add-expertise": "Please add one or multiple of your areas of expertise.",
                 "add-availability": "Please add the periods you will be available.",
                 "expertise-added": "Expertise successfully added!",
-                "availability-added": "Availability successfully added!"
+                "availability-added": "Availability successfully added!",
+                "start-date-after-end-date": "To add more periods, please set your start date before your end date.",
+                "conflicting-periods": "To add more periods, select start and end dates that does not conflict with the already added periods."
             },
             "personal-information": {
                 "header": "Personal Information",

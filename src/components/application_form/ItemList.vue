@@ -79,7 +79,7 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
 <style scoped>
 tbody {
     display: block;
-    max-height: 14rem;
+    max-height: 11rem;
     overflow-y: auto;
 }
 

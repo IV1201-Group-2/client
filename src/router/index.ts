@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/applicant/ApplicantLoginView.vue'
 import ApplicantRegistrationView from '../views/applicant/ApplicantRegistrationView.vue'
-import ApplicationFormView from '@/views/applicant/application_form/ApplicationFormView.vue'
+import ApplicationFormView from '@/views/applicant/ApplicationFormView.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 
@@ -48,22 +48,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { role } = useAuthStore();
 
-  function isRecruiter(): boolean {
-    return role === 'Recruiter';
-  }
-
-  function isApplicant(): boolean {
-    return role === 'Applicant';
-  }
-
-  function canAccessAsRecruiter(): boolean {
-    return to.meta.requiredRole === "Recruiter" && isRecruiter();
-  }
-
-  function canAccessAsApplicant(): boolean {
-    return to.meta.requiredRole === "Applicant" && isApplicant();
-  }
-
   if(to.meta.requiresAuth) {
     if(canAccessAsRecruiter()) {
       next()
@@ -80,6 +64,22 @@ router.beforeEach((to, from, next) => {
       } else {
         next()
       }
+  }
+  
+  function isRecruiter(): boolean {
+    return role === 'Recruiter';
+  }
+
+  function isApplicant(): boolean {
+    return role === 'Applicant';
+  }
+
+  function canAccessAsRecruiter(): boolean {
+    return to.meta.requiredRole === "Recruiter" && isRecruiter();
+  }
+
+  function canAccessAsApplicant(): boolean {
+    return to.meta.requiredRole === "Applicant" && isApplicant();
   }
 })
 
