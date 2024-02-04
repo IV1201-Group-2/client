@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, watch, type Ref, type ComputedRef } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
-import type { CompetenceList, AvailabilityList } from '@/components/application_form/types';
+import { useApplicationStore } from '@/stores/applicationForm';
 import { ApplicationTestId } from '@/util/enums';
 import ItemList from '@/components/application_form/ItemList.vue';
 import PersonalInformation from '@/components/application_form/PersonalInformation.vue';
+const applicationStore = useApplicationStore();
+const { competenceList, availabilityList } = storeToRefs(applicationStore)
 const i18n = useI18n();
 const { t } = i18n;
 
@@ -22,8 +25,7 @@ const {
     areasOfExpertise,
     areasOfExpertiseReverseMap,
     selectedExpertise,
-    yearsOfExperience,
-    competenceList
+    yearsOfExperience
 } = initCompetence();
 
 const {
@@ -32,7 +34,6 @@ const {
     startDateStr,
     endDateStr,
     endDateIsPastStartDate,
-    availabilityList,
     conflictingDateIndices,
     conflictsWithOtherAvailability
 } = initAvailability();
@@ -76,17 +77,17 @@ function addAvailability() {
 }
 
 function initPaths() {
-    const basePath = "applicant.application-form-page.";
-    const competencePath = basePath + "competence.";
+    const basePath = applicationStore.basePath;
+    const competencePath = applicationStore.competencePath;
     
     return {
         basePath,
         messagesPath: basePath + "messages.",
         competencePath,
         expertiseOptionsPath: competencePath + 'options.',
-        availabilityPath: basePath + "availability.",
+        availabilityPath: applicationStore.availabilityPath,
         buttonsPath: basePath + "buttons.",
-        itemListPath: basePath + "item-list."
+        itemListPath: applicationStore.itemListPath
     }
 }
 
@@ -94,8 +95,7 @@ function initCompetence(): {
     areasOfExpertise: Ref<string[]>,
     areasOfExpertiseReverseMap: Ref<any>,
     selectedExpertise: Ref<string>,
-    yearsOfExperience: Ref<number>,
-    competenceList: Ref<CompetenceList>
+    yearsOfExperience: Ref<number>
 } {
     const expertiseReverseMap = getExpertiseReverseMap();
 
@@ -103,8 +103,7 @@ function initCompetence(): {
         areasOfExpertise: ref(Object.keys(expertiseReverseMap).sort()),
         areasOfExpertiseReverseMap: ref(expertiseReverseMap),
         selectedExpertise: ref(""),
-        yearsOfExperience: ref(0),
-        competenceList: ref({ __typename: "CompetenceList", data: [] })
+        yearsOfExperience: ref(0)
     }
 }
 
@@ -114,7 +113,6 @@ function initAvailability(): {
     startDateStr: Ref<string>,
     endDateStr: Ref<string>,
     endDateIsPastStartDate: ComputedRef<boolean>,
-    availabilityList: Ref<AvailabilityList>,
     conflictingDateIndices: Ref<Array<number>>
     conflictsWithOtherAvailability: ComputedRef<boolean>
 } {
@@ -124,7 +122,6 @@ function initAvailability(): {
         startDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateStr: ref(new Date().toISOString().substring(0, 10)),
         endDateIsPastStartDate: computed(() => startDate.value.getDate() > endDate.value.getDate()),
-        availabilityList: ref({ __typename: "AvailabilityList", data: [] }),
         conflictingDateIndices: ref([]),
         conflictsWithOtherAvailability: computed(() => {
             interface AvailabilityPeriod {
@@ -228,7 +225,7 @@ function parseDate(dateStr: string) {
 </script>
 
 <template>
-    <v-sheet style="height: 30rem">
+    <main style="height: 30rem">
         <div class="text-h3 text-center mb-10">{{ $t(basePath + 'header') }}</div>
         <v-sheet class="d-flex w-100 h-100">
             <v-sheet>
@@ -305,5 +302,5 @@ function parseDate(dateStr: string) {
                 </v-sheet>
             </v-sheet>
         </v-sheet>
-    </v-sheet>
+    </main>
 </template>

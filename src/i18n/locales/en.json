@@ -88,6 +88,9 @@
                 "competence-header": "Competence List",
                 "availability-header": "Availability List"
             },
+            "confirmation": {
+                "confirm": "I hereby confirm that the information provided is true."
+            },
             "buttons": {
                 "add": "Add",
                 "review": "Review Application",

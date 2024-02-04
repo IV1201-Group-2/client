@@ -9,6 +9,7 @@ defineProps<{
     headerI18nKey: string,
     firstColumnI18nKey: string,
     secondColumnI18nKey: string,
+    disableDelete?: boolean
 }>()
 
 interface CompetenceOrAvailability {
@@ -48,14 +49,14 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
                     <tr>
                         <th style="text-align: center;">{{ $t(firstColumnI18nKey) }}</th>
                         <th style="text-align: center;">{{ $t(secondColumnI18nKey) }}</th>
-                        <th style="text-align: center;">{{ $t('applicant.application-form-page.item-list.third-column') }}</th>
+                        <th v-if="!disableDelete" style="text-align: center;">{{ $t('applicant.application-form-page.item-list.third-column') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-if="isAvailabilityList(list)" v-for="(availability, index) in list.data" :key="index">
                         <td :style="{ color: conflictingDateIndices?.includes(index) ? 'red' : '' }">{{ availability.start }}</td>
                         <td :style="{ color: conflictingDateIndices?.includes(index) ? 'red' : '' }">{{ availability.end }}</td>
-                        <v-tooltip text="Delete" open-delay="500">
+                        <v-tooltip v-if="!disableDelete" text="Delete" open-delay="500">
                             <template v-slot:activator="{ props }">
                                 <td><v-icon icon="mdi-delete" v-bind="props" @click="removeItemFromList(availability)" /></td>
                             </template>
@@ -64,7 +65,7 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
                     <tr v-if="isCompetenceList(list)" v-for="(competence, index) in list!.data" :key="index">
                         <td>{{ $t(expertiseOptionsPath + competence.areaOfExpertise) }}</td>
                         <td style="text-align: center;">{{ competence.yearsOfExperience }}</td>
-                        <v-tooltip text="Delete" open-delay="500">
+                        <v-tooltip v-if="!disableDelete" text="Delete" open-delay="500">
                             <template v-slot:activator="{ props }">
                                 <td><v-icon icon="mdi-delete" v-bind="props" @click="removeItemFromList(competence)" /></td>
                             </template>

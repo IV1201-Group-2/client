@@ -88,6 +88,9 @@
                 "competence-header": "Kompetenslista",
                 "availability-header": "Tillgänglighetslista"
             },
+            "confirmation": {
+                "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer."
+            },
             "buttons": {
                 "add": "Lägg till",
                 "review": "Granska ansökan",
