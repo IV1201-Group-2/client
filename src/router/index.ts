@@ -27,13 +27,12 @@ const router = createRouter({
     },
     {
       path: '/application',
-      name: 'application',
       meta: {
         requiresAuth: true,
         requiredRole: "Applicant"
       },
       children: [
-        { path: '', component: ApplicationFormView },
+        { path: '', name: "application", component: ApplicationFormView },
         { path: 'confirmation', component: ApplicationConfirmationView}
       ]
     },

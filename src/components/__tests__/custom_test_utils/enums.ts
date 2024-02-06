@@ -12,8 +12,10 @@
  */
 export enum GenericComponent {
     Label = "Label",
+    List = "List",
+    Field = "Field",
     ValidationMessage = "Validation message",
-    SubmitButton = "Submit button"
+    SubmitButton = "Submit button",
 }
 
 /**
@@ -26,8 +28,11 @@ export enum Action {
     HasEnglishTranslation = "has English translation",
     HasSwedishTranslation = "has Swedish translation",
     IsDisabled = "is disabled",
+    IsNotDisabled = "is not disabled",
+    IsReadonly = "is read-only",
     Shows = "shows",
-    Hides = "hides"
+    Hides = "hides",
+    Contains = "contains"
 }
 
 /**

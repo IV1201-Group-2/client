@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll, beforeAll } from "vitest";
+import { describe, it, expect, afterAll, beforeAll, afterEach, beforeEach } from "vitest";
 import { mount, VueWrapper } from '@vue/test-utils'
 import ApplicationFormView from '@/views/applicant/ApplicationFormView.vue'
 import { ApplicationTestId } from "@/util/enums";
@@ -8,13 +8,16 @@ import {
     When,
     Language
 } from "./custom_test_utils/enums"
-import { extractLabelTranslation, getSelector } from "./custom_test_utils/functions";
+import { extractLabelTranslation, getSelector, checkTranslation, checkEnglish } from "./custom_test_utils/functions";
 import i18n from "@/i18n";
+import { useI18n } from "vue-i18n";
 import type WrapperLike from "node_modules/@vue/test-utils/dist/interfaces/wrapperLike";
+
 
 describe("Applicant Registration View", () => {
     let wrapper: VueWrapper | null; 
-    let inputIs: Function | null;
+    let data: any;
+    const isNotInput = true;
 
     function setup() {
         wrapper = mount(ApplicationFormView) 
@@ -28,45 +31,26 @@ describe("Applicant Registration View", () => {
         describe("First Name", () => {
             beforeAll(() => {
                 setup()
-                // inputIs = (wrapper as any).vm.firstNameRules[0];
             })
 
             afterAll(() => {
                 teardown()
-                // inputIs = null
             })
 
             describe(GenericComponent.Label, () => {
                 it(Action.HasEnglishTranslation, () => {
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.FirstName))
-                    expect(extractLabelTranslation(labelEl)).toBe('First Name')
+                    checkEnglish("First Name", ApplicationTestId.FirstName, wrapper)
                 })
 
                 it(Action.HasSwedishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish                
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.FirstName))
-                    expect(extractLabelTranslation(labelEl)).toBe('Förnamn')
-                    i18n.global.locale.value = Language.English
+                    checkTranslation("Förnamn", Language.Swedish, ApplicationTestId.FirstName, wrapper);
                 })
             })
 
-            describe.skip(GenericComponent.ValidationMessage, () => {
-                it(Action.Shows + When.NoInput, () => {
-                    expect(inputIs!('')).not.toBe(true);
-                })
-
-                it(Action.Hides + When.InputIsGiven, () => {
-                    expect(inputIs!('test')).toBe(true);
-                })
-
-                it(Action.HasEnglishTranslation, () => {
-                    expect(inputIs!('')).toContain('You must enter a ');
-                })
-
-                it(Action.HasSwedishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish
-                    expect(inputIs!('')).toContain('Du måste ange ett ')
-                    i18n.global.locale.value = Language.English
+            describe(GenericComponent.Field, () => {
+                it(Action.IsReadonly, () => {
+                    const fieldEl = wrapper!.findComponent(getSelector(ApplicationTestId.FirstName));
+                    expect(fieldEl.classes('v-input--readonly')).toBe(true);
                 })
             })
         })
@@ -74,50 +58,58 @@ describe("Applicant Registration View", () => {
         describe("Last Name", () => {
             beforeAll(() => {
                 setup()
-                // inputIs = (wrapper as any).vm.lastNameRules[0];
             })
 
             afterAll(() => {
                 teardown()
-                // inputIs = null
             })
 
             describe(GenericComponent.Label, () => {
                 it(Action.HasEnglishTranslation, () => {
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.LastName))
-                    expect(extractLabelTranslation(labelEl)).toBe('Last Name')
+                    checkEnglish("Last Name", ApplicationTestId.LastName, wrapper)
                 })
 
                 it(Action.HasSwedishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish                
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.LastName))
-                    expect(extractLabelTranslation(labelEl)).toBe('Efternamn')
-                    i18n.global.locale.value = Language.English
+                    checkTranslation("Efternamn", Language.Swedish, ApplicationTestId.LastName, wrapper)
                 })
             })
 
-            describe.skip(GenericComponent.ValidationMessage, () => {
-                it(Action.Shows, () => {
-                    expect(inputIs!('')).not.toBe(true);
-                })
-
-                it(Action.Hides, () => {
-                    expect(inputIs!('test')).toBe(true);
-                })
-
-                it(Action.HasEnglishTranslation, () => {
-                    expect(inputIs!('')).toContain('You must enter a ')
-                })
-
-                it(Action.HasSwedishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish
-                    expect(inputIs!('')).toContain('Du måste ange ett ')
-                    i18n.global.locale.value = Language.English
+            describe(GenericComponent.Field, () => {
+                it(Action.IsReadonly, () => {
+                    const fieldEl = wrapper!.findComponent(getSelector(ApplicationTestId.LastName));
+                    expect(fieldEl.classes('v-input--readonly')).toBe(true);
                 })
             })
         })
 
         describe("Email", () => {
+            beforeAll(() => {
+                setup()
+            })
+
+            afterAll(() => {
+                teardown()
+            })
+
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("Email", ApplicationTestId.Email, wrapper)
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("E-postadress", Language.Swedish, ApplicationTestId.Email, wrapper)
+                })
+            })
+
+            describe(GenericComponent.Field, () => {
+                it(Action.IsReadonly, () => {
+                    const fieldEl = wrapper!.findComponent(getSelector(ApplicationTestId.Email));
+                    expect(fieldEl.classes('v-input--readonly')).toBe(true);
+                })
+            })
+        })
+
+        describe("Person Number", () => {
             beforeAll(() => {
                 setup()
                 // inputIs = (wrapper as any).vm.emailRules[0];
@@ -130,75 +122,288 @@ describe("Applicant Registration View", () => {
 
             describe(GenericComponent.Label, () => {
                 it(Action.HasEnglishTranslation, () => {
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.Email))
-                    expect(extractLabelTranslation(labelEl)).toBe('Email')
+                    checkEnglish("Person Number", ApplicationTestId.PersonNumber, wrapper)
                 })
 
                 it(Action.HasSwedishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish                
-                    const labelEl = wrapper!.findComponent(getSelector(ApplicationTestId.Email))
-                    expect(extractLabelTranslation(labelEl)).toBe('E-postadress')
-                    i18n.global.locale.value = Language.English
+                    checkTranslation("Personnummer", Language.Swedish, ApplicationTestId.PersonNumber, wrapper)
                 })
             })
 
-            describe.skip(GenericComponent.ValidationMessage, () => {
-                it(Action.Shows + When.NoInput, () => {
-                    expect(inputIs!('')).not.toBe(true);
-                })
-
-                it(Action.Shows + " when only local-part is given but no @ nor domain", () => {
-                    expect(inputIs!('test')).not.toBe(true);
-                })
-
-                it(Action.Shows + " when only @ is given but no local-part nor domain", () => {
-                    expect(inputIs!('@')).not.toBe(true);
-                })
-
-                it(Action.Shows + " when only domain is given but no local-part nor domain", () => {
-                    expect(inputIs!('test.com')).not.toBe(true);
-                })
-
-                it(Action.Shows + " when only local-part and @ are given but no domain", () => {
-                    expect(inputIs!('test@')).not.toBe(true)
-                })
-
-                it(Action.Shows + " when only @ and domain are given but no local-part", () => {
-                    expect(inputIs!('@test.com')).not.toBe(true)
-                })
-
-                it(Action.Hides + " when local-part, @ and domain are present in email address", () => {
-                    expect(inputIs!('test@test.com')).toBe(true);
-                })
-
-                it(Action.HasEnglishTranslation, () => {
-                    expect(inputIs!('')).toEqual('Invalid email')
-                })
-
-                it(Action.HasEnglishTranslation, () => {
-                    i18n.global.locale.value = Language.Swedish
-                    expect(inputIs!('')).toEqual('Ogiltig e-postadress')
-                    i18n.global.locale.value = Language.English
+            describe(GenericComponent.Field, () => {
+                it(Action.IsReadonly, () => {
+                    const fieldEl = wrapper!.findComponent(getSelector(ApplicationTestId.PersonNumber));
+                    expect(fieldEl.classes('v-input--readonly')).toBe(true);
                 })
             })
         })
     })
 
-    describe(GenericComponent.SubmitButton, () => {
-        let buttonEl: any | null;
+    describe("Competence Profile", () => {
+        describe("Area of Expertise", () => {
+            beforeAll(() => {
+                setup()
+                // inputIs = (wrapper as any).vm.firstNameRules[0];
+            })
 
-        beforeAll(() => {
-            setup()
-            buttonEl = wrapper!.find(getSelector(ApplicationTestId.Submit));
+            afterAll(() => {
+                teardown()
+            })
+
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("Area of Expertise", ApplicationTestId.AreaOfExpertise, wrapper)
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("Yrkesområde", Language.Swedish, ApplicationTestId.AreaOfExpertise, wrapper)
+                })
+            })
+
+            describe(GenericComponent.List, () => {
+                it(Action.Contains + " 3 items", () => {
+                    data = (wrapper as any).vm.areasOfExpertise;
+                    expect(data?.length).toBe(3);
+                })
+            })
         })
 
-        afterAll(() => {
+        describe("Years of Experience", () => {
+            beforeAll(() => {
+                setup()
+            })
+
+            afterAll(() => {
+                teardown()
+            })
+
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("Years of Experience", ApplicationTestId.YearsOfExperience, wrapper)
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("Antal arbetsår", Language.Swedish, ApplicationTestId.YearsOfExperience, wrapper)
+                })
+            })
+        })
+    })
+
+    describe("Add button", () => {
+        let addButtonEl: WrapperLike | null
+
+        beforeEach(() => {
+            setup()
+            addButtonEl = wrapper!.findComponent(getSelector(ApplicationTestId.AddCompetence))
+        })
+
+        afterEach(() => {
             teardown()
-            buttonEl = null
+            addButtonEl = null;
+        })
+
+        describe(GenericComponent.Label, () => {
+            it(Action.HasEnglishTranslation, () => {
+                checkEnglish("Add", ApplicationTestId.AddCompetence, wrapper, isNotInput)
+            })
+
+            it(Action.HasSwedishTranslation, () => {
+                checkTranslation("Lägg till", Language.Swedish, ApplicationTestId.AddCompetence, wrapper, isNotInput)
+            })
+        })
+
+        it(Action.IsNotDisabled + " when area of expertise is selected and years of experience is positive", async () => {
+            await wrapper!.findComponent(getSelector(ApplicationTestId.AreaOfExpertise)).setValue("Lotteries")
+            // years of experience is 0 by default
+            expect(addButtonEl!.attributes('disabled')).toBeUndefined()
+        }) 
+
+        it(Action.IsDisabled + " when area of expertise is not selected", () => {
+            expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+        })
+
+        it(Action.IsDisabled + " when years of experience is negative", async () => {
+            await wrapper!.findComponent(getSelector(ApplicationTestId.YearsOfExperience)).setValue("-3")
+            expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+        })
+
+        it(Action.IsDisabled + " when area of expertise is selected but years of experience is negative", async () => {
+            await wrapper!.findComponent(getSelector(ApplicationTestId.AreaOfExpertise)).setValue("Lotteries")
+            await wrapper!.findComponent(getSelector(ApplicationTestId.YearsOfExperience)).setValue("-3")
+            expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+        })
+    })
+
+
+    describe("Available Through", () => {
+        describe("Start Date", () => {
+            beforeAll(() => {
+                setup();
+            })
+
+            afterAll(() => {
+                teardown();
+            })
+
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("Start Date", ApplicationTestId.StartDate, wrapper);
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("Startdatum", Language.Swedish, ApplicationTestId.StartDate, wrapper)
+                })
+            })
+        })
+
+        describe("End Date", () => {
+            beforeAll(() => {
+                setup();
+            })
+
+            afterAll(() => {
+                teardown();
+            })
+            
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("End Date", ApplicationTestId.EndDate, wrapper);
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("Slutdatum", Language.Swedish, ApplicationTestId.EndDate, wrapper)
+                })
+            })
+        })
+
+       
+        describe("Add button", () => {
+            let addButtonEl: WrapperLike | null
+            const oneDay = 24 * 60 * 60 * 1000;
+            const today = new Date();
+            const yesterday = new Date();
+            const tomorrow = new Date();
+            const dayAfterTomorrow = new Date();
+            yesterday.setTime(today.getTime() - oneDay);
+            tomorrow.setTime(today.getTime() + oneDay);
+            dayAfterTomorrow.setTime(tomorrow.getTime() + oneDay)
+
+            beforeEach(() => {
+                setup()
+                addButtonEl = wrapper!.findComponent(getSelector(ApplicationTestId.AddAvailability))
+            })
+
+            afterEach(() => {
+                teardown()
+                addButtonEl = null;
+            })
+
+            describe(GenericComponent.Label, () => {
+                it(Action.HasEnglishTranslation, () => {
+                    checkEnglish("Add", ApplicationTestId.AddAvailability, wrapper, isNotInput)
+                })
+
+                it(Action.HasSwedishTranslation, () => {
+                    checkTranslation("Lägg till", Language.Swedish, ApplicationTestId.AddAvailability, wrapper, isNotInput)
+                })
+            })
+
+            it(Action.IsNotDisabled + " when the start and end date are set to today", () => {
+                // start and end date are set to today by default
+                expect(addButtonEl!.attributes('disabled')).toBeUndefined()
+            }) 
+
+            it(Action.IsNotDisabled + " when the start and end date are set to yesterday (both start and end are in the past)", async () => {
+                await wrapper!.findComponent(getSelector(ApplicationTestId.StartDate)).setValue(yesterday.toISOString().substring(0, 10))
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(yesterday.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+            })
+            
+            it(Action.IsNotDisabled + " when the start date is set to today and end date to tomorrow (start comes before end)", async () => {
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).toBeUndefined()
+            })
+
+            it(Action.IsDisabled + " when the start date is set to yesterday and the end date to today (start is in the past)", async () => {
+                await wrapper!.findComponent(getSelector(ApplicationTestId.StartDate)).setValue(yesterday.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+            })
+
+            it(Action.IsDisabled + " when start date is set to today end date to yesterday (ends comes before start)", async () => {
+                // start date set to today by default
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(yesterday.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+            })
+
+            it(Action.IsDisabled + " when start and end date is set to today, after having added availability between today and tomorrow (conflict with start)", async () => {
+                await addButtonEl!.trigger('click');
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined();
+            })
+
+            it(Action.IsDisabled + " when the start and end date when start and end date is set to tomorrow, after having added availability between today and tomorrow (conflict with end)", async () => {
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                await addButtonEl!.trigger('click');
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(today.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined();
+            })
+
+            it(Action.IsDisabled + " when availability has been added for tomorrow and the user attempts to add availability between today and the day after tomorrow (period contains added period)", async () => {
+                await wrapper!.findComponent(getSelector(ApplicationTestId.StartDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(tomorrow.toISOString().substring(0, 10))
+                await addButtonEl!.trigger('click');
+                await wrapper!.findComponent(getSelector(ApplicationTestId.StartDate)).setValue(today.toISOString().substring(0, 10))
+                await wrapper!.findComponent(getSelector(ApplicationTestId.EndDate)).setValue(dayAfterTomorrow.toISOString().substring(0, 10))
+                expect(addButtonEl!.attributes('disabled')).not.toBeUndefined()
+            })
+        })
+    })
+
+    describe("Review Application button", () => {
+        let addAvailabilityButtonEl: WrapperLike | null
+        let addCompetenceButtonEl: WrapperLike | null
+        let reviewApplicationEl: WrapperLike | null
+
+        beforeEach(() => {
+            setup()
+            addAvailabilityButtonEl = wrapper!.findComponent(getSelector(ApplicationTestId.AddAvailability))
+            addCompetenceButtonEl = wrapper!.findComponent(getSelector(ApplicationTestId.AddCompetence))
+            reviewApplicationEl = wrapper!.findComponent(getSelector(ApplicationTestId.Submit))
+        })
+
+        afterEach(() => {
+            teardown()
+            addAvailabilityButtonEl = null;
+            addCompetenceButtonEl = null;
+            reviewApplicationEl = null;
+        })
+
+        describe(GenericComponent.Label, () => {
+            it(Action.HasEnglishTranslation, () => {
+                checkEnglish("Review Application", ApplicationTestId.Submit, wrapper, isNotInput)
+            })
+
+            it(Action.HasSwedishTranslation, () => {
+                checkTranslation("Granska ansökan", Language.Swedish, ApplicationTestId.Submit, wrapper, isNotInput)
+            })
         })
 
         it(Action.IsDisabled + " when form is not filled", () => {
-            expect(buttonEl!.attributes('disabled')).not.toBeUndefined();
+            expect(reviewApplicationEl!.attributes('disabled')).not.toBeUndefined();
+        })
+        
+        it(Action.IsDisabled + " when form is partially filled (only competence has been added)", async () => {
+            await wrapper!.findComponent(getSelector(ApplicationTestId.AreaOfExpertise)).setValue("Lotteries")
+            addCompetenceButtonEl?.trigger('click');
+            expect(reviewApplicationEl!.attributes('disabled')).not.toBeUndefined();
+        })
+
+        it(Action.IsNotDisabled + " when form is filled", async () => {
+            await wrapper!.findComponent(getSelector(ApplicationTestId.AreaOfExpertise)).setValue("Lotteries")
+            addAvailabilityButtonEl?.trigger('click')
+            addCompetenceButtonEl?.trigger('click')
+            expect(reviewApplicationEl!.attributes('disabled')).toBeUndefined();
         })
     })
 }) 

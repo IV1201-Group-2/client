@@ -11,7 +11,9 @@ const app = createApp( {
   ...App
 })
 
-app.use(createPinia())
+export const pinia = createPinia();
+
+app.use(pinia)
 app.use(router)
 app.use(vuetify)
 app.use(i18n)

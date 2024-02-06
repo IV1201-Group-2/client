@@ -32,6 +32,7 @@ const {
     startDate,
     endDate,
     startDateStr,
+    startDateIsInPast,
     endDateStr,
     endDateIsPastStartDate,
     conflictingDateIndices,
@@ -111,17 +112,19 @@ function initAvailability(): {
     startDate: Ref<Date>,
     endDate: Ref<Date>,
     startDateStr: Ref<string>,
+    startDateIsInPast: ComputedRef<boolean>,
     endDateStr: Ref<string>,
     endDateIsPastStartDate: ComputedRef<boolean>,
     conflictingDateIndices: Ref<Array<number>>
     conflictsWithOtherAvailability: ComputedRef<boolean>
 } {
     return {
-        startDate: ref(new Date()),
-        endDate: ref(new Date()),
+        startDate: ref(parseDate(new Date().toISOString().substring(0, 10))),
+        endDate: ref(parseDate(new Date().toISOString().substring(0, 10))),
         startDateStr: ref(new Date().toISOString().substring(0, 10)),
+        startDateIsInPast: computed(() => startDate.value.getTime() < parseDate(new Date().toISOString().substring(0, 10)).getTime()),
         endDateStr: ref(new Date().toISOString().substring(0, 10)),
-        endDateIsPastStartDate: computed(() => startDate.value.getDate() > endDate.value.getDate()),
+        endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
         conflictingDateIndices: ref([]),
         conflictsWithOtherAvailability: computed(() => {
             interface AvailabilityPeriod {
@@ -133,11 +136,11 @@ function initAvailability(): {
                 return startsBeforeStart(period) && endsAfterEnd(period);
                 
                 function startsBeforeStart(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() < period.start.getDate();
+                    return startDate.value.getTime() < period.start.getTime();
                 }
 
                 function endsAfterEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() > period.end.getDate();
+                    return endDate.value.getTime() > period.end.getTime();
                 }
             }
 
@@ -145,11 +148,11 @@ function initAvailability(): {
                 return startsAfterStart(period) && startsBeforeEnd(period);
                 
                 function startsAfterStart(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() >= period.start.getDate();
+                    return startDate.value.getTime() >= period.start.getTime();
                 }
 
                 function startsBeforeEnd(period: AvailabilityPeriod) {
-                    return startDate.value.getDate() <= period.end.getDate();
+                    return startDate.value.getTime() <= period.end.getTime();
                 }
             }
 
@@ -157,15 +160,16 @@ function initAvailability(): {
                 return endsAfterStart(period) && endsBeforeEnd(period);
                 
                 function endsAfterStart(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() >= period.start.getDate();
+                    return endDate.value.getTime() >= period.start.getTime();
                 }
 
                 function endsBeforeEnd(period: AvailabilityPeriod) {
-                    return endDate.value.getDate() <= period.end.getDate();
+                    return endDate.value.getTime() <= period.end.getTime();
                 }
             }
 
             function isConflicting(period: AvailabilityPeriod) {
+                console.log(contains(period) || startConflicts(period) || endConflicts(period))
                 return contains(period) || startConflicts(period) || endConflicts(period);
             }
 
@@ -176,6 +180,7 @@ function initAvailability(): {
             availabilityPeriods.forEach((period, index) => {
                 if(isConflicting(period)) conflictingDateIndices.value.push(index);
             })
+            console.log(conflictingDateIndices.value.length)
 
             return conflictingDateIndices.value.length !== 0
         })
@@ -241,7 +246,7 @@ function parseDate(dateStr: string) {
                                 <v-text-field :data-test="ApplicationTestId.YearsOfExperience" :label="$t(competencePath + 'years-of-experience')" type="number" min="0" v-model="yearsOfExperience" />
                             </v-col>
                             <v-col cols="3" class="d-flex align-center">
-                                <v-btn :data-test="ApplicationTestId.AddCompetence" :disabled="!selectedExpertise" @click="addCompetence">{{ $t(buttonsPath + 'add') }}</v-btn>
+                                <v-btn :data-test="ApplicationTestId.AddCompetence" :disabled="!selectedExpertise || yearsOfExperience < 0" @click="addCompetence">{{ $t(buttonsPath + 'add') }}</v-btn>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -258,7 +263,7 @@ function parseDate(dateStr: string) {
                                 <v-text-field :data-test="ApplicationTestId.EndDate" :label="$t(availabilityPath + 'end-date')" type="date" :min="startDateStr" v-model="endDateStr" />
                             </v-col>
                             <v-col cols="3" class="d-flex align-center">
-                                <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="endDateIsPastStartDate || conflictsWithOtherAvailability">{{ $t(buttonsPath + "add") }}</v-btn>
+                                <v-btn :data-test="ApplicationTestId.AddAvailability" @click="addAvailability" :disabled="startDateIsInPast || endDateIsPastStartDate || conflictsWithOtherAvailability">{{ $t(buttonsPath + "add") }}</v-btn>
                             </v-col>
                         </v-row>
                     </v-container>

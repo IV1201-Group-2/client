@@ -3,8 +3,8 @@ import { useI18n } from 'vue-i18n'
 import { RouterLink, RouterView } from 'vue-router'
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from './stores/auth';
-
-const { isAuthenticated } = storeToRefs(useAuthStore());
+const authStore = useAuthStore();
+const { isAuthenticated } = storeToRefs(authStore);
 const i18n = useI18n();
 
 function changeLocale(locale: string) {
@@ -16,7 +16,7 @@ function changeLocale(locale: string) {
 <template>
   <header>
       <nav>
-        <RouterLink v-if="isAuthenticated" to="/logout">{{ $t("navigation.logout") }}</RouterLink>
+        <RouterLink v-if="isAuthenticated" @click="authStore.logout()" to="">{{ $t("navigation.logout") }}</RouterLink>
         <RouterLink v-if="!isAuthenticated" to="/">{{ $t("navigation.login") }}</RouterLink>
         <RouterLink v-if="!isAuthenticated" to="/register">{{ $t("navigation.register") }}</RouterLink>
       </nav>
