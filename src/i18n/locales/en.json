@@ -4,7 +4,8 @@
         "sv": "Swedish"
     },
     "navigation": {
-        "login": "Login",
+        "logout": "Log out",
+        "login": "Log in",
         "register": "Register"
     },
     "validation-util": {
@@ -47,6 +48,53 @@
                 "buttons": {
                     "submit": "Submit"
                 }
+            }
+        },
+        "application-form-page": {
+            "header": "Application Form",
+            "messages": {
+                "header": "Messages:",
+                "add-expertise": "Please add one or multiple of your areas of expertise.",
+                "add-availability": "Please add the periods you will be available.",
+                "expertise-added": "Expertise successfully added!",
+                "availability-added": "Availability successfully added!",
+                "start-date-after-end-date": "To add more periods, please set your start date before your end date.",
+                "conflicting-periods": "To add more periods, select start and end dates that does not conflict with the already added periods."
+            },
+            "personal-information": {
+                "header": "Personal Information",
+                "first-name": "First Name",
+                "last-name": "Last Name",
+                "person-number":"Person Number",
+                "email":"Email"
+            },
+            "competence": {
+                "header": "Competence Profile",
+                "area-of-expertise": "Area of Expertise",
+                "years-of-experience": "Years of Experience",
+                "options": {
+                    "ticket-sales": "Ticket Sales",
+                    "lotteries": "Lotteries",
+                    "roller-coaster-operations": "Roller Coaster Operations"
+                }
+            },
+            "availability": {
+                "header": "Available Through:",
+                "start-date": "Start Date",
+                "end-date": "End Date"
+            },
+            "item-list": {
+                "third-column": "Actions",
+                "competence-header": "Competence List",
+                "availability-header": "Availability List"
+            },
+            "confirmation": {
+                "confirm": "I hereby confirm that the information provided is true."
+            },
+            "buttons": {
+                "add": "Add",
+                "review": "Review Application",
+                "submit": "Submit"
             }
         }
     }

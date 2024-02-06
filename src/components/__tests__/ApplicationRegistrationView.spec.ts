@@ -24,7 +24,7 @@ describe("Applicant Registration View", () => {
         wrapper = null;
     }
     
-    describe("Form Fields", () => {
+    describe("Personal Information", () => {
         describe("First Name", () => {
             beforeAll(() => {
                 setup()

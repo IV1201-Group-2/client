@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { type Ref, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+const { login } = useAuthStore();
 
 const basePath = "applicant.login-page.";
 const formPath = basePath + "form.";
@@ -9,7 +11,7 @@ const buttonsPath = formPath + "buttons.";
 const username = ref("");
 const password = ref(""); 
 
-const test = ref(false);
+// const isFormValid = ref(false);
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const test = ref(false);
       <v-form @submit.prevent>
         <v-text-field v-model="username" :label="$t(fieldsPath + 'username')" />
         <v-text-field v-model="password" :label="$t(fieldsPath + 'password')" />
-        <v-btn type="submit" :disabled="test" :loading="test" block>{{ $t(buttonsPath + 'login') }}</v-btn>
+        <v-btn type="submit" @click="login(username, password)" block>{{ $t(buttonsPath + 'login') }}</v-btn>
       </v-form>
     </v-sheet>
   </main>
