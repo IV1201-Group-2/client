@@ -30,16 +30,25 @@ export const useAuthStore = defineStore('auth', () => {
         return JSON.parse(jsonPayload);
     }
 
-    async function login(username: string, password: string) {
-        token.value = (await (await fetch("http://localhost:8080/getToken")).json()).value;
-        role.value = (await (await fetch("http://localhost:8080/getRole", {
+    function login(username: string, password: string) {
+        fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${token.value}`,
                 "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ identity: username, password })
+        }).then(response => {
+            if(response.status !== 200) {
+                response.json().then(result => console.log(result))
+                // throw "could not login, status code: " + response.status
+            } else {
+                response.json().then(result => {
+                    token.value = result.token;
+                    role.value = parseJwt(result.token).role === 2 ? "Applicant" : "Recruiter";
+                    router.push('application')
+                })
             }
-        })).json()).value;
-        router.push(role.value == "Applicant" ? '/application' : '/recruitment')
+        })
     }
 
     function logout() {
