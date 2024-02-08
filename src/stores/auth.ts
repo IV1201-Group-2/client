@@ -17,7 +17,9 @@ export const useAuthStore = defineStore('auth', () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(registrationForm)
-        }).then(response => console.log("status code: " + response.status))
+        }).then(response => {
+            console.log("status code: " + response.status);
+        })
     }
 
     function parseJwt (encryptedToken: string) {
