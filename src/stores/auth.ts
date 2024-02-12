@@ -8,7 +8,7 @@ type Role = "Applicant" | "Recruiter" | "";
 export const useAuthStore = defineStore('auth', () => {
     const token = ref("");
     const isAuthenticated = computed(() => !!token.value);
-    const role: Ref<Role> = ref("")
+    const role: Ref<Role> = ref("Recruiter")
 
     function register(registrationForm: RegistrationForm) {
         fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
         }).join(''));
 
         return JSON.parse(jsonPayload);
-    }
+    }   
 
     function login(username: string, password: string) {
         fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
