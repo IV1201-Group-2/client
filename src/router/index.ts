@@ -5,6 +5,8 @@ import ApplicationFormView from '@/views/applicant/ApplicationFormView.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import ApplicationConfirmationView from '@/views/applicant/ApplicationConfirmationView.vue'
+import AdminPanel from '@/views/recruiter/AdminPanel.vue'
+import HandleApplication from '@/views/recruiter/HandleApplication.vue'
 
 
 const router = createRouter({
@@ -39,11 +41,14 @@ const router = createRouter({
     {
       path: '/recruitment',
       name: 'recruitment',
-      component: HomeView,
       meta: {
         requiresAuth: true,
         requiredRole: "Recruiter"
-      }
+      },
+      children: [
+        { path: '', name: "recruitment", component: AdminPanel },
+        { path: 'handle', component: HandleApplication}
+      ]
     }
   ]
 })

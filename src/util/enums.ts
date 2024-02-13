@@ -1,3 +1,6 @@
+/**
+ * Identifiers used when mounting components inside the registration page for unit tests.
+ */
 export enum RegistrationTestId {
    FirstName = "first-name",
    LastName = "last-name",
@@ -8,6 +11,9 @@ export enum RegistrationTestId {
    Submit = "submit"
 }
 
+/**
+ * Identifiers used when mounting components inside the application form page for unit tests.
+ */
 export enum ApplicationTestId {
     FirstName = "first-name",
     LastName = "last-name",

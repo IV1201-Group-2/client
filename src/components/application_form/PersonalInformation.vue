@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ApplicationTestId } from '@/util/enums';
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+const { token } = storeToRefs(useAuthStore());
 const props = defineProps<{
     basePath: string,
 }>()
@@ -22,6 +25,25 @@ function initPersonalInformation() {
         emailInput: ref("test@exempel.com")
     }
 }
+
+fetch("https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/", {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token.value}`
+    }
+}).then(response => {
+    if(response.status !== 200) {
+        throw "could not get personal information, status code: " + response.status
+    } else {
+        response.json().then(result => {
+            firstNameInput.value = result.name;
+            lastNameInput.value = result.surname;
+            personNumberInput.value = result.pnr;
+            emailInput.value = result.email;
+        })
+    }
+})
 </script>
 
 <template>

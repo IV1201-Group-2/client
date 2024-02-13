@@ -1,8 +1,11 @@
+/**
+ * Specifies the parameters required for registering a user.
+ */
 export interface RegistrationForm {
-    firstName: string,
-    lastName: string,
+    name: string,
+    surname: string,
     email: string,
-    personNumber: string,
+    pnr: string,
     username: string,
     password: string
 }

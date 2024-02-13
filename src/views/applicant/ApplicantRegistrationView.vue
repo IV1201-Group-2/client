@@ -2,7 +2,9 @@
 import { ref, computed, watch } from 'vue';
 import { ValidationBuilder } from '@/util/validation'
 import { RegistrationTestId } from '@/util/enums';
+import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
+const { register } = useAuthStore();
 const i18n = useI18n();
 
 const isFormValid = ref(false);
@@ -93,7 +95,20 @@ function initValidationRules() {
             <v-text-field :data-test="RegistrationTestId.PersonNumber" v-model="personNumber" :rules="personNumberRules" :label="$t(fieldsPath + 'person-number')" />
             <v-text-field :data-test="RegistrationTestId.Username" v-model="username" :rules="usernameRules" :label="$t(fieldsPath + 'username')" />
             <v-text-field :data-test="RegistrationTestId.Password" v-model="password" :rules="passwordRules" type="password" :label="$t(fieldsPath + 'password')" />
-            <v-btn :data-test="RegistrationTestId.Submit" :disabled="!isFormValid" type="submit" block>{{ $t(buttonsPath + 'submit') }}</v-btn>
+            <v-btn 
+            :data-test="RegistrationTestId.Submit" 
+            :disabled="!isFormValid" 
+            type="submit" 
+            @click="register({ 
+                name: firstName, 
+                surname: lastName, 
+                email, 
+                pnr: personNumber, 
+                username, 
+                password })" 
+            block>
+                {{ $t(buttonsPath + 'submit') }}
+            </v-btn>
         </v-form>
     </v-sheet>
 </template>

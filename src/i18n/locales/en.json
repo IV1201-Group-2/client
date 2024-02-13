@@ -97,5 +97,26 @@
                 "submit": "Submit"
             }
         }
+    },
+    "recruiter": {
+        "admin-panel": {
+            "header": "Admin Panel",
+            "table": {
+                "header": {
+                    "first-name": "First Name",
+                    "last-name":"Last Name",
+                    "person-number": "Person Number",
+                    "email": "Email",
+                    "received-at": "Received At",
+                    "actions": "Actions"
+                },
+                "footer": {
+                    "items-per-page-text": "Applicants per page"
+                },
+                "tooltip": {
+                    "view": "View"
+                }
+            }
+        }
     }
 }

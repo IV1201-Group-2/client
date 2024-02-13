@@ -97,5 +97,26 @@
                 "submit": "Skicka"
             }
         }
+    },
+    "recruiter": {
+        "admin-panel": {
+            "header": "Adminpanel",
+            "table": {
+                "header": {
+                    "first-name": "Förnamn",
+                    "last-name": "Efternamn",
+                    "person-number": "Personnummer",
+                    "email": "E-postadress",
+                    "received-at": "Mottaget",
+                    "actions": "Handlingar"
+                },
+                "footer": {
+                    "items-per-page-text": "Antal ansökande per sida"
+                },
+                "tooltip": {
+                    "view": "Visa"
+                }
+            }
+        }
     }
 }

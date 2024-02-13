@@ -180,7 +180,6 @@ function initAvailability(): {
             availabilityPeriods.forEach((period, index) => {
                 if(isConflicting(period)) conflictingDateIndices.value.push(index);
             })
-            console.log(conflictingDateIndices.value.length)
 
             return conflictingDateIndices.value.length !== 0
         })
