@@ -5,7 +5,6 @@ import { RegistrationTestId } from "@/util/enums"
 import { GenericComponent, Action, When, Language } from "./custom_test_utils/enums"
 import { extractLabelTranslation, getSelector } from "./custom_test_utils/functions"
 import i18n from "@/i18n"
-import type WrapperLike from "node_modules/@vue/test-utils/dist/interfaces/wrapperLike"
 
 describe("Applicant Registration View", () => {
   let wrapper: VueWrapper | null

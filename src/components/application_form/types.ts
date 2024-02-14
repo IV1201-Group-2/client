@@ -17,3 +17,6 @@ export interface Availability {
   start: string
   end: string
 }
+
+export const emptyCompetenceList = { data: [], __typename: "CompetenceList" } as CompetenceList
+export const emptyAvailabilityList = { data: [], __typename: "AvailabilityList" } as AvailabilityList

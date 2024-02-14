@@ -2,10 +2,8 @@ import { describe, it, expect, afterAll, beforeAll, afterEach, beforeEach } from
 import { mount, VueWrapper } from "@vue/test-utils"
 import ApplicationFormView from "@/views/applicant/ApplicationFormView.vue"
 import { ApplicationTestId } from "@/util/enums"
-import { GenericComponent, Action, When, Language } from "./custom_test_utils/enums"
-import { extractLabelTranslation, getSelector, checkTranslation, checkEnglish } from "./custom_test_utils/functions"
-import i18n from "@/i18n"
-import { useI18n } from "vue-i18n"
+import { GenericComponent, Action, Language } from "./custom_test_utils/enums"
+import { getSelector, checkTranslation, checkEnglish } from "./custom_test_utils/functions"
 import type WrapperLike from "node_modules/@vue/test-utils/dist/interfaces/wrapperLike"
 
 describe("Applicant Registration View", () => {

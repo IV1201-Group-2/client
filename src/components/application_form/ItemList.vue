@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { watch } from "vue"
 import type { Competence, CompetenceList, Availability, AvailabilityList } from "./types"
-import type { Ref } from "vue"
+import { emptyAvailabilityList, emptyCompetenceList } from "./types"
 import { useI18n } from "vue-i18n"
 const i18n = useI18n()
 const { t } = i18n
@@ -31,12 +30,18 @@ function removeItemFromList(removedItem: Availability | Competence) {
   }
 }
 
-function isCompetenceList(itemList: CompetenceOrAvailability): itemList is CompetenceList {
-  return itemList.__typename === "CompetenceList"
+function getCompetenceList(itemList: CompetenceOrAvailability): CompetenceList {
+  if (itemList.__typename === "CompetenceList") {
+    return itemList as CompetenceList
+  }
+  return emptyCompetenceList
 }
 
-function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is AvailabilityList {
-  return itemList.__typename === "AvailabilityList"
+function getAvailabilityList(itemList: CompetenceOrAvailability): AvailabilityList {
+  if (itemList.__typename === "AvailabilityList") {
+    return itemList as AvailabilityList
+  }
+  return emptyAvailabilityList
 }
 </script>
 
@@ -55,7 +60,7 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
           </tr>
         </thead>
         <tbody>
-          <tr v-if="isAvailabilityList(list)" v-for="(availability, index) in list.data" :key="index">
+          <tr v-for="(availability, index) in getAvailabilityList(list).data" :key="index">
             <td :style="{ color: conflictingDateIndices?.includes(index) ? 'red' : '' }">
               {{ availability.start }}
             </td>
@@ -70,7 +75,7 @@ function isAvailabilityList(itemList: CompetenceOrAvailability): itemList is Ava
               </template>
             </v-tooltip>
           </tr>
-          <tr v-if="isCompetenceList(list)" v-for="(competence, index) in list!.data" :key="index">
+          <tr v-for="(competence, index) in getCompetenceList(list)!.data" :key="index">
             <td>{{ $t(expertiseOptionsPath + competence.areaOfExpertise) }}</td>
             <td style="text-align: center">{{ competence.yearsOfExperience }}</td>
             <v-tooltip v-if="!disableDelete" text="Delete" open-delay="500">

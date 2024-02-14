@@ -53,10 +53,6 @@ watch(i18n.locale, () => {
   if (expertiseKey) selectedExpertise.value = t(expertiseOptionsPath + expertiseKey)
 })
 
-watch(endDateIsPastStartDate, () => {
-  if (endDateIsPastStartDate) conflictingDateIndices.value = []
-})
-
 function addCompetence() {
   competenceList.value.data.push({
     areaOfExpertise: areasOfExpertiseReverseMap.value[selectedExpertise.value],
@@ -110,7 +106,7 @@ function initAvailability(): {
   startDateIsInPast: ComputedRef<boolean>
   endDateStr: Ref<string>
   endDateIsPastStartDate: ComputedRef<boolean>
-  conflictingDateIndices: Ref<Array<number>>
+  conflictingDateIndices: ComputedRef<Array<number>>
   conflictsWithOtherAvailability: ComputedRef<boolean>
 } {
   return {
@@ -122,8 +118,13 @@ function initAvailability(): {
     ),
     endDateStr: ref(new Date().toISOString().substring(0, 10)),
     endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
-    conflictingDateIndices: ref([]),
-    conflictsWithOtherAvailability: computed(() => {
+    conflictingDateIndices: computed(() => {
+      let computedConflicts: number[] = []
+
+      if (endDateIsPastStartDate.value) {
+        return []
+      }
+
       interface AvailabilityPeriod {
         start: Date
         end: Date
@@ -170,19 +171,18 @@ function initAvailability(): {
         return contains(period) || startConflicts(period) || endConflicts(period)
       }
 
-      conflictingDateIndices.value = []
-
       const availabilityPeriods: AvailabilityPeriod[] = availabilityList.value.data.map((period) => ({
         start: parseDate(period.start),
         end: parseDate(period.end)
       }))
 
       availabilityPeriods.forEach((period, index) => {
-        if (isConflicting(period)) conflictingDateIndices.value.push(index)
+        if (isConflicting(period)) computedConflicts.push(index)
       })
 
-      return conflictingDateIndices.value.length !== 0
-    })
+      return computedConflicts
+    }),
+    conflictsWithOtherAvailability: computed(() => conflictingDateIndices.value.length !== 0)
   }
 }
 

@@ -1,7 +1,7 @@
 import type WrapperLike from "node_modules/@vue/test-utils/dist/interfaces/wrapperLike"
 import type { VueWrapper } from "@vue/test-utils"
-import { Action, Language } from "./enums"
-import { expect, describe, it } from "vitest"
+import { Language } from "./enums"
+import { expect } from "vitest"
 import i18n from "@/i18n"
 const { t } = i18n.global
 
