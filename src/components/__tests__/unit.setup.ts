@@ -1,4 +1,4 @@
-import { config } from "@vue/test-utils"
+import { config } from "@vue/test-utils";
 import { pinia } from "@/main";
 import i18n from "../../i18n/index";
 import vuetify from "@/vuetify";

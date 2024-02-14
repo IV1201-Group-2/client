@@ -1,0 +1,26 @@
+name: check
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  # Check code with eslint and prettier
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+      - name: Install dependencies
+        run: npm install
+      - name: ESLint
+        run: npm run lint-check
+      - name: Prettier
+        run: npm run format-check

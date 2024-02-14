@@ -1,6 +1,6 @@
-import { createI18n, useI18n } from 'vue-i18n'
-import en from './locales/en.json'
-import sv from './locales/sv.json'
+import { createI18n } from "vue-i18n";
+import en from "./locales/en.json";
+import sv from "./locales/sv.json";
 
 export default createI18n({
   locale: import.meta.env.VITE_DEFAULT_LOCALE,
@@ -9,4 +9,4 @@ export default createI18n({
   legacy: false,
   globalInjection: true,
   messages: { en, sv }
-})
+});

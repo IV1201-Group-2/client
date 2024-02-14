@@ -1,6 +1,6 @@
-/** 
+/**
  * FILE DESCRIPTION:
- * The enums in this file are meant to be imported to test files to enforce naming conventions. 
+ * The enums in this file are meant to be imported to test files to enforce naming conventions.
  * Resort to custom strings when the component, action or time cannot be described by any of the enums below.
  */
 
@@ -11,11 +11,11 @@
  * RULES WHEN ADDING MORE PROPERTIES: First letter should be uppercase.
  */
 export enum GenericComponent {
-    Label = "Label",
-    List = "List",
-    Field = "Field",
-    ValidationMessage = "Validation message",
-    SubmitButton = "Submit button",
+  Label = "Label",
+  List = "List",
+  Field = "Field",
+  ValidationMessage = "Validation message",
+  SubmitButton = "Submit button"
 }
 
 /**
@@ -25,14 +25,14 @@ export enum GenericComponent {
  * RULES WHEN ADDING MORE PROPERTIES: First letter should be lowercase.
  */
 export enum Action {
-    HasEnglishTranslation = "has English translation",
-    HasSwedishTranslation = "has Swedish translation",
-    IsDisabled = "is disabled",
-    IsNotDisabled = "is not disabled",
-    IsReadonly = "is read-only",
-    Shows = "shows",
-    Hides = "hides",
-    Contains = "contains"
+  HasEnglishTranslation = "has English translation",
+  HasSwedishTranslation = "has Swedish translation",
+  IsDisabled = "is disabled",
+  IsNotDisabled = "is not disabled",
+  IsReadonly = "is read-only",
+  Shows = "shows",
+  Hides = "hides",
+  Contains = "contains"
 }
 
 /**
@@ -42,8 +42,8 @@ export enum Action {
  * RULES WHEN ADDING MORE PROPERTIES: 1) first character is a space 2) first letter is lowercase
  */
 export enum When {
-    NoInput = " when no input is given",
-    InputIsGiven = " when input is given"
+  NoInput = " when no input is given",
+  InputIsGiven = " when input is given"
 }
 
 /**
@@ -52,6 +52,6 @@ export enum When {
  * EXAMPLE: i18n.global.locale.value = Language.Swedish
  */
 export enum Language {
-    English = 'en',
-    Swedish = 'sv'
+  English = "en",
+  Swedish = "sv"
 }
