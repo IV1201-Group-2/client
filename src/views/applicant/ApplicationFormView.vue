@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, watch, type Ref, type ComputedRef } from "vue"
-import { storeToRefs } from "pinia"
-import { useI18n } from "vue-i18n"
-import { useApplicationStore } from "@/stores/applicationForm"
-import { ApplicationTestId } from "@/util/enums"
-import ItemList from "@/components/application_form/ItemList.vue"
-import PersonalInformation from "@/components/application_form/PersonalInformation.vue"
-const applicationStore = useApplicationStore()
-const { competenceList, availabilityList } = storeToRefs(applicationStore)
-const i18n = useI18n()
-const { t } = i18n
+import { ref, computed, watch, type Ref, type ComputedRef } from "vue";
+import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
+import { useApplicationStore } from "@/stores/applicationForm";
+import { ApplicationTestId } from "@/util/enums";
+import ItemList from "@/components/application_form/ItemList.vue";
+import PersonalInformation from "@/components/application_form/PersonalInformation.vue";
+const applicationStore = useApplicationStore();
+const { competenceList, availabilityList } = storeToRefs(applicationStore);
+const i18n = useI18n();
+const { t } = i18n;
 
 const { basePath, messagesPath, competencePath, availabilityPath, expertiseOptionsPath, buttonsPath, itemListPath } =
-  initPaths()
+  initPaths();
 
-const { areasOfExpertise, areasOfExpertiseReverseMap, selectedExpertise, yearsOfExperience } = initCompetence()
+const { areasOfExpertise, areasOfExpertiseReverseMap, selectedExpertise, yearsOfExperience } = initCompetence();
 
 const {
   startDate,
@@ -25,7 +25,7 @@ const {
   endDateIsPastStartDate,
   conflictingDateIndices,
   conflictsWithOtherAvailability
-} = initAvailability()
+} = initAvailability();
 
 const {
   competenceListEmpty,
@@ -34,43 +34,43 @@ const {
   availabilityMsg,
   reverseDatesErrMsg,
   conflictingPeriodsErrMsg
-} = initMessages()
+} = initMessages();
 
 watch(startDateStr, () => {
-  startDate.value = parseDate(startDateStr.value)
-})
+  startDate.value = parseDate(startDateStr.value);
+});
 
 watch(endDateStr, () => {
-  endDate.value = parseDate(endDateStr.value)
-})
+  endDate.value = parseDate(endDateStr.value);
+});
 
 watch(i18n.locale, () => {
   areasOfExpertise.value = areasOfExpertise.value.map((expertise) =>
     t(expertiseOptionsPath + areasOfExpertiseReverseMap.value[expertise])
-  )
-  const expertiseKey = areasOfExpertiseReverseMap.value?.[selectedExpertise.value]
-  areasOfExpertiseReverseMap.value = getExpertiseReverseMap()
-  if (expertiseKey) selectedExpertise.value = t(expertiseOptionsPath + expertiseKey)
-})
+  );
+  const expertiseKey = areasOfExpertiseReverseMap.value?.[selectedExpertise.value];
+  areasOfExpertiseReverseMap.value = getExpertiseReverseMap();
+  if (expertiseKey) selectedExpertise.value = t(expertiseOptionsPath + expertiseKey);
+});
 
 function addCompetence() {
   competenceList.value.data.push({
     areaOfExpertise: areasOfExpertiseReverseMap.value[selectedExpertise.value],
     yearsOfExperience: yearsOfExperience.value
-  })
+  });
   areasOfExpertise.value = areasOfExpertise.value.filter(
     (areaOfExpertise) => areaOfExpertise !== selectedExpertise.value
-  )
-  selectedExpertise.value = ""
+  );
+  selectedExpertise.value = "";
 }
 
 function addAvailability() {
-  availabilityList.value.data.push({ start: startDateStr.value, end: endDateStr.value })
+  availabilityList.value.data.push({ start: startDateStr.value, end: endDateStr.value });
 }
 
 function initPaths() {
-  const basePath = applicationStore.basePath
-  const competencePath = applicationStore.competencePath
+  const basePath = applicationStore.basePath;
+  const competencePath = applicationStore.competencePath;
 
   return {
     basePath,
@@ -80,34 +80,34 @@ function initPaths() {
     availabilityPath: applicationStore.availabilityPath,
     buttonsPath: basePath + "buttons.",
     itemListPath: applicationStore.itemListPath
-  }
+  };
 }
 
 function initCompetence(): {
-  areasOfExpertise: Ref<string[]>
-  areasOfExpertiseReverseMap: Ref<any>
-  selectedExpertise: Ref<string>
-  yearsOfExperience: Ref<number>
+  areasOfExpertise: Ref<string[]>;
+  areasOfExpertiseReverseMap: Ref<any>;
+  selectedExpertise: Ref<string>;
+  yearsOfExperience: Ref<number>;
 } {
-  const expertiseReverseMap = getExpertiseReverseMap()
+  const expertiseReverseMap = getExpertiseReverseMap();
 
   return {
     areasOfExpertise: ref(Object.keys(expertiseReverseMap).sort()),
     areasOfExpertiseReverseMap: ref(expertiseReverseMap),
     selectedExpertise: ref(""),
     yearsOfExperience: ref(0)
-  }
+  };
 }
 
 function initAvailability(): {
-  startDate: Ref<Date>
-  endDate: Ref<Date>
-  startDateStr: Ref<string>
-  startDateIsInPast: ComputedRef<boolean>
-  endDateStr: Ref<string>
-  endDateIsPastStartDate: ComputedRef<boolean>
-  conflictingDateIndices: ComputedRef<Array<number>>
-  conflictsWithOtherAvailability: ComputedRef<boolean>
+  startDate: Ref<Date>;
+  endDate: Ref<Date>;
+  startDateStr: Ref<string>;
+  startDateIsInPast: ComputedRef<boolean>;
+  endDateStr: Ref<string>;
+  endDateIsPastStartDate: ComputedRef<boolean>;
+  conflictingDateIndices: ComputedRef<Array<number>>;
+  conflictsWithOtherAvailability: ComputedRef<boolean>;
 } {
   return {
     startDate: ref(parseDate(new Date().toISOString().substring(0, 10))),
@@ -119,80 +119,80 @@ function initAvailability(): {
     endDateStr: ref(new Date().toISOString().substring(0, 10)),
     endDateIsPastStartDate: computed(() => startDate.value.getTime() > endDate.value.getTime()),
     conflictingDateIndices: computed(() => {
-      let computedConflicts: number[] = []
+      let computedConflicts: number[] = [];
 
       if (endDateIsPastStartDate.value) {
-        return []
+        return [];
       }
 
       interface AvailabilityPeriod {
-        start: Date
-        end: Date
+        start: Date;
+        end: Date;
       }
 
       function contains(period: AvailabilityPeriod) {
-        return startsBeforeStart(period) && endsAfterEnd(period)
+        return startsBeforeStart(period) && endsAfterEnd(period);
 
         function startsBeforeStart(period: AvailabilityPeriod) {
-          return startDate.value.getTime() < period.start.getTime()
+          return startDate.value.getTime() < period.start.getTime();
         }
 
         function endsAfterEnd(period: AvailabilityPeriod) {
-          return endDate.value.getTime() > period.end.getTime()
+          return endDate.value.getTime() > period.end.getTime();
         }
       }
 
       function startConflicts(period: AvailabilityPeriod) {
-        return startsAfterStart(period) && startsBeforeEnd(period)
+        return startsAfterStart(period) && startsBeforeEnd(period);
 
         function startsAfterStart(period: AvailabilityPeriod) {
-          return startDate.value.getTime() >= period.start.getTime()
+          return startDate.value.getTime() >= period.start.getTime();
         }
 
         function startsBeforeEnd(period: AvailabilityPeriod) {
-          return startDate.value.getTime() <= period.end.getTime()
+          return startDate.value.getTime() <= period.end.getTime();
         }
       }
 
       function endConflicts(period: AvailabilityPeriod) {
-        return endsAfterStart(period) && endsBeforeEnd(period)
+        return endsAfterStart(period) && endsBeforeEnd(period);
 
         function endsAfterStart(period: AvailabilityPeriod) {
-          return endDate.value.getTime() >= period.start.getTime()
+          return endDate.value.getTime() >= period.start.getTime();
         }
 
         function endsBeforeEnd(period: AvailabilityPeriod) {
-          return endDate.value.getTime() <= period.end.getTime()
+          return endDate.value.getTime() <= period.end.getTime();
         }
       }
 
       function isConflicting(period: AvailabilityPeriod) {
-        console.log(contains(period) || startConflicts(period) || endConflicts(period))
-        return contains(period) || startConflicts(period) || endConflicts(period)
+        console.log(contains(period) || startConflicts(period) || endConflicts(period));
+        return contains(period) || startConflicts(period) || endConflicts(period);
       }
 
       const availabilityPeriods: AvailabilityPeriod[] = availabilityList.value.data.map((period) => ({
         start: parseDate(period.start),
         end: parseDate(period.end)
-      }))
+      }));
 
       availabilityPeriods.forEach((period, index) => {
-        if (isConflicting(period)) computedConflicts.push(index)
-      })
+        if (isConflicting(period)) computedConflicts.push(index);
+      });
 
-      return computedConflicts
+      return computedConflicts;
     }),
     conflictsWithOtherAvailability: computed(() => conflictingDateIndices.value.length !== 0)
-  }
+  };
 }
 
 function initMessages(): {
-  competenceListEmpty: ComputedRef<boolean>
-  availabilityListEmpty: ComputedRef<boolean>
-  expertiseMsg: ComputedRef<string>
-  availabilityMsg: ComputedRef<string>
-  reverseDatesErrMsg: ComputedRef<string>
-  conflictingPeriodsErrMsg: ComputedRef<string>
+  competenceListEmpty: ComputedRef<boolean>;
+  availabilityListEmpty: ComputedRef<boolean>;
+  expertiseMsg: ComputedRef<string>;
+  availabilityMsg: ComputedRef<string>;
+  reverseDatesErrMsg: ComputedRef<string>;
+  conflictingPeriodsErrMsg: ComputedRef<string>;
 } {
   return {
     competenceListEmpty: computed(() => competenceList.value.data.length === 0),
@@ -205,7 +205,7 @@ function initMessages(): {
     ),
     reverseDatesErrMsg: computed(() => t(messagesPath + "start-date-after-end-date")),
     conflictingPeriodsErrMsg: computed(() => t(messagesPath + "conflicting-periods"))
-  }
+  };
 }
 
 function getExpertiseReverseMap() {
@@ -215,19 +215,19 @@ function getExpertiseReverseMap() {
     TicketSales = "ticket-sales"
   }
 
-  const ticketSales = t(expertiseOptionsPath + ExpertiseKeys.TicketSales)
-  const lotteries = t(expertiseOptionsPath + ExpertiseKeys.Lotteries)
-  const rollerCoasterOperations = t(expertiseOptionsPath + ExpertiseKeys.RollerCoasterOperations)
+  const ticketSales = t(expertiseOptionsPath + ExpertiseKeys.TicketSales);
+  const lotteries = t(expertiseOptionsPath + ExpertiseKeys.Lotteries);
+  const rollerCoasterOperations = t(expertiseOptionsPath + ExpertiseKeys.RollerCoasterOperations);
 
   return {
     [ticketSales]: ExpertiseKeys.TicketSales,
     [lotteries]: ExpertiseKeys.Lotteries,
     [rollerCoasterOperations]: ExpertiseKeys.RollerCoasterOperations
-  }
+  };
 }
 
 function parseDate(dateStr: string) {
-  return new Date(Date.parse(dateStr))
+  return new Date(Date.parse(dateStr));
 }
 </script>
 

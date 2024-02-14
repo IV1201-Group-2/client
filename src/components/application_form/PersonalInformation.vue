@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ApplicationTestId } from "@/util/enums"
-import { ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useAuthStore } from "@/stores/auth"
-const { token } = storeToRefs(useAuthStore())
+import { ApplicationTestId } from "@/util/enums";
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth";
+const { token } = storeToRefs(useAuthStore());
 const props = defineProps<{
-  basePath: string
-}>()
+  basePath: string;
+}>();
 
-const personalInformationPath = props.basePath + "personal-information."
+const personalInformationPath = props.basePath + "personal-information.";
 
-const { firstNameInput, lastNameInput, personNumberInput, emailInput } = initPersonalInformation()
+const { firstNameInput, lastNameInput, personNumberInput, emailInput } = initPersonalInformation();
 
 function initPersonalInformation() {
   return {
@@ -18,7 +18,7 @@ function initPersonalInformation() {
     lastNameInput: ref("Svensson"),
     personNumberInput: ref("930101-xxxx"),
     emailInput: ref("test@exempel.com")
-  }
+  };
 }
 
 fetch("https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/", {
@@ -29,16 +29,16 @@ fetch("https://application-form-service-8e764787209b.herokuapp.com/api/applicati
   }
 }).then((response) => {
   if (response.status !== 200) {
-    throw "could not get personal information, status code: " + response.status
+    throw "could not get personal information, status code: " + response.status;
   } else {
     response.json().then((result) => {
-      firstNameInput.value = result.name
-      lastNameInput.value = result.surname
-      personNumberInput.value = result.pnr
-      emailInput.value = result.email
-    })
+      firstNameInput.value = result.name;
+      lastNameInput.value = result.surname;
+      personNumberInput.value = result.pnr;
+      emailInput.value = result.email;
+    });
   }
-})
+});
 </script>
 
 <template>

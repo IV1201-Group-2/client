@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue"
-import { ValidationBuilder } from "@/util/validation"
-import { RegistrationTestId } from "@/util/enums"
-import { useAuthStore } from "@/stores/auth"
-import { useI18n } from "vue-i18n"
-const { register } = useAuthStore()
-const i18n = useI18n()
+import { ref, computed, watch } from "vue";
+import { ValidationBuilder } from "@/util/validation";
+import { RegistrationTestId } from "@/util/enums";
+import { useAuthStore } from "@/stores/auth";
+import { useI18n } from "vue-i18n";
+const { register } = useAuthStore();
+const i18n = useI18n();
 
-const isFormValid = ref(false)
+const isFormValid = ref(false);
 
-const { registrationPath, formPath, fieldsPath, buttonsPath } = initPaths()
+const { registrationPath, formPath, fieldsPath, buttonsPath } = initPaths();
 
-const { firstName, lastName, email, personNumber, username, password } = initInputs()
+const { firstName, lastName, email, personNumber, username, password } = initInputs();
 
 const { firstNameRules, lastNameRules, emailRules, personNumberRules, usernameRules, passwordRules } =
-  initValidationRules()
+  initValidationRules();
 
 function initPaths() {
-  const registrationPath = "applicant.registration-page."
-  const formPath = registrationPath + "form."
+  const registrationPath = "applicant.registration-page.";
+  const formPath = registrationPath + "form.";
 
   return {
     registrationPath,
     formPath,
     fieldsPath: formPath + "fields.",
     buttonsPath: formPath + "buttons."
-  }
+  };
 }
 
 function initInputs() {
@@ -36,25 +36,25 @@ function initInputs() {
     personNumber: ref(""),
     username: ref(""),
     password: ref("")
-  }
+  };
 }
 
 function initValidationRules() {
-  const mandatoryFieldPath = "validation-util.mandatory."
+  const mandatoryFieldPath = "validation-util.mandatory.";
 
-  const firstNameTranslation = ref(i18n.t(mandatoryFieldPath + "first-name"))
-  const lastNameTranslation = ref(i18n.t(mandatoryFieldPath + "last-name"))
-  const usernameTranslation = ref(i18n.t(mandatoryFieldPath + "username"))
-  const passwordTranslation = ref(i18n.t(mandatoryFieldPath + "password"))
+  const firstNameTranslation = ref(i18n.t(mandatoryFieldPath + "first-name"));
+  const lastNameTranslation = ref(i18n.t(mandatoryFieldPath + "last-name"));
+  const usernameTranslation = ref(i18n.t(mandatoryFieldPath + "username"));
+  const passwordTranslation = ref(i18n.t(mandatoryFieldPath + "password"));
 
   watch(i18n.locale, () => {
-    firstNameTranslation.value = i18n.t(mandatoryFieldPath + "first-name")
-    lastNameTranslation.value = i18n.t(mandatoryFieldPath + "last-name")
-    usernameTranslation.value = i18n.t(mandatoryFieldPath + "username")
-    passwordTranslation.value = i18n.t(mandatoryFieldPath + "password")
-  })
+    firstNameTranslation.value = i18n.t(mandatoryFieldPath + "first-name");
+    lastNameTranslation.value = i18n.t(mandatoryFieldPath + "last-name");
+    usernameTranslation.value = i18n.t(mandatoryFieldPath + "username");
+    passwordTranslation.value = i18n.t(mandatoryFieldPath + "password");
+  });
 
-  const builder = new ValidationBuilder(formPath + "validations.")
+  const builder = new ValidationBuilder(formPath + "validations.");
 
   return {
     firstNameRules: computed(() => builder.isMandatory(firstNameTranslation.value).build()),
@@ -63,7 +63,7 @@ function initValidationRules() {
     personNumberRules: builder.isPersonNumber().build(),
     usernameRules: computed(() => builder.isMandatory(usernameTranslation.value).build()),
     passwordRules: computed(() => builder.isMandatory(passwordTranslation.value).build())
-  }
+  };
 }
 </script>
 

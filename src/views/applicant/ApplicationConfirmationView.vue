@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-import { useApplicationStore } from "@/stores/applicationForm"
-import ItemList from "@/components/application_form/ItemList.vue"
-import PersonalInformation from "@/components/application_form/PersonalInformation.vue"
-import { ref } from "vue"
-const applicationStore = useApplicationStore()
-const { competenceList, availabilityList } = storeToRefs(applicationStore)
-const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore
+import { storeToRefs } from "pinia";
+import { useApplicationStore } from "@/stores/applicationForm";
+import ItemList from "@/components/application_form/ItemList.vue";
+import PersonalInformation from "@/components/application_form/PersonalInformation.vue";
+import { ref } from "vue";
+const applicationStore = useApplicationStore();
+const { competenceList, availabilityList } = storeToRefs(applicationStore);
+const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore;
 
-const confirmPath = basePath + "confirmation.confirm"
-const submitPath = basePath + "buttons.submit"
+const confirmPath = basePath + "confirmation.confirm";
+const submitPath = basePath + "buttons.submit";
 
-const hasConfirmed = ref(false)
+const hasConfirmed = ref(false);
 </script>
 
 <template>

@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { computed } from "vue"
-import router from "@/router"
-import { useI18n } from "vue-i18n"
-const { t } = useI18n()
+import { computed } from "vue";
+import router from "@/router";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 interface ApplicantRow {
-  firstName: string
-  lastName: string
-  personNumber: string
-  email: string
-  receivedAt: string
-  actions: "mdi-eye"
+  firstName: string;
+  lastName: string;
+  personNumber: string;
+  email: string;
+  receivedAt: string;
+  actions: "mdi-eye";
 }
 
-const { basePath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths()
+const { basePath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths();
 
-const header = computed(() => t(basePath + "header"))
+const header = computed(() => t(basePath + "header"));
 
-const firstName = computed(() => t(tableHeaderPath + "first-name"))
-const lastName = computed(() => t(tableHeaderPath + "last-name"))
-const personNumber = computed(() => t(tableHeaderPath + "person-number"))
-const email = computed(() => t(tableHeaderPath + "email"))
-const receivedAt = computed(() => t(tableHeaderPath + "received-at"))
-const actions = computed(() => t(tableHeaderPath + "actions"))
+const firstName = computed(() => t(tableHeaderPath + "first-name"));
+const lastName = computed(() => t(tableHeaderPath + "last-name"));
+const personNumber = computed(() => t(tableHeaderPath + "person-number"));
+const email = computed(() => t(tableHeaderPath + "email"));
+const receivedAt = computed(() => t(tableHeaderPath + "received-at"));
+const actions = computed(() => t(tableHeaderPath + "actions"));
 
-const itemsPerPageText = computed(() => t(tableFooterPath + "items-per-page-text"))
-const viewTooltip = computed(() => t(tooltipPath + "view"))
+const itemsPerPageText = computed(() => t(tableFooterPath + "items-per-page-text"));
+const viewTooltip = computed(() => t(tooltipPath + "view"));
 
-const tempCurrDate = computed(() => new Date().toISOString().substring(0, 10))
+const tempCurrDate = computed(() => new Date().toISOString().substring(0, 10));
 
 const headers: any = [
   { title: firstName, align: "start", key: "firstName" },
@@ -36,7 +36,7 @@ const headers: any = [
   { title: email, align: "start", key: "email" },
   { title: receivedAt, align: "start", key: "receivedAt" },
   { title: actions, align: "center", key: "actions" }
-]
+];
 const test: ApplicantRow[] = [
   {
     firstName: "Daniel",
@@ -166,22 +166,22 @@ const test: ApplicantRow[] = [
     receivedAt: tempCurrDate.value,
     actions: "mdi-eye"
   }
-]
+];
 
 function initPaths() {
-  const basePath = "recruiter.admin-panel."
-  const tablePath = basePath + "table."
+  const basePath = "recruiter.admin-panel.";
+  const tablePath = basePath + "table.";
 
   return {
     basePath,
     tableHeaderPath: tablePath + "header.",
     tableFooterPath: tablePath + "footer.",
     tooltipPath: tablePath + "tooltip."
-  }
+  };
 }
 
 function view() {
-  router.push(router.currentRoute.value.path + "/handle")
+  router.push(router.currentRoute.value.path + "/handle");
 }
 </script>
 

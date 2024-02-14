@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n"
-import { RouterLink, RouterView } from "vue-router"
-import { storeToRefs } from "pinia"
-import { useAuthStore } from "./stores/auth"
-const authStore = useAuthStore()
-const { isAuthenticated } = storeToRefs(authStore)
-const i18n = useI18n()
+import { useI18n } from "vue-i18n";
+import { RouterLink, RouterView } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "./stores/auth";
+const authStore = useAuthStore();
+const { isAuthenticated } = storeToRefs(authStore);
+const i18n = useI18n();
 
 function changeLocale(locale: string) {
-  i18n.locale.value = locale
+  i18n.locale.value = locale;
 }
 </script>
 

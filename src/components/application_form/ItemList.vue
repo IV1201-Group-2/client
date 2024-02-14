@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import type { Competence, CompetenceList, Availability, AvailabilityList } from "./types"
-import { emptyAvailabilityList, emptyCompetenceList } from "./types"
-import { useI18n } from "vue-i18n"
-const i18n = useI18n()
-const { t } = i18n
+import type { Competence, CompetenceList, Availability, AvailabilityList } from "./types";
+import { emptyAvailabilityList, emptyCompetenceList } from "./types";
+import { useI18n } from "vue-i18n";
+const i18n = useI18n();
+const { t } = i18n;
 defineProps<{
-  headerI18nKey: string
-  firstColumnI18nKey: string
-  secondColumnI18nKey: string
-  disableDelete?: boolean
-}>()
+  headerI18nKey: string;
+  firstColumnI18nKey: string;
+  secondColumnI18nKey: string;
+  disableDelete?: boolean;
+}>();
 
 interface CompetenceOrAvailability {
-  __typename: "AvailabilityList" | "CompetenceList"
-  data: Array<Availability | Competence>
+  __typename: "AvailabilityList" | "CompetenceList";
+  data: Array<Availability | Competence>;
 }
 
-const list = defineModel<CompetenceOrAvailability>("list", { required: true })
-const areasOfExpertise = defineModel<Array<string>>("areasOfExpertise")
-const conflictingDateIndices = defineModel<Array<number>>("conflictingDateIndices")
+const list = defineModel<CompetenceOrAvailability>("list", { required: true });
+const areasOfExpertise = defineModel<Array<string>>("areasOfExpertise");
+const conflictingDateIndices = defineModel<Array<number>>("conflictingDateIndices");
 
-const expertiseOptionsPath = "applicant.application-form-page.competence.options."
+const expertiseOptionsPath = "applicant.application-form-page.competence.options.";
 
 function removeItemFromList(removedItem: Availability | Competence) {
-  list.value.data = list.value.data.filter((item) => item !== removedItem)
-  const expertises = areasOfExpertise.value
+  list.value.data = list.value.data.filter((item) => item !== removedItem);
+  const expertises = areasOfExpertise.value;
   if ("areaOfExpertise" in removedItem && expertises) {
-    areasOfExpertise.value = [...expertises, t(expertiseOptionsPath + removedItem.areaOfExpertise)].sort()
+    areasOfExpertise.value = [...expertises, t(expertiseOptionsPath + removedItem.areaOfExpertise)].sort();
   }
 }
 
 function getCompetenceList(itemList: CompetenceOrAvailability): CompetenceList {
   if (itemList.__typename === "CompetenceList") {
-    return itemList as CompetenceList
+    return itemList as CompetenceList;
   }
-  return emptyCompetenceList
+  return emptyCompetenceList;
 }
 
 function getAvailabilityList(itemList: CompetenceOrAvailability): AvailabilityList {
   if (itemList.__typename === "AvailabilityList") {
-    return itemList as AvailabilityList
+    return itemList as AvailabilityList;
   }
-  return emptyAvailabilityList
+  return emptyAvailabilityList;
 }
 </script>
 

@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "@/views/applicant/ApplicantLoginView.vue"
-import ApplicantRegistrationView from "@/views/applicant/ApplicantRegistrationView.vue"
-import ApplicationFormView from "@/views/applicant/ApplicationFormView.vue"
-import { useAuthStore } from "@/stores/auth"
-import ApplicationConfirmationView from "@/views/applicant/ApplicationConfirmationView.vue"
-import AdminPanel from "@/views/recruiter/AdminPanel.vue"
-import HandleApplication from "@/views/recruiter/HandleApplication.vue"
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "@/views/applicant/ApplicantLoginView.vue";
+import ApplicantRegistrationView from "@/views/applicant/ApplicantRegistrationView.vue";
+import ApplicationFormView from "@/views/applicant/ApplicationFormView.vue";
+import { useAuthStore } from "@/stores/auth";
+import ApplicationConfirmationView from "@/views/applicant/ApplicationConfirmationView.vue";
+import AdminPanel from "@/views/recruiter/AdminPanel.vue";
+import HandleApplication from "@/views/recruiter/HandleApplication.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,44 +49,44 @@ const router = createRouter({
       ]
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
-  const { role } = useAuthStore()
+  const { role } = useAuthStore();
 
   if (to.meta.requiresAuth) {
     if (canAccessAsRecruiter()) {
-      next()
+      next();
     } else if (canAccessAsApplicant()) {
-      next()
+      next();
     } else {
-      next("/")
+      next("/");
     }
   } else {
     if (isRecruiter()) {
-      next("recruitment")
+      next("recruitment");
     } else if (isApplicant()) {
-      next("application")
+      next("application");
     } else {
-      next()
+      next();
     }
   }
 
   function isRecruiter(): boolean {
-    return role === "Recruiter"
+    return role === "Recruiter";
   }
 
   function isApplicant(): boolean {
-    return role === "Applicant"
+    return role === "Applicant";
   }
 
   function canAccessAsRecruiter(): boolean {
-    return to.meta.requiredRole === "Recruiter" && isRecruiter()
+    return to.meta.requiredRole === "Recruiter" && isRecruiter();
   }
 
   function canAccessAsApplicant(): boolean {
-    return to.meta.requiredRole === "Applicant" && isApplicant()
+    return to.meta.requiredRole === "Applicant" && isApplicant();
   }
-})
+});
 
-export default router
+export default router;

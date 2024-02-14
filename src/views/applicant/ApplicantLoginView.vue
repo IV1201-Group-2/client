@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { type ref } from "vue"
-import { useAuthStore } from "@/stores/auth"
-const { login } = useAuthStore()
+import { type ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+const { login } = useAuthStore();
 
-const basePath = "applicant.login-page."
-const formPath = basePath + "form."
-const fieldsPath = formPath + "fields."
-const buttonsPath = formPath + "buttons."
+const basePath = "applicant.login-page.";
+const formPath = basePath + "form.";
+const fieldsPath = formPath + "fields.";
+const buttonsPath = formPath + "buttons.";
 
-const username = ref("")
-const password = ref("")
+const username = ref("");
+const password = ref("");
 
 // const isFormValid = ref(false);
 </script>
