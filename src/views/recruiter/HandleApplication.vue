@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PersonalInformation from '@/components/generic/PersonalInformation.vue';
-import ItemList from '@/components/generic/ItemList.vue';
-import Status from '@/components/handle_application/Status.vue'
-import type { AvailabilityList, CompetenceList } from '@/components/generic/types';
+import PersonalInformation from "@/components/generic/PersonalInformation.vue";
+import ItemList from "@/components/generic/ItemList.vue";
+import StatusCard from "@/components/handle_application/StatusCard.vue";
+import type { AvailabilityList, CompetenceList } from "@/components/generic/types";
 
 const basePath = "recruiter.handle-application.";
 const itemListPath = basePath + "item-list.";
@@ -37,7 +37,7 @@ const testAvailabilityList: AvailabilityList = {
       end: new Date().toISOString().substring(0, 10)
     }
   ]
-}
+};
 
 const testCompetenceList: CompetenceList = {
   __typename: "CompetenceList",
@@ -51,7 +51,7 @@ const testCompetenceList: CompetenceList = {
       yearsOfExperience: 3
     }
   ]
-}
+};
 </script>
 
 <template>
@@ -60,7 +60,7 @@ const testCompetenceList: CompetenceList = {
     <v-sheet class="d-flex">
       <v-sheet>
         <PersonalInformation :base-path="basePath" />
-        <Status />
+        <StatusCard />
       </v-sheet>
       <v-sheet class="d-flex flex-column justify-space-between">
         <v-sheet class="d-flex">
@@ -77,10 +77,9 @@ const testCompetenceList: CompetenceList = {
             :second-column-i18n-key="availabilityPath + 'end-date'"
             :disable-delete="true"
             v-model:list="testAvailabilityList"
-        />
+          />
         </v-sheet>
       </v-sheet>
     </v-sheet>
   </main>
 </template>
-@/components/generic/types
