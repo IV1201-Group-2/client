@@ -117,6 +117,28 @@
           "view": "View"
         }
       }
+    },
+    "handle-application": {
+      "personal-information": {
+        "header": "Personal Information",
+        "first-name": "First Name",
+        "last-name": "Last Name",
+        "person-number": "Person Number",
+        "email": "Email"
+      },
+      "item-list": {
+        "third-column": "Actions",
+        "competence-header": "Competence List",
+        "availability-header": "Availability List"
+      },
+      "competence": {
+        "area-of-expertise": "Area of Expertise",
+        "years-of-experience": "Years of Experience"
+      },
+      "availability": {
+        "start-date": "Start Date",
+        "end-date": "End Date"
+      }
     }
   }
 }

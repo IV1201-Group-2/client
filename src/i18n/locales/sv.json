@@ -117,6 +117,28 @@
           "view": "Visa"
         }
       }
+    },
+    "handle-application": {
+      "personal-information": {
+        "header": "Personlig information",
+        "first-name": "Förnamn",
+        "last-name": "Efternamn",
+        "person-number": "Personnummer",
+        "email": "E-postadress"
+      },
+      "item-list": {
+        "third-column": "Handlingar",
+        "competence-header": "Kompetenslista",
+        "availability-header": "Tillgänglighetslista"
+      },
+      "competence": {
+        "area-of-expertise": "Yrkesområde",
+        "years-of-experience": "Antal arbetsår"
+      },
+      "availability": {
+        "start-date": "Startdatum",
+        "end-date": "Slutdatum"
+      }
     }
   }
 }
