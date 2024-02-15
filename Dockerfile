@@ -17,5 +17,4 @@ RUN ./mvnw package
 
 FROM openjdk:17
 COPY --from=servicestage /service/target/client-service-0.0.1-SNAPSHOT.jar /app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD java -Dserver.port=$PORT -jar /app.jar
