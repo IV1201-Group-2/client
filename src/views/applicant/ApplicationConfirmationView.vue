@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useApplicationStore } from "@/stores/applicationForm";
-import ItemList from "@/components/application_form/ItemList.vue";
-import PersonalInformation from "@/components/application_form/PersonalInformation.vue";
+import ItemList from "@/components/generic/ItemList.vue";
+import PersonalInformation from "@/components/generic/PersonalInformation.vue";
 import { ref } from "vue";
 const applicationStore = useApplicationStore();
 const { competenceList, availabilityList } = storeToRefs(applicationStore);

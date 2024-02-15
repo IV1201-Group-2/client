@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PersonalInformation from '@/components/application_form/PersonalInformation.vue';
-import ItemList from '@/components/application_form/ItemList.vue';
+import PersonalInformation from '@/components/generic/PersonalInformation.vue';
+import ItemList from '@/components/generic/ItemList.vue';
 import Status from '@/components/handle_application/Status.vue'
-import type { AvailabilityList, CompetenceList } from '@/components/application_form/types';
+import type { AvailabilityList, CompetenceList } from '@/components/generic/types';
 
 const basePath = "recruiter.handle-application.";
 const itemListPath = basePath + "item-list.";
@@ -83,3 +83,4 @@ const testCompetenceList: CompetenceList = {
     </v-sheet>
   </main>
 </template>
+@/components/generic/types

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
-import type { AvailabilityList, CompetenceList } from "@/components/application_form/types";
+import type { AvailabilityList, CompetenceList } from "@/components/generic/types";
 
 export const useApplicationStore = defineStore("application", () => {
   const basePath = "applicant.application-form-page.";
