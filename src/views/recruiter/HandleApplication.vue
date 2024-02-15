@@ -1,33 +1,13 @@
 <script setup lang="ts">
 import PersonalInformation from '@/components/application_form/PersonalInformation.vue';
 import ItemList from '@/components/application_form/ItemList.vue';
+import Status from '@/components/handle_application/Status.vue'
 import type { AvailabilityList, CompetenceList } from '@/components/application_form/types';
-import { ref } from 'vue';
 
 const basePath = "recruiter.handle-application.";
 const itemListPath = basePath + "item-list.";
 const competencePath = basePath + "competence.";
 const availabilityPath = basePath + "availability.";
-
-const receivedAt = ref(new Date().toISOString().substring(0, 10));
-
-const statuses = [
-  {
-    text: "Accepted",
-    icon: "mdi-check-circle",
-    color: "success"
-  },
-  {
-    text: "Pending",
-    icon: "mdi-minus-circle",
-    color: "orange"
-  },
-  {
-    text: "Rejected",
-    icon: "mdi-close-circle",
-    color: "red"
-  }
-]
 
 const testAvailabilityList: AvailabilityList = {
   __typename: "AvailabilityList",
@@ -76,21 +56,11 @@ const testCompetenceList: CompetenceList = {
 
 <template>
   <main style="height: 30rem">
-    <div class="text-h3 text-center mb-10">Handle Application</div>
+    <div class="text-h3 text-center mb-10">{{ $t(basePath + "header") }}</div>
     <v-sheet class="d-flex">
       <v-sheet>
         <PersonalInformation :base-path="basePath" />
-        <div class="text-h5">Application Status</div>
-        <v-container>
-          <v-row>
-            <v-text-field label="Received At" v-model="receivedAt" />
-            <v-combobox v-model="statuses" append-icon="" style="pointer-events: none;"> 
-              <template #selection="{ item }">
-                <v-chip :color="item.value.color" append-icon="mdi-minus-circle">Pending</v-chip>
-              </template>
-            </v-combobox>
-          </v-row>
-        </v-container>
+        <Status />
       </v-sheet>
       <v-sheet class="d-flex flex-column justify-space-between">
         <v-sheet class="d-flex">
@@ -110,10 +80,6 @@ const testCompetenceList: CompetenceList = {
         />
         </v-sheet>
       </v-sheet>
-    </v-sheet>
-    <v-sheet class="d-flex justify-center">
-      <v-btn color="red" class="mr-2">Reject</v-btn>
-      <v-btn color="success">Accept</v-btn>
     </v-sheet>
   </main>
 </template>

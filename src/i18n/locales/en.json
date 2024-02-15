@@ -119,6 +119,7 @@
       }
     },
     "handle-application": {
+      "header": "Handle Application",
       "personal-information": {
         "header": "Personal Information",
         "first-name": "First Name",
@@ -138,6 +139,23 @@
       "availability": {
         "start-date": "Start Date",
         "end-date": "End Date"
+      },
+      "status": {
+        "header": "Status",
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "rejected": "Rejected",
+        "actions": {
+          "accept": "Accept",
+          "reject": "Reject",
+          "undo": "Undo"
+        },
+        "undo-message": {
+          "header": "Caution!",
+          "body": "You are about to undo the status of this application. <br> This may confuse the applicant since you have already informed them of their status. <br><br> Do you want to proceed?",
+          "no": "No",
+          "yes": "Yes"
+        }
       }
     }
   }
