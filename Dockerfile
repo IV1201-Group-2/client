@@ -1,17 +1,21 @@
-FROM node:lits-alpine as clientstage
+FROM node:lts-alpine as clientstage
+WORKDIR /app
+COPY . .
 RUN npm install
 RUN npm run build
-COPY dist ./service/src/main/resources/static
 
 FROM openjdk:17 as servicestage
-WORKDIR /app
+WORKDIR /service
+
 COPY service/mvnw .
 COPY service/.mvn .mvn
 COPY service/pom.xml .
 COPY service/src src
+COPY --from=clientstage /app/dist src/main/resources/static
+
 RUN ./mvnw package
-COPY service/target/*.jar app.jar
 
 FROM openjdk:17
-COPY --from=servicestage /app/app.jar .
+COPY --from=servicestage /service/target/client-service-0.0.1-SNAPSHOT.jar /app.jar
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
