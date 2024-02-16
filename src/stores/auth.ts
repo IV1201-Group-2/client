@@ -8,7 +8,7 @@ type Role = "Applicant" | "Recruiter" | "";
 export const useAuthStore = defineStore("auth", () => {
   const token = ref("");
   const isAuthenticated = computed(() => !!token.value);
-  const role: Ref<Role> = ref("Recruiter");
+  const role: Ref<Role> = ref("");
 
   function register(registrationForm: RegistrationForm) {
     fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {

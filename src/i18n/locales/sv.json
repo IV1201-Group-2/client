@@ -117,6 +117,46 @@
           "view": "Visa"
         }
       }
+    },
+    "handle-application": {
+      "header": "Hantera ansökan",
+      "personal-information": {
+        "header": "Personlig information",
+        "first-name": "Förnamn",
+        "last-name": "Efternamn",
+        "person-number": "Personnummer",
+        "email": "E-postadress"
+      },
+      "item-list": {
+        "third-column": "Handlingar",
+        "competence-header": "Kompetenslista",
+        "availability-header": "Tillgänglighetslista"
+      },
+      "competence": {
+        "area-of-expertise": "Yrkesområde",
+        "years-of-experience": "Antal arbetsår"
+      },
+      "availability": {
+        "start-date": "Startdatum",
+        "end-date": "Slutdatum"
+      },
+      "status": {
+        "header": "Status",
+        "pending": "Bearbetas",
+        "accepted": "Accepterad",
+        "rejected": "Nekad",
+        "actions": {
+          "accept": "Acceptera",
+          "reject": "Neka",
+          "undo": "Återställ"
+        },
+        "undo-message": {
+          "header": "Varning!",
+          "body": "Du är på väg att återställa statusen för denna ansökan. <br> Det kan leda till förvirring för den ansökande eftersom statusen redan delgivits denne. <br><br> Önskar du fortsätta?",
+          "no": "Nej",
+          "yes": "Ja"
+        }
+      }
     }
   }
 }
