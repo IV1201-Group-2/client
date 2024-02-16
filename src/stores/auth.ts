@@ -6,9 +6,11 @@ import router from "@/router";
 type Role = "Applicant" | "Recruiter" | "";
 
 export const useAuthStore = defineStore("auth", () => {
-  const token = ref("");
+  const token = ref(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+  );
   const isAuthenticated = computed(() => !!token.value);
-  const role: Ref<Role> = ref("");
+  const role: Ref<Role> = ref("Recruiter");
 
   function register(registrationForm: RegistrationForm) {
     fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
@@ -69,6 +71,7 @@ export const useAuthStore = defineStore("auth", () => {
     token,
     isAuthenticated,
     role,
+    parseJwt,
     register,
     login,
     logout

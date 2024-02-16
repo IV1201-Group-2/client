@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth";
 import { useI18n } from "vue-i18n";
+const authStore = useAuthStore();
+const { token } = storeToRefs(authStore);
+const { parseJwt } = authStore;
 const { t } = useI18n();
 
 type StatusKeys = "accepted" | "pending" | "rejected";
@@ -42,15 +47,15 @@ const dialogIsVisible = ref(false);
 const undoMsgBody = computed(() => t(undoMsgPath + "body"));
 
 function accept() {
-  status.value = statuses.accepted;
+  submitStatus(statuses.accepted.i18nPath as keyof Statuses);
 }
 
 function reject() {
-  status.value = statuses.rejected;
+  submitStatus(statuses.rejected.i18nPath as keyof Statuses);
 }
 
 function undo() {
-  status.value = statuses.pending;
+  submitStatus(statuses.pending.i18nPath as keyof Statuses);
   hideDialog();
 }
 
@@ -60,6 +65,22 @@ function showDialog() {
 
 function hideDialog() {
   dialogIsVisible.value = false;
+}
+
+function submitStatus(statusKey: StatusKeys) {
+  fetch("http://localhost:8080/api/applicant", {
+    method: "POST",
+    headers: {
+      "Content-type": `Bearer:${token.value}`
+    },
+    body: JSON.stringify({ person_id: parseJwt(token.value).id, status: statuses[statusKey].i18nPath })
+  }).then((response) => {
+    if (response.status !== 200) {
+      // throw "could not set status. error code: " + response.status
+    } else {
+      // status.value = statuses[statusKey]
+    }
+  });
 }
 </script>
 
