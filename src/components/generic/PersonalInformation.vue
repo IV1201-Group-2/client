@@ -35,8 +35,7 @@ function getPersonalInformation() {
   }
 
   const url =
-    "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/application-form/applicant/personal-info/" +
-    params;
+    "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/application-form/applicant/personal-info/" + params;
   let options = {
     method: "GET",
     headers: {
