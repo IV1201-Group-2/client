@@ -3,14 +3,20 @@ import { ApplicationTestId } from "@/util/enums";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
-const { token } = storeToRefs(useAuthStore());
-const props = defineProps<{
-  basePath: string;
-}>();
+const { token, role } = storeToRefs(useAuthStore());
+const props = defineProps({
+  basePath: {
+      type: String,
+      required: true
+    },
+    personId: Number
+});
 
 const personalInformationPath = props.basePath + "personal-information.";
 
 const { firstNameInput, lastNameInput, personNumberInput, emailInput } = initPersonalInformation();
+
+getPersonalInformation()
 
 function initPersonalInformation() {
   return {
@@ -21,24 +27,36 @@ function initPersonalInformation() {
   };
 }
 
-fetch("https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token.value}`
+function getPersonalInformation() {
+  let params: "" | number = "";
+
+  if(props.personId && role.value === "Recruiter") {
+    params = props.personId;
   }
-}).then((response) => {
-  if (response.status !== 200) {
-    throw "could not get personal information, status code: " + response.status;
-  } else {
-    response.json().then((result) => {
-      firstNameInput.value = result.name;
-      lastNameInput.value = result.surname;
-      personNumberInput.value = result.pnr;
-      emailInput.value = result.email;
-    });
+
+  const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/"
+    + params;
+  let options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.value}`
+    }
   }
-});
+
+  fetch(url, options).then((response) => {
+    if (response.status !== 200) {
+      throw "could not get personal information, status code: " + response.status;
+    } else {
+      response.json().then((result) => {
+        firstNameInput.value = result.name;
+        lastNameInput.value = result.surname;
+        personNumberInput.value = result.pnr;
+        emailInput.value = result.email;
+      });
+    }
+  });
+}
 </script>
 
 <template>
