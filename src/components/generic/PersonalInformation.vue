@@ -6,17 +6,17 @@ import { useAuthStore } from "@/stores/auth";
 const { token, role } = storeToRefs(useAuthStore());
 const props = defineProps({
   basePath: {
-      type: String,
-      required: true
-    },
-    personId: Number
+    type: String,
+    required: true
+  },
+  personId: Number
 });
 
 const personalInformationPath = props.basePath + "personal-information.";
 
 const { firstNameInput, lastNameInput, personNumberInput, emailInput } = initPersonalInformation();
 
-getPersonalInformation()
+getPersonalInformation();
 
 function initPersonalInformation() {
   return {
@@ -30,19 +30,20 @@ function initPersonalInformation() {
 function getPersonalInformation() {
   let params: "" | number = "";
 
-  if(props.personId && role.value === "Recruiter") {
+  if (props.personId && role.value === "Recruiter") {
     params = props.personId;
   }
 
-  const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/"
-    + params;
+  const url =
+    "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/" +
+    params;
   let options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token.value}`
     }
-  }
+  };
 
   fetch(url, options).then((response) => {
     if (response.status !== 200) {
