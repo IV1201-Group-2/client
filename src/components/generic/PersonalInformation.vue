@@ -20,10 +20,10 @@ getPersonalInformation();
 
 function initPersonalInformation() {
   return {
-    firstNameInput: ref("Sven"),
-    lastNameInput: ref("Svensson"),
-    personNumberInput: ref("930101-xxxx"),
-    emailInput: ref("test@exempel.com")
+    firstNameInput: ref(""),
+    lastNameInput: ref(""),
+    personNumberInput: ref(""),
+    emailInput: ref("")
   };
 }
 
@@ -35,8 +35,7 @@ function getPersonalInformation() {
   }
 
   const url =
-    "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/applicant/personal-info/" +
-    params;
+    "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/application-form/applicant/personal-info/" + params;
   let options = {
     method: "GET",
     headers: {
