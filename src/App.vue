@@ -1,38 +1,41 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { RouterLink, RouterView } from 'vue-router'
-
+import { useI18n } from "vue-i18n";
+import { RouterLink, RouterView } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "./stores/auth";
+const authStore = useAuthStore();
+const { isAuthenticated } = storeToRefs(authStore);
 const i18n = useI18n();
 
 function changeLocale(locale: string) {
-  i18n.locale.value = locale
+  i18n.locale.value = locale;
 }
-
 </script>
 
 <template>
   <header>
-      <nav>
-        <RouterLink to="/">{{ $t("navigation.login") }}</RouterLink>
-        <RouterLink to="/register">{{ $t("navigation.register") }}</RouterLink>
-      </nav>
-      <v-btn>
-        <v-icon icon="mdi-translate" />
-        <v-menu activator="parent">
-            <v-list>
-              <v-list-item
-                v-for="language in i18n.availableLocales"
-                :key="language"
-                :value="language"
-                @click="() => changeLocale(language)">
-              
-                <v-list-item-title>
-                  {{ $t("languages." + language) }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-      </v-btn>
+    <nav>
+      <RouterLink v-if="isAuthenticated" @click="authStore.logout()" to="">{{ $t("navigation.logout") }}</RouterLink>
+      <RouterLink v-if="!isAuthenticated" to="/">{{ $t("navigation.login") }}</RouterLink>
+      <RouterLink v-if="!isAuthenticated" to="/register">{{ $t("navigation.register") }}</RouterLink>
+    </nav>
+    <v-btn>
+      <v-icon icon="mdi-translate" />
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item
+            v-for="language in i18n.availableLocales"
+            :key="language"
+            :value="language"
+            @click="() => changeLocale(language)"
+          >
+            <v-list-item-title>
+              {{ $t("languages." + language) }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
   </header>
 
   <RouterView />
@@ -65,10 +68,10 @@ nav a:first-of-type {
 
 @media (min-width: 1024px) {
   header {
-  display: flex;
-  flex-direction: row;
-  place-items: center;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    place-items: center;
+    justify-content: space-between;
   }
 
   .logo {
@@ -78,7 +81,6 @@ nav a:first-of-type {
   nav {
     text-align: left;
     font-size: 1rem;
-
   }
 }
 </style>

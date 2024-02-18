@@ -1,53 +1,162 @@
 {
-    "languages": {
-        "en": "Engelska",
-        "sv": "Svenska"
-    },
-    "navigation": {
-        "login": "Logga in",
-        "register": "Skapa konto"
-    },
-    "validation-util": {
-        "mandatory": {
-            "first-name": "förnamn",
-            "last-name": "efternamn",
-            "username": "användarnamn",
-            "password": "lösenord"
-        }
-    },
-    "applicant": {
-        "login-page": {
-            "header": "Välkommen",
-            "form": {
-                "fields": {
-                    "username": "Användarnamn",
-                    "password": "Lösenord"
-                },
-                "buttons": {
-                    "login": "Logga in"
-                }
-            }
-        },
-        "registration-page": {
-            "header": "Skapa nytt konto",
-            "form": {
-                "fields": {
-                    "first-name": "Förnamn",
-                    "last-name": "Efternamn",
-                    "email": "E-postadress",
-                    "person-number": "Personnummer",
-                    "username": "Användarnamn",
-                    "password": "Lösenord"
-                },
-                "validations": {
-                    "mandatory": "Du måste ange ett {fieldName}",
-                    "email": "Ogiltig e-postadress",
-                    "person-number": "Ogiltigt personnummer"
-                },
-                "buttons": {
-                    "submit": "Skicka"
-                }
-            }
-        }
+  "languages": {
+    "en": "Engelska",
+    "sv": "Svenska"
+  },
+  "navigation": {
+    "logout": "Logga ut",
+    "login": "Logga in",
+    "register": "Skapa konto"
+  },
+  "validation-util": {
+    "mandatory": {
+      "first-name": "förnamn",
+      "last-name": "efternamn",
+      "username": "användarnamn",
+      "password": "lösenord"
     }
+  },
+  "applicant": {
+    "login-page": {
+      "header": "Välkommen",
+      "form": {
+        "fields": {
+          "username": "Användarnamn",
+          "password": "Lösenord"
+        },
+        "buttons": {
+          "login": "Logga in"
+        }
+      }
+    },
+    "registration-page": {
+      "header": "Skapa nytt konto",
+      "form": {
+        "fields": {
+          "first-name": "Förnamn",
+          "last-name": "Efternamn",
+          "email": "E-postadress",
+          "person-number": "Personnummer",
+          "username": "Användarnamn",
+          "password": "Lösenord"
+        },
+        "validations": {
+          "mandatory": "Du måste ange ett {fieldName}",
+          "email": "Ogiltig e-postadress",
+          "person-number": "Ogiltigt personnummer"
+        },
+        "buttons": {
+          "submit": "Skicka"
+        }
+      }
+    },
+    "application-form-page": {
+      "header": "Ansökningsformulär",
+      "messages": {
+        "header": "Meddelanden:",
+        "add-expertise": "Vänligen lägg till ett eller fler av dina yrkesområden.",
+        "add-availability": "Vänligen lägg till dina tillgänglighetstider.",
+        "expertise-added": "Yrkesområde tillagt!",
+        "availability-added": "Tillgänglighetstid tillagd!",
+        "start-date-after-end-date": "Vänligen sätt startdatumet före slutdatumet för att lägga till fler tider.",
+        "conflicting-periods": "Vänligen välj start- och slutdatum som inte krockar med redan tillagda tider för att lägga till fler tider."
+      },
+      "personal-information": {
+        "header": "Personlig information",
+        "first-name": "Förnamn",
+        "last-name": "Efternamn",
+        "person-number": "Personnummer",
+        "email": "E-postadress"
+      },
+      "competence": {
+        "header": "Kompetensprofil",
+        "area-of-expertise": "Yrkesområde",
+        "years-of-experience": "Antal arbetsår",
+        "options": {
+          "ticket-sales": "Biljettförsäljning",
+          "lotteries": "Lotteriförsäljning",
+          "roller-coaster-operations": "Berg-och-dalbana-operatör"
+        }
+      },
+      "availability": {
+        "header": "Tillgänglig mellan:",
+        "start-date": "Startdatum",
+        "end-date": "Slutdatum"
+      },
+      "item-list": {
+        "third-column": "Handlingar",
+        "competence-header": "Kompetenslista",
+        "availability-header": "Tillgänglighetslista"
+      },
+      "confirmation": {
+        "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer."
+      },
+      "buttons": {
+        "add": "Lägg till",
+        "review": "Granska ansökan",
+        "submit": "Skicka"
+      }
+    }
+  },
+  "recruiter": {
+    "admin-panel": {
+      "header": "Adminpanel",
+      "table": {
+        "header": {
+          "first-name": "Förnamn",
+          "last-name": "Efternamn",
+          "person-number": "Personnummer",
+          "email": "E-postadress",
+          "received-at": "Mottaget",
+          "actions": "Handlingar"
+        },
+        "footer": {
+          "items-per-page-text": "Antal ansökande per sida"
+        },
+        "tooltip": {
+          "view": "Visa"
+        }
+      }
+    },
+    "handle-application": {
+      "header": "Hantera ansökan",
+      "personal-information": {
+        "header": "Personlig information",
+        "first-name": "Förnamn",
+        "last-name": "Efternamn",
+        "person-number": "Personnummer",
+        "email": "E-postadress"
+      },
+      "item-list": {
+        "third-column": "Handlingar",
+        "competence-header": "Kompetenslista",
+        "availability-header": "Tillgänglighetslista"
+      },
+      "competence": {
+        "area-of-expertise": "Yrkesområde",
+        "years-of-experience": "Antal arbetsår"
+      },
+      "availability": {
+        "start-date": "Startdatum",
+        "end-date": "Slutdatum"
+      },
+      "status": {
+        "header": "Status",
+        "pending": "Bearbetas",
+        "accepted": "Accepterad",
+        "rejected": "Nekad",
+        "actions": {
+          "accept": "Acceptera",
+          "reject": "Neka",
+          "undo": "Återställ"
+        },
+        "undo-message": {
+          "header": "Varning!",
+          "body": "Du är på väg att återställa statusen för denna ansökan. <br> Det kan leda till förvirring för den ansökande eftersom statusen redan delgivits denne. <br><br> Önskar du fortsätta?",
+          "no": "Nej",
+          "yes": "Ja"
+        }
+      }
+    }
+  }
 }
