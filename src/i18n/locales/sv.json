@@ -89,7 +89,12 @@
         "availability-header": "Tillgänglighetslista"
       },
       "confirmation": {
-        "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer."
+        "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer.",
+        "dialog": {
+          "header": "Information",
+          "success": "Tack för din ansökan! <br> Vi kommer att återkoppla till dig inom kort.",
+          "failure": "Din ansökan kunde ej mottas. <br> Vänligen försök igen senare."
+        }
       },
       "buttons": {
         "add": "Lägg till",

@@ -56,7 +56,7 @@ watch(i18n.locale, () => {
 function addCompetence() {
   competenceList.value.data.push({
     areaOfExpertise: areasOfExpertiseReverseMap.value[selectedExpertise.value],
-    yearsOfExperience: yearsOfExperience.value
+    yearsOfExperience: Number(yearsOfExperience.value)
   });
   areasOfExpertise.value = areasOfExpertise.value.filter(
     (areaOfExpertise) => areaOfExpertise !== selectedExpertise.value
