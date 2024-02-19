@@ -17,7 +17,7 @@ const { t } = useI18n();
 const confirmationPath = basePath + "confirmation.";
 const confirmPath = confirmationPath + "confirm";
 const dialogPath = confirmationPath + "dialog.";
-const submitPath = basePath + "buttons.submit";
+const buttonsPath = basePath + "buttons.";
 
 const hasConfirmed = ref(false);
 const waitingForResponse = ref(false);
@@ -145,10 +145,10 @@ function hideDialog() {
       <v-checkbox v-model="hasConfirmed" :label="$t(confirmPath)" />
       <v-sheet>
         <v-btn class="mr-2" @click="$router.back()">
-          Back
+          {{ $t(buttonsPath + "back") }}
         </v-btn>
         <v-btn :disabled="!hasConfirmed" @click="submit">
-          {{ $t(submitPath) }}
+          {{ $t(buttonsPath + "submit") }}
         </v-btn>
       </v-sheet>
       <v-dialog v-model="dialogIsVisible" width="auto">
