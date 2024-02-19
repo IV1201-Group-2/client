@@ -18,7 +18,12 @@ export const useAuthStore = defineStore("auth", () => {
       },
       body: JSON.stringify(registrationForm)
     });
-    console.log("status code: " + response.status);
+
+    if (response.status === 200) {
+      await login(registrationForm.username, registrationForm.password);
+    } else {
+      // TODO
+    }
   }
 
   function parseJwt(encryptedToken: string) {
@@ -44,16 +49,15 @@ export const useAuthStore = defineStore("auth", () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ identity: username, password })
-    })
+    });
     const jsonResponse = await response.json();
 
-    if (response.status !== 200) {
-      console.log(jsonResponse);
-      // throw "could not login, status code: " + response.status
-    } else {
+    if (response.status === 200) {
       token.value = jsonResponse.token;
       role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
-      router.push("application");
+      router.push("/application");
+    } else {
+      // TODO
     }
   }
 
