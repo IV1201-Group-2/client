@@ -25,8 +25,6 @@ const dialogIsVisible = ref(false);
 
 const dialogMsg = ref("");
 
-console.log(competenceList.value.data);
-
 function submit() {
   isWaitingForResponse();
   const competencesPromise = getSelectableCompetences();
