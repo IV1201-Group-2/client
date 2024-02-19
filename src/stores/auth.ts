@@ -2,6 +2,7 @@ import { ref, computed, type Ref } from "vue";
 import { defineStore } from "pinia";
 import type { RegistrationForm } from "@/util/types";
 import router from "@/router";
+import { RESTError } from "@/util/error";
 
 type Role = "Applicant" | "Recruiter" | "";
 
@@ -10,16 +11,21 @@ export const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = computed(() => !!token.value);
   const role: Ref<Role> = ref("");
 
-  function register(registrationForm: RegistrationForm) {
-    fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
+  async function register(registrationForm: RegistrationForm): Promise<RESTError> {
+    const response = await fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(registrationForm)
-    }).then((response) => {
-      console.log("status code: " + response.status);
     });
+    const jsonResponse = await response.json();
+
+    if (response.status === 200) {
+      return await login(registrationForm.username, registrationForm.password);
+    } else {
+      return jsonResponse.error as RESTError;
+    }
   }
 
   function parseJwt(encryptedToken: string) {
@@ -38,25 +44,24 @@ export const useAuthStore = defineStore("auth", () => {
     return JSON.parse(jsonPayload);
   }
 
-  function login(username: string, password: string) {
-    fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
+  async function login(username: string, password: string): Promise<RESTError> {
+    const response = await fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ identity: username, password })
-    }).then((response) => {
-      if (response.status !== 200) {
-        response.json().then((result) => console.log(result));
-        // throw "could not login, status code: " + response.status
-      } else {
-        response.json().then((result) => {
-          token.value = result.token;
-          role.value = parseJwt(result.token).role === 2 ? "Applicant" : "Recruiter";
-          router.push("application");
-        });
-      }
     });
+    const jsonResponse = await response.json();
+
+    if (response.status === 200) {
+      token.value = jsonResponse.token;
+      role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
+      router.push("/");
+      return RESTError.None;
+    } else {
+      return jsonResponse.error as RESTError;
+    }
   }
 
   function logout() {
