@@ -91,9 +91,15 @@ function initCompetence(): {
 } {
   const expertiseReverseMap = getExpertiseReverseMap();
   const expertiseTranslations = Object.keys(expertiseReverseMap);
-  const expertises = competenceList.value.data.length > 0 ? 
-          expertiseTranslations.filter(expertise => !competenceList.value.data.some(competence => t(expertiseOptionsPath + competence.areaOfExpertise) === expertise)) :
-          expertiseTranslations;
+  const expertises =
+    competenceList.value.data.length > 0
+      ? expertiseTranslations.filter(
+          (expertise) =>
+            !competenceList.value.data.some(
+              (competence) => t(expertiseOptionsPath + competence.areaOfExpertise) === expertise
+            )
+        )
+      : expertiseTranslations;
 
   return {
     areasOfExpertise: ref(expertises),
