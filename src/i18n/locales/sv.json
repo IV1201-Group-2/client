@@ -20,6 +20,7 @@
     "login-page": {
       "header": "Välkommen",
       "form": {
+        "resetRequired": "Ditt lösenord behöver återställas. Vänligen ange ett nytt lösenord.",
         "fields": {
           "username": "Användarnamn",
           "password": "Lösenord"
@@ -176,6 +177,7 @@
     "WRONG_PASSWORD": "Fel lösenord angett",
     "MISSING_PASSWORD": "Lösenord hittades inte i databasen",
     "ALREADY_LOGGED_IN": "Redan inloggad",
+    "TOKEN_NOT_PROVIDED": "Åtkomst nekad",
     "UNKNOWN": "Okänt fel"
   }
 }

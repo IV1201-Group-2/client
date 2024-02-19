@@ -10,7 +10,7 @@ import type { AvailabilityList } from "@/components/generic/types";
 const applicationStore = useApplicationStore();
 const authStore = useAuthStore();
 const { competenceList, availabilityList } = storeToRefs(applicationStore);
-const { token } = storeToRefs(authStore);
+const { loginToken } = storeToRefs(authStore);
 const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore;
 const { t } = useI18n();
 
@@ -67,7 +67,7 @@ function submit() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`
+        Authorization: `Bearer ${loginToken.value}`
       },
       body: JSON.stringify({
         competences: selectedCompetenceIdsAndYears,
@@ -96,7 +96,7 @@ function submit() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`
+        Authorization: `Bearer ${loginToken.value}`
       }
     };
 

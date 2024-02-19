@@ -3,7 +3,7 @@ import { ApplicationTestId } from "@/util/enums";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
-const { token, role } = storeToRefs(useAuthStore());
+const { loginToken, role } = storeToRefs(useAuthStore());
 const props = defineProps({
   basePath: {
     type: String,
@@ -39,7 +39,7 @@ function getPersonalInformation() {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.value}`
+      Authorization: `Bearer ${loginToken.value}`
     }
   };
 
