@@ -7,8 +7,9 @@ import { RESTError } from "@/util/error";
 type Role = "Applicant" | "Recruiter" | "";
 
 export const useAuthStore = defineStore("auth", () => {
-  const token = ref("");
-  const isAuthenticated = computed(() => !!token.value);
+  const loginToken = ref("");
+  const resetToken = ref("");
+  const isAuthenticated = computed(() => !!loginToken.value);
   const role: Ref<Role> = ref("");
 
   async function register(registrationForm: RegistrationForm): Promise<RESTError> {
@@ -55,23 +56,27 @@ export const useAuthStore = defineStore("auth", () => {
     const jsonResponse = await response.json();
 
     if (response.status === 200) {
-      token.value = jsonResponse.token;
+      loginToken.value = jsonResponse.token;
       role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
       router.push("/");
       return RESTError.None;
     } else {
+      if (jsonResponse.error === RESTError.MissingPassword) {
+        resetToken.value = jsonResponse.details.reset_token;
+      }
       return jsonResponse.error as RESTError;
     }
   }
 
   function logout() {
-    token.value = "";
+    loginToken.value = "";
+    resetToken.value = "";
     role.value = "";
     router.push("/");
   }
 
   return {
-    token,
+    loginToken,
     isAuthenticated,
     role,
     register,
