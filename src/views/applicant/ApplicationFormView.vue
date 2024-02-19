@@ -56,7 +56,7 @@ watch(i18n.locale, () => {
 function addCompetence() {
   competenceList.value.data.push({
     areaOfExpertise: areasOfExpertiseReverseMap.value[selectedExpertise.value],
-    yearsOfExperience: yearsOfExperience.value
+    yearsOfExperience: Number(yearsOfExperience.value)
   });
   areasOfExpertise.value = areasOfExpertise.value.filter(
     (areaOfExpertise) => areaOfExpertise !== selectedExpertise.value
@@ -167,7 +167,6 @@ function initAvailability(): {
       }
 
       function isConflicting(period: AvailabilityPeriod) {
-        console.log(contains(period) || startConflicts(period) || endConflicts(period));
         return contains(period) || startConflicts(period) || endConflicts(period);
       }
 
@@ -336,14 +335,13 @@ function parseDate(dateStr: string) {
             </ul>
           </v-sheet>
           <v-sheet class="pa-4" style="height: 100%; display: flex; align-items: end">
-            <RouterLink :to="$route.path + '/confirmation'">
-              <v-btn
-                :data-test="ApplicationTestId.Submit"
-                :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
-              >
-                {{ $t(buttonsPath + "review") }}
-              </v-btn>
-            </RouterLink>
+            <v-btn
+              :data-test="ApplicationTestId.Submit"
+              :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
+              @click="$router.push($route.path + '/confirmation')"
+            >
+              {{ $t(buttonsPath + "review") }}
+            </v-btn>
           </v-sheet>
         </v-sheet>
       </v-sheet>

@@ -89,7 +89,12 @@
         "availability-header": "Availability List"
       },
       "confirmation": {
-        "confirm": "I hereby confirm that the information provided is true."
+        "confirm": "I hereby confirm that the information provided is true.",
+        "dialog": {
+          "header": "Information",
+          "success": "Thank you for your application! <br> We will get back to you as soon as possible.",
+          "failure": "Your application could not be handled. <br> Please try again later."
+        }
       },
       "buttons": {
         "add": "Add",
