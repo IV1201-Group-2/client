@@ -113,7 +113,7 @@
           "last-name": "Efternamn",
           "person-number": "Personnummer",
           "email": "E-postadress",
-          "received-at": "Mottaget",
+          "status": "Status",
           "actions": "Handlingar"
         },
         "footer": {

@@ -113,7 +113,7 @@
           "last-name": "Last Name",
           "person-number": "Person Number",
           "email": "Email",
-          "received-at": "Received At",
+          "status": "Status",
           "actions": "Actions"
         },
         "footer": {
