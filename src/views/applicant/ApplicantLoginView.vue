@@ -23,7 +23,7 @@ const showDialog = computed(() => loginError.value !== RESTError.None);
 const onLogin = async (username: string, password: string) => {
   loginError.value = await login(username, password);
   loginErrorTranslation.value = i18n.t(`error.${loginError.value}`);
-}
+};
 </script>
 
 <template>

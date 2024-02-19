@@ -18,7 +18,7 @@ const router = createRouter({
       path: "/login",
       name: "home",
       meta: {
-        authenticatedPage: false,
+        authenticatedPage: false
       },
       component: LoginView
     },
@@ -26,7 +26,7 @@ const router = createRouter({
       path: "/logout",
       name: "logout",
       meta: {
-        authenticatedPage: true,
+        authenticatedPage: true
       },
       component: LoginView
     },
@@ -34,7 +34,7 @@ const router = createRouter({
       path: "/register",
       name: "register",
       meta: {
-        authenticatedPage: false,
+        authenticatedPage: false
       },
       component: ApplicantRegistrationView
     },
@@ -81,18 +81,17 @@ router.beforeEach((to, from, next) => {
   }
 
   function canAccess(): boolean {
-    return (to.meta.requiredRole === "Recruiter" && isRecruiter()) ||
-      (to.meta.requiredRole === "Applicant" && isApplicant());
+    return (
+      (to.meta.requiredRole === "Recruiter" && isRecruiter()) || (to.meta.requiredRole === "Applicant" && isApplicant())
+    );
   }
 
   function navigateDefault() {
     if (isRecruiter()) {
       next("/recruitment");
-    }
-    else if(isApplicant()) {
+    } else if (isApplicant()) {
       next("/application");
-    }
-    else {
+    } else {
       next("/login");
     }
   }
@@ -100,20 +99,16 @@ router.beforeEach((to, from, next) => {
   // Route not found
   if (to.path === "/" || to.matched.length === 0) {
     navigateDefault();
-  }
-  else if (isLoggedIn() && to.meta.authenticatedPage) {
+  } else if (isLoggedIn() && to.meta.authenticatedPage) {
     if (canAccess()) {
       next();
-    }
-    else {
+    } else {
       auth.logout();
       navigateDefault();
     }
-  }
-  else if (!isLoggedIn() && !to.meta.authenticatedPage) {
+  } else if (!isLoggedIn() && !to.meta.authenticatedPage) {
     next();
-  }
-  else {
+  } else {
     navigateDefault();
   }
 });
