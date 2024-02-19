@@ -55,7 +55,7 @@ export const useAuthStore = defineStore("auth", () => {
     if (response.status === 200) {
       token.value = jsonResponse.token;
       role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
-      router.push("/application");
+      router.push("/");
     } else {
       // TODO
     }
