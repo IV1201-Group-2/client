@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { statuses } from "@/util/constants";
 import router from "@/router";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -9,11 +10,11 @@ interface ApplicantRow {
   lastName: string;
   personNumber: string;
   email: string;
-  receivedAt: string;
+  status: "accepted" | "rejected" | "pending";
   actions: "mdi-eye";
 }
 
-const { basePath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths();
+const { basePath, statusPath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths();
 
 const header = computed(() => t(basePath + "header"));
 
@@ -21,7 +22,7 @@ const firstName = computed(() => t(tableHeaderPath + "first-name"));
 const lastName = computed(() => t(tableHeaderPath + "last-name"));
 const personNumber = computed(() => t(tableHeaderPath + "person-number"));
 const email = computed(() => t(tableHeaderPath + "email"));
-const receivedAt = computed(() => t(tableHeaderPath + "received-at"));
+const status = computed(() => t(tableHeaderPath + "status"));
 const actions = computed(() => t(tableHeaderPath + "actions"));
 
 const itemsPerPageText = computed(() => t(tableFooterPath + "items-per-page-text"));
@@ -34,7 +35,7 @@ const headers: any = [
   { title: lastName, align: "start", key: "lastName" },
   { title: personNumber, align: "start", key: "personNumber" },
   { title: email, align: "start", key: "email" },
-  { title: receivedAt, align: "start", key: "receivedAt" },
+  { title: status, align: "start", key: "status" },
   { title: actions, align: "center", key: "actions" }
 ];
 const test: ApplicantRow[] = [
@@ -43,7 +44,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "pending",
     actions: "mdi-eye"
   },
   {
@@ -51,7 +52,7 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
   {
@@ -59,7 +60,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "rejected",
     actions: "mdi-eye"
   },
   {
@@ -67,7 +68,7 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
   {
@@ -75,7 +76,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "pending",
     actions: "mdi-eye"
   },
   {
@@ -83,7 +84,7 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
   {
@@ -91,7 +92,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "rejected",
     actions: "mdi-eye"
   },
   {
@@ -99,7 +100,7 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
   {
@@ -107,7 +108,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "pending",
     actions: "mdi-eye"
   },
   {
@@ -115,7 +116,7 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
   {
@@ -123,7 +124,7 @@ const test: ApplicantRow[] = [
     lastName: "Dahlberg",
     personNumber: "930822-1234",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "rejected",
     actions: "mdi-eye"
   },
   {
@@ -131,41 +132,9 @@ const test: ApplicantRow[] = [
     lastName: "Svensson",
     personNumber: "930822-1235",
     email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
+    status: "accepted",
     actions: "mdi-eye"
   },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    receivedAt: tempCurrDate.value,
-    actions: "mdi-eye"
-  }
 ];
 
 function initPaths() {
@@ -174,6 +143,7 @@ function initPaths() {
 
   return {
     basePath,
+    statusPath: "recruiter.handle-application.status.",
     tableHeaderPath: tablePath + "header.",
     tableFooterPath: tablePath + "footer.",
     tooltipPath: tablePath + "tooltip."
@@ -195,6 +165,18 @@ function view() {
             <v-icon :icon="value" v-bind="props" @click="view" />
           </template>
         </v-tooltip>
+      </template>
+
+      <template #item.status="{ value }">
+        <v-chip v-if="value === 'pending'" :color="statuses.pending.color" :append-icon="statuses.pending.icon">
+          {{ t(statusPath + statuses.pending.i18nPath) }}
+        </v-chip>
+        <v-chip v-if="value === 'accepted'" :color="statuses.accepted.color" :append-icon="statuses.accepted.icon">
+          {{ t(statusPath + statuses.accepted.i18nPath) }}
+        </v-chip>
+        <v-chip v-if="value === 'rejected'" :color="statuses.rejected.color" :append-icon="statuses.rejected.icon">
+          {{ t(statusPath + statuses.rejected.i18nPath) }}
+        </v-chip>
       </template>
     </v-data-table>
   </main>
