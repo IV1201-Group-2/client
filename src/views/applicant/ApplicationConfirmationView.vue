@@ -145,9 +145,14 @@ function hideDialog() {
         />
       </v-sheet>
       <v-checkbox v-model="hasConfirmed" :label="$t(confirmPath)" />
-      <v-btn :disabled="!hasConfirmed" @click="submit">
-        {{ $t(submitPath) }}
-      </v-btn>
+      <v-sheet>
+        <v-btn class="mr-2" @click="$router.back()">
+          Back
+        </v-btn>
+        <v-btn :disabled="!hasConfirmed" @click="submit">
+          {{ $t(submitPath) }}
+        </v-btn>
+      </v-sheet>
       <v-dialog v-model="dialogIsVisible" width="auto">
         <v-card>
           <v-card-title>
