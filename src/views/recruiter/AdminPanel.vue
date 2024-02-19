@@ -134,7 +134,7 @@ const test: ApplicantRow[] = [
     email: "test@exempel.com",
     status: "accepted",
     actions: "mdi-eye"
-  },
+  }
 ];
 
 function initPaths() {

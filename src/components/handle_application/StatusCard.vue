@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { statuses } from '@/util/constants';
+import { statuses } from "@/util/constants";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-
 
 const basePath = "recruiter.handle-application.";
 const statusPath = basePath + "status.";
 const actionsPath = statusPath + "actions.";
 const undoMsgPath = statusPath + "undo-message.";
-
 
 const status = ref(statuses.pending);
 const isHandled = computed(() => status.value.i18nPath !== statuses.pending.i18nPath);
