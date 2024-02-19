@@ -20,6 +20,7 @@
     "login-page": {
       "header": "Welcome",
       "form": {
+        "resetRequired": "Your password needs to be reset. Please enter a new password.",
         "fields": {
           "username": "Username",
           "password": "Password"
@@ -176,6 +177,7 @@
     "WRONG_PASSWORD": "Wrong password provided",
     "MISSING_PASSWORD": "No password in database",
     "ALREADY_LOGGED_IN": "Already logged in",
+    "TOKEN_NOT_PROVIDED": "Access denied",
     "UNKNOWN": "Unknown error occured"
   }
 }

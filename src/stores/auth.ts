@@ -68,6 +68,28 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
+  async function resetPassword(password: string): Promise<RESTError> {
+    const response = await fetch("https://login-service-afb21392797e.herokuapp.com/api/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resetToken.value}`
+      },
+      body: JSON.stringify({ password })
+    });
+    const jsonResponse = await response.json();
+
+    resetToken.value = "";
+    if (response.status === 200) {
+      loginToken.value = jsonResponse.token;
+      role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
+      router.push("/");
+      return RESTError.None;
+    } else {
+      return jsonResponse.error as RESTError;
+    }
+  }
+
   function logout() {
     loginToken.value = "";
     resetToken.value = "";
@@ -77,10 +99,12 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     loginToken,
+    resetToken,
     isAuthenticated,
     role,
     register,
     login,
+    resetPassword,
     logout
   };
 });
