@@ -157,18 +157,19 @@
           "yes": "Yes"
         }
       }
-    },
-    "error": {
-      "MISSING_PARAMETERS": "Not all required details were provided",
-      "INVALID_EMAIL": "Invalid email address provided",
-      "USERNAME_TAKEN": "That username is already taken",
-      "EMAIL_TAKEN": "That email address is already taken",
-      "PNR_TAKEN": "That person number is already taken",
-      "WRONG_IDENTITY": "User not found",
-      "WRONG_PASSWORD": "Wrong password provided",
-      "MISSING_PASSWORD": "No password in database",
-      "ALREADY_LOGGED_IN": "Already logged in",
-      "UNKNOWN": "Unknown error occured"
     }
+  },
+  "error": {
+    "none": "",
+    "MISSING_PARAMETERS": "Not all required details were provided",
+    "INVALID_EMAIL": "Invalid email address provided",
+    "USERNAME_TAKEN": "That username is already taken",
+    "EMAIL_TAKEN": "That email address is already taken",
+    "PNR_TAKEN": "That person number is already taken",
+    "WRONG_IDENTITY": "User not found",
+    "WRONG_PASSWORD": "Wrong password provided",
+    "MISSING_PASSWORD": "No password in database",
+    "ALREADY_LOGGED_IN": "Already logged in",
+    "UNKNOWN": "Unknown error occured"
   }
 }

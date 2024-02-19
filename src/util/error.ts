@@ -3,7 +3,7 @@
  */
 export enum RESTError {
   /* Common errors */
-  None = "",
+  None = "none",
   Unknown = "UNKNOWN",
   MissingParameters = "MISSING_PARAMETERS",
 
