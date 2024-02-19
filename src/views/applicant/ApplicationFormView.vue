@@ -167,7 +167,6 @@ function initAvailability(): {
       }
 
       function isConflicting(period: AvailabilityPeriod) {
-        console.log(contains(period) || startConflicts(period) || endConflicts(period));
         return contains(period) || startConflicts(period) || endConflicts(period);
       }
 
