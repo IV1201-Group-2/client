@@ -28,10 +28,13 @@ const dialogMsg = ref("");
 console.log(competenceList.value.data)
 
 function submit() {
+  isWaitingForResponse();
   const competencesPromise = getSelectableCompetences();
   competencesPromise.then(response => {
     if(response.status !== 200) {
-      throw "could not fetch competences, status code: " + response.status
+      dialogMsg.value = t(dialogPath + "failure")
+      showDialog();
+      noLongerWaitingForResponse();
     } else {
       response.json().then((result: Array<{ competence_id: number, i18n_key: string }>) => {
         interface CompetenceIdAndYears {
@@ -64,15 +67,16 @@ function submit() {
         availabilities: availabilities.data.map(availability => ({ from_date: availability.start, to_date: availability.end }))
       })
     }
+    console.log(options)
 
     fetch(url, options).then(response => {
-      if(response.status !== 200) {
+      if(response.status !== 201) {
         dialogMsg.value = t(dialogPath + "failure");
       } else {
         dialogMsg.value = t(dialogPath + "success")
       }
-
       showDialog();
+      noLongerWaitingForResponse();
     })
   }
   
@@ -91,6 +95,14 @@ function submit() {
 
   function showDialog() {
     dialogIsVisible.value = true;
+  }
+
+  function isWaitingForResponse() {
+    waitingForResponse.value = true;
+  }
+
+  function noLongerWaitingForResponse() {
+    waitingForResponse.value = false;
   }
 }
 
@@ -121,16 +133,13 @@ function hideDialog() {
         />
       </v-sheet>
       <v-checkbox v-model="hasConfirmed" :label="$t(confirmPath)" />
+      <v-btn :disabled="!hasConfirmed" @click="submit">
+        {{ $t(submitPath) }}
+      </v-btn>
       <v-dialog v-model="dialogIsVisible" width="auto">
-        <template #activator="{ props }">
-          <v-btn :disabled="!hasConfirmed" @click="submit">
-            {{ $t(submitPath) }}
-          </v-btn>
-        </template>
-
         <v-card>
           <v-card-title>
-            {{ $t(confirmationPath + "header") }}
+            {{ $t(dialogPath + "header") }}
           </v-card-title>
           <v-card-text class="text-center">
             <div v-html="dialogMsg" />
