@@ -98,6 +98,7 @@
       },
       "buttons": {
         "add": "Lägg till",
+        "back": "Tillbaka",
         "review": "Granska ansökan",
         "submit": "Skicka"
       }
