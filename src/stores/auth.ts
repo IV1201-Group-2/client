@@ -14,7 +14,7 @@ type AuthError =
   "WRONG_IDENTITY" |
   "WRONG_PASSWORD" |
   "ALREADY_LOGGED_IN" |
-  "UNKNOWN_ERROR" |
+  "UNKNOWN" |
   "";
 
 export interface AuthResult {

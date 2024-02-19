@@ -157,6 +157,18 @@
           "yes": "Ja"
         }
       }
+    },
+    "error": {
+      "MISSING_PARAMETERS": "Nödvändiga uppgifter saknas",
+      "INVALID_EMAIL": "Felaktig e-postadress",
+      "USERNAME_TAKEN": "Användarnamnet är upptaget",
+      "EMAIL_TAKEN": "E-postadress är upptaget",
+      "PNR_TAKEN": "Personnummer är upptaget",
+      "WRONG_IDENTITY": "Användaren kunde inte hittas",
+      "WRONG_PASSWORD": "Fel lösenord angett",
+      "MISSING_PASSWORD": "Lösenord hittades inte i databasen",
+      "ALREADY_LOGGED_IN": "Redan inloggad",
+      "UNKNOWN": "Okänt fel"
     }
   }
 }
