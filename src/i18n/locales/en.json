@@ -93,6 +93,7 @@
         "confirm": "I hereby confirm that the information provided is true.",
         "dialog": {
           "header": "Information",
+          "already-taken": "We could not receive your application since the application you previously sent us is still being processed. <br> We will get back to you as soon as possible.",
           "success": "Thank you for your application! <br> We will get back to you as soon as possible.",
           "failure": "Your application could not be handled. <br> Please try again later."
         }

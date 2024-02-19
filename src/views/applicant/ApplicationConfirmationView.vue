@@ -79,8 +79,13 @@ function submit() {
     };
     console.log(options);
 
-    fetch(url, options).then((response) => {
-      if (response.status !== 201) {
+    fetch(url, options).then(async (response) => {
+      console.log(response.statusText);
+      const result = await response.json();
+
+      if (result?.error === "ALREADY_APPLIED_BEFORE") {
+        dialogMsg.value = t(dialogPath + "already-applied");
+      } else if (response.status !== 201) {
         dialogMsg.value = t(dialogPath + "failure");
       } else {
         dialogMsg.value = t(dialogPath + "success");
@@ -147,7 +152,7 @@ function hideDialog() {
         <v-btn class="mr-2" @click="$router.back()">
           {{ $t(buttonsPath + "back") }}
         </v-btn>
-        <v-btn :disabled="!hasConfirmed" @click="submit">
+        <v-btn :loading="waitingForResponse" :disabled="!hasConfirmed" @click="submit">
           {{ $t(buttonsPath + "submit") }}
         </v-btn>
       </v-sheet>
