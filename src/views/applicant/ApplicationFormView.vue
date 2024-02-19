@@ -336,14 +336,13 @@ function parseDate(dateStr: string) {
             </ul>
           </v-sheet>
           <v-sheet class="pa-4" style="height: 100%; display: flex; align-items: end">
-            <RouterLink :to="$route.path + '/confirmation'">
               <v-btn
                 :data-test="ApplicationTestId.Submit"
                 :disabled="competenceList.data.length === 0 || availabilityList.data.length === 0"
+                @click="$router.push($route.path + '/confirmation')"
               >
                 {{ $t(buttonsPath + "review") }}
               </v-btn>
-            </RouterLink>
           </v-sheet>
         </v-sheet>
       </v-sheet>
