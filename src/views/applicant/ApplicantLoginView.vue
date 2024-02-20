@@ -43,7 +43,6 @@ const onResetPassword = async (password: string) => {
 
 const loginDisabled = computed(() => username.value.length === 0 || password.value.length === 0);
 const resetDisabled = computed(() => newPassword.value.length === 0);
-
 </script>
 
 <template>
@@ -54,7 +53,9 @@ const resetDisabled = computed(() => newPassword.value.length === 0);
       <v-form @submit.prevent>
         <v-text-field v-model="username" :label="$t(fieldsPath + 'username')" />
         <v-text-field v-model="password" :label="$t(fieldsPath + 'password')" />
-        <v-btn type="submit" :disabled="loginDisabled" @click="onLogin(username, password)" block>{{ $t(buttonsPath + "login") }}</v-btn>
+        <v-btn type="submit" :disabled="loginDisabled" @click="onLogin(username, password)" block>{{
+          $t(buttonsPath + "login")
+        }}</v-btn>
       </v-form>
     </v-sheet>
     <v-dialog v-model="showErrorDialog" width="auto">
