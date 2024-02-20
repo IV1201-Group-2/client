@@ -4,11 +4,13 @@ import { statuses } from "@/util/constants";
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
-import { useI18n } from "vue-i18n";
-const authStore = useAuthStore();
-const { token } = storeToRefs(authStore);
-const { parseJwt } = authStore;
+import { useStatusStore } from "@/stores/status"
+import { useI18n } from "vue-i18n";;
+const { loginToken } = storeToRefs(useAuthStore());
+const { applicantId } = storeToRefs(useStatusStore());
 const { t } = useI18n();
+
+console.log(applicantId.value)
 
 const basePath = "recruiter.handle-application.";
 const statusPath = basePath + "status.";
@@ -42,19 +44,25 @@ function hideDialog() {
 }
 
 function submitStatus(statusKey: StatusKeys) {
-  fetch("http://localhost:8080/api/applicant", {
+  console.log(JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) }))
+  fetch("https://application-status-service-e3dff919c7c0.herokuapp.com/api/applicant", {
     method: "POST",
     headers: {
-      "Content-type": `Bearer:${token.value}`
+      "Content-Type": "application/json",
+      "Authorization": `Bearer:${loginToken.value}`
     },
-    body: JSON.stringify({ person_id: parseJwt(token.value).id, status: statuses[statusKey].i18nPath })
+    body: JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) })
   }).then((response) => {
     if (response.status !== 200) {
-      // throw "could not set status. error code: " + response.status
+      throw "could not set status. error code: " + response.status
     } else {
-      // status.value = statuses[statusKey]
+      status.value = statuses[statusKey]
     }
   });
+  
+  function captializeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 }
 </script>
 

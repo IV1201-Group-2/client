@@ -151,8 +151,8 @@
       "status": {
         "header": "Status",
         "pending": "Pending",
-        "accepted": "Accepted",
-        "rejected": "Rejected",
+        "accept": "Accepted",
+        "reject": "Rejected",
         "actions": {
           "accept": "Accept",
           "reject": "Reject",

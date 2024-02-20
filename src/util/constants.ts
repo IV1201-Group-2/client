@@ -5,7 +5,7 @@ import type { Statuses } from "./types";
  */
 export const statuses: Statuses = {
   accepted: {
-    i18nPath: "accepted",
+    i18nPath: "accept",
     icon: "mdi-check-circle",
     color: "success"
   },
@@ -15,7 +15,7 @@ export const statuses: Statuses = {
     color: "orange"
   },
   rejected: {
-    i18nPath: "rejected",
+    i18nPath: "reject",
     icon: "mdi-close-circle",
     color: "red"
   }

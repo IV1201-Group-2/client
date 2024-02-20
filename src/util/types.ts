@@ -10,7 +10,7 @@ export interface RegistrationForm {
   password: string;
 }
 
-type StatusKeys = "accepted" | "pending" | "rejected";
+export type StatusKeys = "accepted" | "pending" | "rejected";
 
 /**
  * Specifies the statuses an application be set to by the recruiter.
