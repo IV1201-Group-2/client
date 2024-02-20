@@ -58,22 +58,23 @@ const headers: any = [
   { title: actions, align: "center", key: "actions" }
 ];
 
-// fetch("https://recruiter-service-b2f03b50686a.herokuapp.com/api/applications/", {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Authorization": `Bearer ${loginToken.value}`
-//   }
-// }).then(response => {
-//   if(response.status !== 200) {
-//     throw "could not fetch applications, status code: " + response.status
-//   } else {
-//     response.json().then((result)  => {
-//       const applications: ApplicantRow[] = (result as Applications).applications.map(application => ({ ...application, actions: 'mdi-eye' }));
-//       rows.value = applications;
-//     })
-//   }
-// })
+fetch("https://recruiter-service-b2f03b50686a.herokuapp.com/api/applications/", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${loginToken.value}`
+  }
+}).then(response => {
+  if(response.status !== 200) {
+    throw "could not fetch applications, status code: " + response.status
+  } else {
+    response.json().then((result)  => {
+      console.log(result)
+      const applications: ApplicantRow[] = (result as Applications).applications.map(application => ({ ...application, actions: 'mdi-eye' }));
+      rows.value = applications;
+    })
+  }
+})
 
 // const test: any[] = [
 //   {
