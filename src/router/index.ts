@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/applicant/ApplicantLoginView.vue";
+import LoginView from "@/views/applicant/ApplicantLoginView.vue";
 import ApplicantRegistrationView from "@/views/applicant/ApplicantRegistrationView.vue";
 import ApplicationFormView from "@/views/applicant/ApplicationFormView.vue";
 import { useAuthStore } from "@/stores/auth";
@@ -12,23 +12,37 @@ const router = createRouter({
   routes: [
     {
       path: "/",
+      component: LoginView
+    },
+    {
+      path: "/login",
       name: "home",
-      component: HomeView
+      meta: {
+        authenticatedPage: false
+      },
+      component: LoginView
     },
     {
       path: "/logout",
       name: "logout",
-      component: HomeView
+      meta: {
+        authenticatedPage: true
+      },
+      component: LoginView
     },
     {
       path: "/register",
       name: "register",
+      meta: {
+        authenticatedPage: false
+      },
       component: ApplicantRegistrationView
     },
     {
       path: "/application",
+      name: "application",
       meta: {
-        requiresAuth: true,
+        authenticatedPage: true,
         requiredRole: "Applicant"
       },
       children: [
@@ -40,7 +54,7 @@ const router = createRouter({
       path: "/recruitment",
       name: "recruitment",
       meta: {
-        requiresAuth: true,
+        authenticatedPage: true,
         requiredRole: "Recruiter"
       },
       children: [
@@ -52,40 +66,50 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { role } = useAuthStore();
-
-  if (to.meta.requiresAuth) {
-    if (canAccessAsRecruiter()) {
-      next();
-    } else if (canAccessAsApplicant()) {
-      next();
-    } else {
-      next("/");
-    }
-  } else {
-    if (isRecruiter()) {
-      next("recruitment");
-    } else if (isApplicant()) {
-      next("application");
-    } else {
-      next();
-    }
-  }
+  const auth = useAuthStore();
 
   function isRecruiter(): boolean {
-    return role === "Recruiter";
+    return auth.role === "Recruiter";
   }
 
   function isApplicant(): boolean {
-    return role === "Applicant";
+    return auth.role === "Applicant";
   }
 
-  function canAccessAsRecruiter(): boolean {
-    return to.meta.requiredRole === "Recruiter" && isRecruiter();
+  function isLoggedIn(): boolean {
+    return isRecruiter() || isApplicant();
   }
 
-  function canAccessAsApplicant(): boolean {
-    return to.meta.requiredRole === "Applicant" && isApplicant();
+  function canAccess(): boolean {
+    return (
+      (to.meta.requiredRole === "Recruiter" && isRecruiter()) || (to.meta.requiredRole === "Applicant" && isApplicant())
+    );
+  }
+
+  function navigateDefault() {
+    if (isRecruiter()) {
+      next("/recruitment");
+    } else if (isApplicant()) {
+      next("/application");
+    } else {
+      next("/login");
+    }
+  }
+
+  // Route not found
+  if (to.path === "/" || to.matched.length === 0) {
+    navigateDefault();
+  } else if (isLoggedIn() && to.meta.authenticatedPage) {
+    if (canAccess()) {
+      next();
+    } else {
+      auth.logout();
+      navigateDefault();
+    }
+  } else if (!isLoggedIn() && !to.meta.authenticatedPage) {
+    next();
+  } else {
+    navigateDefault();
   }
 });
 

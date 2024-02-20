@@ -60,7 +60,13 @@ const testCompetenceList: CompetenceList = {
     <v-sheet class="d-flex">
       <v-sheet>
         <PersonalInformation :base-path="basePath" />
-        <StatusCard />
+        <v-sheet class="d-flex">
+          <StatusCard />
+          <v-spacer style=""></v-spacer>
+          <v-sheet style="display: flex; align-items: flex-end">
+            <v-btn @click="$router.back()">Back</v-btn>
+          </v-sheet>
+        </v-sheet>
       </v-sheet>
       <v-sheet class="d-flex flex-column justify-space-between">
         <v-sheet class="d-flex">

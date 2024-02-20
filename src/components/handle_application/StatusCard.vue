@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Statuses, StatusKeys } from "@/util/types";
+import { statuses } from "@/util/constants";
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
@@ -8,38 +10,10 @@ const { token } = storeToRefs(authStore);
 const { parseJwt } = authStore;
 const { t } = useI18n();
 
-type StatusKeys = "accepted" | "pending" | "rejected";
-
-type Statuses = {
-  [status in StatusKeys]: {
-    i18nPath: string;
-    icon: string;
-    color: string;
-  };
-};
-
 const basePath = "recruiter.handle-application.";
 const statusPath = basePath + "status.";
 const actionsPath = statusPath + "actions.";
 const undoMsgPath = statusPath + "undo-message.";
-
-const statuses: Statuses = {
-  accepted: {
-    i18nPath: "accepted",
-    icon: "mdi-check-circle",
-    color: "success"
-  },
-  pending: {
-    i18nPath: "pending",
-    icon: "mdi-minus-circle",
-    color: "orange"
-  },
-  rejected: {
-    i18nPath: "rejected",
-    icon: "mdi-close-circle",
-    color: "red"
-  }
-};
 
 const status = ref(statuses.pending);
 const isHandled = computed(() => status.value.i18nPath !== statuses.pending.i18nPath);
