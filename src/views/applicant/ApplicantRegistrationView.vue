@@ -2,10 +2,13 @@
 import { ref, computed, watch } from "vue";
 import { ValidationBuilder } from "@/util/validation";
 import { RegistrationTestId } from "@/util/enums";
+import { RESTError } from "@/util/error";
 import { useAuthStore } from "@/stores/auth";
 import { useI18n } from "vue-i18n";
-const { register } = useAuthStore();
+import type { RegistrationForm } from "@/util/types";
+
 const i18n = useI18n();
+const { register } = useAuthStore();
 
 const isFormValid = ref(false);
 
@@ -65,6 +68,15 @@ function initValidationRules() {
     passwordRules: computed(() => builder.isMandatory(passwordTranslation.value).build())
   };
 }
+
+const registerError = ref(RESTError.None);
+const registerErrorTranslation = ref("");
+const showDialog = computed(() => registerError.value !== RESTError.None);
+
+const onRegister = async (form: RegistrationForm) => {
+  registerError.value = await register(form);
+  registerErrorTranslation.value = i18n.t(`error.${registerError.value}`);
+};
 </script>
 
 <template>
@@ -113,7 +125,7 @@ function initValidationRules() {
         :disabled="!isFormValid"
         type="submit"
         @click="
-          register({
+          onRegister({
             name: firstName,
             surname: lastName,
             email,
@@ -128,4 +140,11 @@ function initValidationRules() {
       </v-btn>
     </v-form>
   </v-sheet>
+  <v-dialog v-model="showDialog" width="auto">
+    <v-card :text="registerErrorTranslation">
+      <v-card-actions>
+        <v-btn color="primary" block @click="registerError = RESTError.None">OK</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

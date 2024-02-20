@@ -3,7 +3,7 @@ import { ApplicationTestId } from "@/util/enums";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
-const { token, role } = storeToRefs(useAuthStore());
+const { loginToken, role } = storeToRefs(useAuthStore());
 const props = defineProps({
   basePath: {
     type: String,
@@ -34,12 +34,12 @@ function getPersonalInformation() {
     params = props.personId;
   }
 
-  const url = "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/personal-info/" + params;
+  const url = "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/applicant/personal-info/" + params;
   let options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.value}`
+      Authorization: `Bearer ${loginToken.value}`
     }
   };
 

@@ -20,6 +20,7 @@
     "login-page": {
       "header": "Välkommen",
       "form": {
+        "resetRequired": "Ditt lösenord behöver återställas. Vänligen ange ett nytt lösenord.",
         "fields": {
           "username": "Användarnamn",
           "password": "Lösenord"
@@ -89,10 +90,17 @@
         "availability-header": "Tillgänglighetslista"
       },
       "confirmation": {
-        "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer."
+        "confirm": "Jag försäkrar härmed att lämnade uppgifter stämmer.",
+        "dialog": {
+          "header": "Information",
+          "already-applied": "Din ansökan kunde ej mottas eftersom en tidigare ansökan som du skickat oss är under bearbetning. <br> Vi kommer att återkoppla till dig inom kort.",
+          "success": "Tack för din ansökan! <br> Vi kommer att återkoppla till dig inom kort.",
+          "failure": "Din ansökan kunde ej mottas. <br> Vänligen försök igen senare."
+        }
       },
       "buttons": {
         "add": "Lägg till",
+        "back": "Tillbaka",
         "review": "Granska ansökan",
         "submit": "Skicka"
       }
@@ -107,7 +115,7 @@
           "last-name": "Efternamn",
           "person-number": "Personnummer",
           "email": "E-postadress",
-          "received-at": "Mottaget",
+          "status": "Status",
           "actions": "Handlingar"
         },
         "footer": {
@@ -158,5 +166,19 @@
         }
       }
     }
+  },
+  "error": {
+    "none": "",
+    "MISSING_PARAMETERS": "Nödvändiga uppgifter saknas",
+    "INVALID_EMAIL": "Felaktig e-postadress",
+    "USERNAME_TAKEN": "Användarnamnet är upptaget",
+    "EMAIL_TAKEN": "E-postadress är upptaget",
+    "PNR_TAKEN": "Personnummer är upptaget",
+    "WRONG_IDENTITY": "Användaren kunde inte hittas",
+    "WRONG_PASSWORD": "Fel lösenord angett",
+    "MISSING_PASSWORD": "Lösenord hittades inte i databasen",
+    "ALREADY_LOGGED_IN": "Redan inloggad",
+    "TOKEN_NOT_PROVIDED": "Åtkomst nekad",
+    "UNKNOWN": "Okänt fel"
   }
 }

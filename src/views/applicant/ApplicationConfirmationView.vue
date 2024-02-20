@@ -1,17 +1,129 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useApplicationStore } from "@/stores/applicationForm";
+import { useAuthStore } from "@/stores/auth";
+import { useI18n } from "vue-i18n";
 import ItemList from "@/components/generic/ItemList.vue";
 import PersonalInformation from "@/components/generic/PersonalInformation.vue";
 import { ref } from "vue";
+import type { AvailabilityList } from "@/components/generic/types";
 const applicationStore = useApplicationStore();
+const authStore = useAuthStore();
 const { competenceList, availabilityList } = storeToRefs(applicationStore);
+const { loginToken } = storeToRefs(authStore);
 const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore;
+const { t } = useI18n();
 
-const confirmPath = basePath + "confirmation.confirm";
-const submitPath = basePath + "buttons.submit";
+const confirmationPath = basePath + "confirmation.";
+const confirmPath = confirmationPath + "confirm";
+const dialogPath = confirmationPath + "dialog.";
+const buttonsPath = basePath + "buttons.";
 
 const hasConfirmed = ref(false);
+const waitingForResponse = ref(false);
+const dialogIsVisible = ref(false);
+
+const dialogMsg = ref("");
+
+function submit() {
+  isWaitingForResponse();
+  const competencesPromise = getSelectableCompetences();
+  competencesPromise.then((response) => {
+    if (response.status !== 200) {
+      dialogMsg.value = t(dialogPath + "failure");
+      showDialog();
+      noLongerWaitingForResponse();
+    } else {
+      response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
+        interface CompetenceIdAndYears {
+          competence_id: number;
+          years_of_experience: number;
+        }
+
+        const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
+        const selectedCompetenceIdsAndAreas = result.filter((competence) =>
+          selectedCompetenceAreas.includes(competence.i18n_key)
+        );
+        const selectedCompetenceIdsAndYears: CompetenceIdAndYears[] = selectedCompetenceIdsAndAreas.map(
+          (competenceWithId) => {
+            const competenceAreaAndYears = competenceList.value.data.find(
+              (competenceWithYear) => competenceWithId.i18n_key === competenceWithYear.areaOfExpertise
+            );
+            return {
+              competence_id: competenceWithId.competence_id,
+              years_of_experience: competenceAreaAndYears!.yearsOfExperience
+            };
+          }
+        );
+
+        storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
+      });
+    }
+  });
+
+  function storeApplication(selectedCompetenceIdsAndYears: any, availabilities: AvailabilityList) {
+    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/submit/";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${loginToken.value}`
+      },
+      body: JSON.stringify({
+        competences: selectedCompetenceIdsAndYears,
+        availabilities: availabilities.data.map((availability) => ({
+          from_date: availability.start,
+          to_date: availability.end
+        }))
+      })
+    };
+    console.log(options);
+
+    fetch(url, options).then(async (response) => {
+      console.log(response.statusText);
+      const result = await response.json();
+
+      if (result?.error === "ALREADY_APPLIED_BEFORE") {
+        dialogMsg.value = t(dialogPath + "already-applied");
+      } else if (response.status !== 201) {
+        dialogMsg.value = t(dialogPath + "failure");
+      } else {
+        dialogMsg.value = t(dialogPath + "success");
+      }
+      showDialog();
+      noLongerWaitingForResponse();
+    });
+  }
+
+  function getSelectableCompetences() {
+    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/competences/";
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${loginToken.value}`
+      }
+    };
+
+    return fetch(url, options);
+  }
+
+  function showDialog() {
+    dialogIsVisible.value = true;
+  }
+
+  function isWaitingForResponse() {
+    waitingForResponse.value = true;
+  }
+
+  function noLongerWaitingForResponse() {
+    waitingForResponse.value = false;
+  }
+}
+
+function hideDialog() {
+  dialogIsVisible.value = false;
+}
 </script>
 
 <template>
@@ -36,7 +148,28 @@ const hasConfirmed = ref(false);
         />
       </v-sheet>
       <v-checkbox v-model="hasConfirmed" :label="$t(confirmPath)" />
-      <v-btn :disabled="!hasConfirmed">{{ $t(submitPath) }}</v-btn>
+      <v-sheet>
+        <v-btn class="mr-2" @click="$router.back()">
+          {{ $t(buttonsPath + "back") }}
+        </v-btn>
+        <v-btn :loading="waitingForResponse" :disabled="!hasConfirmed" @click="submit">
+          {{ $t(buttonsPath + "submit") }}
+        </v-btn>
+      </v-sheet>
+      <v-dialog v-model="dialogIsVisible" width="auto">
+        <v-card>
+          <v-card-title>
+            {{ $t(dialogPath + "header") }}
+          </v-card-title>
+          <v-card-text class="text-center">
+            <div v-html="dialogMsg" />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="hideDialog">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-sheet>
   </main>
 </template>

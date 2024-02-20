@@ -2,24 +2,31 @@ import { ref, computed, type Ref } from "vue";
 import { defineStore } from "pinia";
 import type { RegistrationForm } from "@/util/types";
 import router from "@/router";
+import { RESTError } from "@/util/error";
 
 type Role = "Applicant" | "Recruiter" | "";
 
 export const useAuthStore = defineStore("auth", () => {
-  const token = ref("");
-  const isAuthenticated = computed(() => !!token.value);
+  const loginToken = ref("");
+  const resetToken = ref("");
+  const isAuthenticated = computed(() => !!loginToken.value);
   const role: Ref<Role> = ref("");
 
-  function register(registrationForm: RegistrationForm) {
-    fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
+  async function register(registrationForm: RegistrationForm): Promise<RESTError> {
+    const response = await fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(registrationForm)
-    }).then((response) => {
-      console.log("status code: " + response.status);
     });
+    const jsonResponse = await response.json();
+
+    if (response.status === 200) {
+      return await login(registrationForm.username, registrationForm.password);
+    } else {
+      return jsonResponse.error as RESTError;
+    }
   }
 
   function parseJwt(encryptedToken: string) {
@@ -38,39 +45,66 @@ export const useAuthStore = defineStore("auth", () => {
     return JSON.parse(jsonPayload);
   }
 
-  function login(username: string, password: string) {
-    fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
+  async function login(username: string, password: string): Promise<RESTError> {
+    const response = await fetch("https://login-service-afb21392797e.herokuapp.com/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ identity: username, password })
-    }).then((response) => {
-      if (response.status !== 200) {
-        response.json().then((result) => console.log(result));
-        // throw "could not login, status code: " + response.status
-      } else {
-        response.json().then((result) => {
-          token.value = result.token;
-          role.value = parseJwt(result.token).role === 2 ? "Applicant" : "Recruiter";
-          router.push("application");
-        });
-      }
     });
+    const jsonResponse = await response.json();
+
+    if (response.status === 200) {
+      loginToken.value = jsonResponse.token;
+      role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
+      router.push("/");
+      return RESTError.None;
+    } else {
+      if (jsonResponse.error === RESTError.MissingPassword) {
+        resetToken.value = jsonResponse.details.reset_token;
+      }
+      return jsonResponse.error as RESTError;
+    }
+  }
+
+  async function resetPassword(password: string): Promise<RESTError> {
+    const response = await fetch("https://login-service-afb21392797e.herokuapp.com/api/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resetToken.value}`
+      },
+      body: JSON.stringify({ password })
+    });
+    const jsonResponse = await response.json();
+
+    resetToken.value = "";
+    if (response.status === 200) {
+      loginToken.value = jsonResponse.token;
+      role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
+      router.push("/");
+      return RESTError.None;
+    } else {
+      return jsonResponse.error as RESTError;
+    }
   }
 
   function logout() {
-    token.value = "";
+    loginToken.value = "";
+    resetToken.value = "";
     role.value = "";
     router.push("/");
   }
 
   return {
-    token,
+    loginToken,
+    resetToken,
     isAuthenticated,
     role,
     register,
     login,
+    resetPassword,
     logout
   };
 });
