@@ -20,11 +20,11 @@ export const useAuthStore = defineStore("auth", () => {
       },
       body: JSON.stringify(registrationForm)
     });
-    const jsonResponse = await response.json();
 
     if (response.status === 200) {
       return await login(registrationForm.username, registrationForm.password);
     } else {
+      const jsonResponse = await response.json();
       return jsonResponse.error as RESTError;
     }
   }
