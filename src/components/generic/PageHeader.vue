@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router"
+import { RouterLink } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
@@ -13,30 +13,30 @@ function changeLocale(locale: string) {
 </script>
 
 <template>
-    <header>
-        <nav>
-        <RouterLink v-if="isAuthenticated" @click="authStore.logout()" to="">{{ $t("navigation.logout") }}</RouterLink>
-        <RouterLink v-if="!isAuthenticated" to="/">{{ $t("navigation.login") }}</RouterLink>
-        <RouterLink v-if="!isAuthenticated" to="/register">{{ $t("navigation.register") }}</RouterLink>
-        </nav>
-        <v-btn>
-        <v-icon icon="mdi-translate" />
-        <v-menu activator="parent">
-            <v-list>
-            <v-list-item
-                v-for="language in i18n.availableLocales"
-                :key="language"
-                :value="language"
-                @click="() => changeLocale(language)"
-            >
-                <v-list-item-title>
-                {{ $t("languages." + language) }}
-                </v-list-item-title>
-            </v-list-item>
-            </v-list>
-        </v-menu>
-        </v-btn>
-    </header>
+  <header>
+    <nav>
+      <RouterLink v-if="isAuthenticated" @click="authStore.logout()" to="">{{ $t("navigation.logout") }}</RouterLink>
+      <RouterLink v-if="!isAuthenticated" to="/">{{ $t("navigation.login") }}</RouterLink>
+      <RouterLink v-if="!isAuthenticated" to="/register">{{ $t("navigation.register") }}</RouterLink>
+    </nav>
+    <v-btn>
+      <v-icon icon="mdi-translate" />
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item
+            v-for="language in i18n.availableLocales"
+            :key="language"
+            :value="language"
+            @click="() => changeLocale(language)"
+          >
+            <v-list-item-title>
+              {{ $t("languages." + language) }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+  </header>
 </template>
 
 <style scoped>

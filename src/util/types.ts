@@ -33,15 +33,15 @@ export interface ApplicantRow {
     person_id: number;
     pnr: string;
     email: string;
-  },
+  };
   competences: {
     competence_id: number;
     years_of_experience: number;
-  }[],
+  }[];
   availabilities: {
     from_date: string;
     to_date: string;
-  }[],
+  }[];
   status: "Pending" | "Reject" | "Accept" | "UNHANDLED";
   actions: "mdi-eye";
 }
@@ -52,5 +52,5 @@ export interface CompetenceIdAndYears {
 }
 
 export interface CompetenceIdAndI18nKey extends Omit<CompetenceIdAndYears, "years_of_experience"> {
-  i18n_key: string
+  i18n_key: string;
 }

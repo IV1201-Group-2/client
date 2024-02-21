@@ -4,7 +4,7 @@ import { statuses } from "@/util/constants";
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
-import { useStatusStore } from "@/stores/status"
+import { useStatusStore } from "@/stores/status";
 import { useErrorStore } from "@/stores/error";
 import { useI18n } from "vue-i18n";
 import { BASE_URL } from "@/util/api";
@@ -18,7 +18,7 @@ const statusPath = basePath + "status.";
 const actionsPath = statusPath + "actions.";
 const undoMsgPath = statusPath + "undo-message.";
 
-const applicantStatus = ref(statuses[status.value.charAt(0).toLowerCase() + status.value.slice(1) as keyof Statuses]);
+const applicantStatus = ref(statuses[(status.value.charAt(0).toLowerCase() + status.value.slice(1)) as keyof Statuses]);
 const isHandled = computed(() => applicantStatus.value.i18nPath !== statuses.pending.i18nPath);
 const dialogIsVisible = ref(false);
 const undoMsgBody = computed(() => t(undoMsgPath + "body"));
@@ -49,17 +49,19 @@ function submitStatus(statusKey: StatusKeys) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer:${loginToken.value}`
+      Authorization: `Bearer:${loginToken.value}`
     },
     body: JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) })
-  }).then((response) => {
-    if (response.status !== 200) {
-      showGenericErrorMsg();
-    } else {
-      applicantStatus.value = statuses[statusKey]
-    }
-  }).catch(_ => showGenericErrorMsg());
-  
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        showGenericErrorMsg();
+      } else {
+        applicantStatus.value = statuses[statusKey];
+      }
+    })
+    .catch(() => showGenericErrorMsg());
+
   function captializeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }

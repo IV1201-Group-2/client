@@ -18,7 +18,7 @@ const msg = computed(() => t(basePath + (specificMsg.value ? specificMsg.value :
 
 function resetPage() {
   logout();
-  router.push("/")
+  router.push("/");
   hideGenericErrorMsg();
 }
 </script>

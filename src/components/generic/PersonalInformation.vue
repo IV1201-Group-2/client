@@ -42,22 +42,24 @@ function getPersonalInformation() {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${loginToken.value}`
+      Authorization: `Bearer ${loginToken.value}`
     }
   };
 
-  fetch(url, options).then((response) => {
-    if (response.status !== 200) {
-      showGenericErrorMsg();
-    } else {
-      response.json().then((result) => {
-        firstNameInput.value = result.name;
-        lastNameInput.value = result.surname;
-        personNumberInput.value = result.pnr;
-        emailInput.value = result.email;
-      });
-    }
-  }).catch(_ => showGenericErrorMsg("cannot-fetch-data"));
+  fetch(url, options)
+    .then((response) => {
+      if (response.status !== 200) {
+        showGenericErrorMsg();
+      } else {
+        response.json().then((result) => {
+          firstNameInput.value = result.name;
+          lastNameInput.value = result.surname;
+          personNumberInput.value = result.pnr;
+          emailInput.value = result.email;
+        });
+      }
+    })
+    .catch(() => showGenericErrorMsg("cannot-fetch-data"));
 }
 </script>
 

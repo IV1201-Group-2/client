@@ -32,35 +32,35 @@ const dialogMsg = ref("");
 function submit() {
   isWaitingForResponse();
   const competencesPromise = getSelectableCompetences(loginToken);
-  competencesPromise.then((response) => {
-    if (response.status !== 200) {
-      dialogMsg.value = t(dialogPath + "failure");
-      showDialog();
-      noLongerWaitingForResponse();
-    } else {
-      response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
-        
+  competencesPromise
+    .then((response) => {
+      if (response.status !== 200) {
+        dialogMsg.value = t(dialogPath + "failure");
+        showDialog();
+        noLongerWaitingForResponse();
+      } else {
+        response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
+          const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
+          const selectedCompetenceIdsAndAreas = result.filter((competence) =>
+            selectedCompetenceAreas.includes(competence.i18n_key)
+          );
+          const selectedCompetenceIdsAndYears: CompetenceIdAndYears[] = selectedCompetenceIdsAndAreas.map(
+            (competenceWithId) => {
+              const competenceAreaAndYears = competenceList.value.data.find(
+                (competenceWithYear) => competenceWithId.i18n_key === competenceWithYear.areaOfExpertise
+              );
+              return {
+                competence_id: competenceWithId.competence_id,
+                years_of_experience: competenceAreaAndYears!.yearsOfExperience
+              };
+            }
+          );
 
-        const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
-        const selectedCompetenceIdsAndAreas = result.filter((competence) =>
-          selectedCompetenceAreas.includes(competence.i18n_key)
-        );
-        const selectedCompetenceIdsAndYears: CompetenceIdAndYears[] = selectedCompetenceIdsAndAreas.map(
-          (competenceWithId) => {
-            const competenceAreaAndYears = competenceList.value.data.find(
-              (competenceWithYear) => competenceWithId.i18n_key === competenceWithYear.areaOfExpertise
-            );
-            return {
-              competence_id: competenceWithId.competence_id,
-              years_of_experience: competenceAreaAndYears!.yearsOfExperience
-            };
-          }
-        );
-
-        storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
-      });
-    }
-  }).catch(_ => showGenericErrorMsg());
+          storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
+        });
+      }
+    })
+    .catch(() => showGenericErrorMsg());
 
   function storeApplication(selectedCompetenceIdsAndYears: any, availabilities: AvailabilityList) {
     const url = BASE_URL.APPLICATION_FORM + "/api/application-form/submit/";
@@ -79,19 +79,21 @@ function submit() {
       })
     };
 
-    fetch(url, options).then(async (response) => {
-      const result = await response.json();
+    fetch(url, options)
+      .then(async (response) => {
+        const result = await response.json();
 
-      if (result?.error === "ALREADY_APPLIED_BEFORE") {
-        dialogMsg.value = t(dialogPath + "already-applied");
-      } else if (response.status !== 201) {
-        dialogMsg.value = t(dialogPath + "failure");
-      } else {
-        dialogMsg.value = t(dialogPath + "success");
-      }
-      showDialog();
-      noLongerWaitingForResponse();
-    }).catch(_ => showGenericErrorMsg());
+        if (result?.error === "ALREADY_APPLIED_BEFORE") {
+          dialogMsg.value = t(dialogPath + "already-applied");
+        } else if (response.status !== 201) {
+          dialogMsg.value = t(dialogPath + "failure");
+        } else {
+          dialogMsg.value = t(dialogPath + "success");
+        }
+        showDialog();
+        noLongerWaitingForResponse();
+      })
+      .catch(() => showGenericErrorMsg());
   }
 
   function showDialog() {

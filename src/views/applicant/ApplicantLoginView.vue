@@ -5,7 +5,7 @@ import { RESTError } from "@/util/error";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { login, resetPassword, logout } = useAuthStore();
+const { login, resetPassword } = useAuthStore();
 const i18n = useI18n();
 
 const basePath = "applicant.login-page.";

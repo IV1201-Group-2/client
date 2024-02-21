@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ApplicantRow } from "@/util/types"
+import type { ApplicantRow } from "@/util/types";
 import { computed, ref, type Ref } from "vue";
 import { statuses } from "@/util/constants";
 import router from "@/router";
@@ -15,8 +15,8 @@ const { showGenericErrorMsg } = useErrorStore();
 const { t } = useI18n();
 
 interface Applications {
-  applications: Omit<ApplicantRow, "actions">[]
-  errors: Array<[error: string]>
+  applications: Omit<ApplicantRow, "actions">[];
+  errors: Array<[error: string]>;
 }
 
 const { basePath, statusPath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths();
@@ -33,7 +33,7 @@ const actions = computed(() => t(tableHeaderPath + "actions"));
 const itemsPerPageText = computed(() => t(tableFooterPath + "items-per-page-text"));
 const viewTooltip = computed(() => t(tooltipPath + "view"));
 
-const rows: Ref<ApplicantRow[]> = ref([])
+const rows: Ref<ApplicantRow[]> = ref([]);
 
 const headers: any = [
   { title: firstName, align: "start", key: "personal_info.name" },
@@ -44,26 +44,34 @@ const headers: any = [
   { title: actions, align: "center", key: "actions" }
 ];
 
-
 fetch(BASE_URL.RECRUITER + "/api/applications/", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${loginToken.value}`
+    Authorization: `Bearer ${loginToken.value}`
   }
-}).then(response => {
-  if(response.status === 200) {
-    response.json().then((result)  => {
-      const applications: ApplicantRow[] = (result as Array<ApplicantRow>).map(application => ({ ...application, status: application.status === "UNHANDLED" ? "Pending" : application.status, actions: 'mdi-eye' }));
-      rows.value = applications;
-    })
-  } else if(response.status === 206) {
-    response.json().then((result) => {
-      const applications: ApplicantRow[] = (result as Applications).applications.map(application => ({ ...application, actions: 'mdi-eye' }));
-      rows.value = applications;
-    })
-  }
-}).catch(_ => showGenericErrorMsg("cannot-fetch-applications"))
+})
+  .then((response) => {
+    if (response.status === 200) {
+      response.json().then((result) => {
+        const applications: ApplicantRow[] = (result as Array<ApplicantRow>).map((application) => ({
+          ...application,
+          status: application.status === "UNHANDLED" ? "Pending" : application.status,
+          actions: "mdi-eye"
+        }));
+        rows.value = applications;
+      });
+    } else if (response.status === 206) {
+      response.json().then((result) => {
+        const applications: ApplicantRow[] = (result as Applications).applications.map((application) => ({
+          ...application,
+          actions: "mdi-eye"
+        }));
+        rows.value = applications;
+      });
+    }
+  })
+  .catch(() => showGenericErrorMsg("cannot-fetch-applications"));
 
 function initPaths() {
   const basePath = "recruiter.admin-panel.";
@@ -88,7 +96,7 @@ function view(applicant: ApplicantRow) {
   <main style="height: 30rem">
     <div class="text-h3 text-center mb-10">{{ header }}</div>
     <v-data-table :items="rows" :headers="headers" :items-per-page-text="itemsPerPageText">
-     <template #item.actions="{ value, index }">
+      <template #item.actions="{ value, index }">
         <v-tooltip :text="viewTooltip">
           <template #activator="{ props }">
             <v-icon :icon="value" v-bind="props" @click="view(rows[index])" />
@@ -106,7 +114,7 @@ function view(applicant: ApplicantRow) {
         <v-chip v-if="value === 'Reject'" :color="statuses.reject.color" :append-icon="statuses.reject.icon">
           {{ t(statusPath + statuses.reject.i18nPath) }}
         </v-chip>
-      </template> 
+      </template>
     </v-data-table>
   </main>
 </template>

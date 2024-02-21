@@ -21,26 +21,36 @@ const availabilityPath = basePath + "availability.";
 
 const processedAvailabilityList: AvailabilityList = {
   __typename: "AvailabilityList",
-  data: availabilityList.value.map(availability => ({ start: availability.from_date, end: availability.to_date }))
-}
+  data: availabilityList.value.map((availability) => ({ start: availability.from_date, end: availability.to_date }))
+};
 
 const processedCompetenceList: Ref<CompetenceList> = ref({
   __typename: "CompetenceList",
   data: []
 });
 
-getSelectableCompetences(loginToken).then(response => {
-  if(response.status !== 200) {
-    showGenericErrorMsg();
-  } else {
-    response.json().then((competenceIdsAndI18nKeys: Array<CompetenceIdAndI18nKey>) => {
-      processedCompetenceList.value = { ...processedCompetenceList.value, data: competenceList.value.map((competence) => {
-        const competenceIdAndI18nKey = competenceIdsAndI18nKeys.find(competenceIdAndI18nKey => competenceIdAndI18nKey.competence_id === competence.competence_id);
-        return { areaOfExpertise: competenceIdAndI18nKey!.i18n_key, yearsOfExperience: competence.years_of_experience }
-      }) }
-    })
-  }
-}).catch(_ => showGenericErrorMsg())
+getSelectableCompetences(loginToken)
+  .then((response) => {
+    if (response.status !== 200) {
+      showGenericErrorMsg();
+    } else {
+      response.json().then((competenceIdsAndI18nKeys: Array<CompetenceIdAndI18nKey>) => {
+        processedCompetenceList.value = {
+          ...processedCompetenceList.value,
+          data: competenceList.value.map((competence) => {
+            const competenceIdAndI18nKey = competenceIdsAndI18nKeys.find(
+              (competenceIdAndI18nKey) => competenceIdAndI18nKey.competence_id === competence.competence_id
+            );
+            return {
+              areaOfExpertise: competenceIdAndI18nKey!.i18n_key,
+              yearsOfExperience: competence.years_of_experience
+            };
+          })
+        };
+      });
+    }
+  })
+  .catch(() => showGenericErrorMsg());
 </script>
 
 <template>
