@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import type { ApplicantRow } from "@/util/types";
+import { computed, ref, type Ref } from "vue";
 import { statuses } from "@/util/constants";
 import router from "@/router";
+import { storeToRefs } from "pinia";
+import { useStatusStore } from "@/stores/status";
+import { useAuthStore } from "@/stores/auth";
+import { useErrorStore } from "@/stores/error";
 import { useI18n } from "vue-i18n";
+import { BASE_URL } from "@/util/api";
+const { setApplicant } = useStatusStore();
+const { loginToken } = storeToRefs(useAuthStore());
+const { showGenericErrorMsg } = useErrorStore();
 const { t } = useI18n();
 
-interface ApplicantRow {
-  firstName: string;
-  lastName: string;
-  personNumber: string;
-  email: string;
-  status: "accepted" | "rejected" | "pending";
-  actions: "mdi-eye";
+interface Applications {
+  applications: Omit<ApplicantRow, "actions">[];
+  errors: Array<[error: string]>;
 }
 
 const { basePath, statusPath, tableHeaderPath, tableFooterPath, tooltipPath } = initPaths();
@@ -28,114 +33,45 @@ const actions = computed(() => t(tableHeaderPath + "actions"));
 const itemsPerPageText = computed(() => t(tableFooterPath + "items-per-page-text"));
 const viewTooltip = computed(() => t(tooltipPath + "view"));
 
-const tempCurrDate = computed(() => new Date().toISOString().substring(0, 10));
+const rows: Ref<ApplicantRow[]> = ref([]);
 
 const headers: any = [
-  { title: firstName, align: "start", key: "firstName" },
-  { title: lastName, align: "start", key: "lastName" },
-  { title: personNumber, align: "start", key: "personNumber" },
-  { title: email, align: "start", key: "email" },
+  { title: firstName, align: "start", key: "personal_info.name" },
+  { title: lastName, align: "start", key: "personal_info.surname" },
+  { title: personNumber, align: "start", key: "personal_info.pnr" },
+  { title: email, align: "start", key: "personal_info.email" },
   { title: status, align: "start", key: "status" },
   { title: actions, align: "center", key: "actions" }
 ];
-const test: ApplicantRow[] = [
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "pending",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "rejected",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "pending",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "rejected",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "pending",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Daniel",
-    lastName: "Dahlberg",
-    personNumber: "930822-1234",
-    email: "test@exempel.com",
-    status: "rejected",
-    actions: "mdi-eye"
-  },
-  {
-    firstName: "Sven",
-    lastName: "Svensson",
-    personNumber: "930822-1235",
-    email: "test@exempel.com",
-    status: "accepted",
-    actions: "mdi-eye"
+
+fetch(BASE_URL.RECRUITER + "/api/applications/", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${loginToken.value}`
   }
-];
+})
+  .then((response) => {
+    if (response.status === 200) {
+      response.json().then((result) => {
+        const applications: ApplicantRow[] = (result as Array<ApplicantRow>).map((application) => ({
+          ...application,
+          status: application.status === "UNHANDLED" ? "Pending" : application.status,
+          actions: "mdi-eye"
+        }));
+        rows.value = applications;
+      });
+    } else if (response.status === 206) {
+      response.json().then((result) => {
+        const applications: ApplicantRow[] = (result as Applications).applications.map((application) => ({
+          ...application,
+          actions: "mdi-eye"
+        }));
+        rows.value = applications;
+      });
+    }
+  })
+  .catch(() => showGenericErrorMsg("cannot-fetch-applications"));
 
 function initPaths() {
   const basePath = "recruiter.admin-panel.";
@@ -150,7 +86,8 @@ function initPaths() {
   };
 }
 
-function view() {
+function view(applicant: ApplicantRow) {
+  setApplicant(applicant);
   router.push(router.currentRoute.value.path + "/handle");
 }
 </script>
@@ -158,24 +95,24 @@ function view() {
 <template>
   <main style="height: 30rem">
     <div class="text-h3 text-center mb-10">{{ header }}</div>
-    <v-data-table :items="test" :headers="headers" :items-per-page-text="itemsPerPageText">
-      <template #item.actions="{ value }">
+    <v-data-table :items="rows" :headers="headers" :items-per-page-text="itemsPerPageText">
+      <template #item.actions="{ value, index }">
         <v-tooltip :text="viewTooltip">
           <template #activator="{ props }">
-            <v-icon :icon="value" v-bind="props" @click="view" />
+            <v-icon :icon="value" v-bind="props" @click="view(rows[index])" />
           </template>
         </v-tooltip>
       </template>
 
       <template #item.status="{ value }">
-        <v-chip v-if="value === 'pending'" :color="statuses.pending.color" :append-icon="statuses.pending.icon">
+        <v-chip v-if="value === 'Pending'" :color="statuses.pending.color" :append-icon="statuses.pending.icon">
           {{ t(statusPath + statuses.pending.i18nPath) }}
         </v-chip>
-        <v-chip v-if="value === 'accepted'" :color="statuses.accepted.color" :append-icon="statuses.accepted.icon">
-          {{ t(statusPath + statuses.accepted.i18nPath) }}
+        <v-chip v-if="value === 'Accept'" :color="statuses.accept.color" :append-icon="statuses.accept.icon">
+          {{ t(statusPath + statuses.accept.i18nPath) }}
         </v-chip>
-        <v-chip v-if="value === 'rejected'" :color="statuses.rejected.color" :append-icon="statuses.rejected.icon">
-          {{ t(statusPath + statuses.rejected.i18nPath) }}
+        <v-chip v-if="value === 'Reject'" :color="statuses.reject.color" :append-icon="statuses.reject.icon">
+          {{ t(statusPath + statuses.reject.i18nPath) }}
         </v-chip>
       </template>
     </v-data-table>

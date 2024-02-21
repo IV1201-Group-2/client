@@ -5,7 +5,7 @@ import { RESTError } from "@/util/error";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { login, resetPassword, logout } = useAuthStore();
+const { login, resetPassword } = useAuthStore();
 const i18n = useI18n();
 
 const basePath = "applicant.login-page.";
@@ -52,7 +52,7 @@ const resetDisabled = computed(() => newPassword.value.length === 0);
       <br />
       <v-form @submit.prevent>
         <v-text-field v-model="username" :label="$t(fieldsPath + 'username')" />
-        <v-text-field v-model="password" :label="$t(fieldsPath + 'password')" />
+        <v-text-field v-model="password" type="password" :label="$t(fieldsPath + 'password')" />
         <v-btn type="submit" :disabled="loginDisabled" @click="onLogin(username, password)" block>{{
           $t(buttonsPath + "login")
         }}</v-btn>

@@ -10,7 +10,7 @@ export interface RegistrationForm {
   password: string;
 }
 
-type StatusKeys = "accepted" | "pending" | "rejected";
+export type StatusKeys = "accept" | "pending" | "reject";
 
 /**
  * Specifies the statuses an application be set to by the recruiter.
@@ -22,3 +22,35 @@ export type Statuses = {
     color: string;
   };
 };
+
+/**
+ * Specifies a row in the admin panel list of applications
+ */
+export interface ApplicantRow {
+  personal_info: {
+    name: string;
+    surname: string;
+    person_id: number;
+    pnr: string;
+    email: string;
+  };
+  competences: {
+    competence_id: number;
+    years_of_experience: number;
+  }[];
+  availabilities: {
+    from_date: string;
+    to_date: string;
+  }[];
+  status: "Pending" | "Reject" | "Accept" | "UNHANDLED";
+  actions: "mdi-eye";
+}
+
+export interface CompetenceIdAndYears {
+  competence_id: number;
+  years_of_experience: number;
+}
+
+export interface CompetenceIdAndI18nKey extends Omit<CompetenceIdAndYears, "years_of_experience"> {
+  i18n_key: string;
+}

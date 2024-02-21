@@ -16,6 +16,15 @@
       "password": "lösenord"
     }
   },
+  "generic-error": {
+    "header": "Varning!",
+    "generic-msg": "Något gick snett. <br> Vänligen försök igen senare.",
+    "specific-msg": {
+      "cannot-fetch-data": "Hämtning av uppgifter som krävs för att slutföra din förfrågan misslyckades. <br> Vänligen försök igen senare.",
+      "cannot-fetch-applications": "Kunde ej hämta ansökningarna. <br> Vänligen kontakta teknisk support."
+    },
+    "take-me-back": "Ta mig tillbaka"
+  },
   "applicant": {
     "login-page": {
       "header": "Välkommen",
@@ -151,8 +160,8 @@
       "status": {
         "header": "Status",
         "pending": "Bearbetas",
-        "accepted": "Accepterad",
-        "rejected": "Nekad",
+        "accept": "Accepterad",
+        "reject": "Nekad",
         "actions": {
           "accept": "Acceptera",
           "reject": "Neka",

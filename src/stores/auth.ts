@@ -102,6 +102,7 @@ export const useAuthStore = defineStore("auth", () => {
     resetToken,
     isAuthenticated,
     role,
+    parseJwt,
     register,
     login,
     resetPassword,
