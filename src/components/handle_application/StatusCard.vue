@@ -5,29 +5,30 @@ import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useStatusStore } from "@/stores/status"
-import { useI18n } from "vue-i18n";;
+import { useErrorStore } from "@/stores/error";
+import { useI18n } from "vue-i18n";
+import { BASE_URL } from "@/util/api";
 const { loginToken } = storeToRefs(useAuthStore());
-const { applicantId } = storeToRefs(useStatusStore());
+const { applicantId, status } = storeToRefs(useStatusStore());
+const { showGenericErrorMsg } = useErrorStore();
 const { t } = useI18n();
-
-console.log(applicantId.value)
 
 const basePath = "recruiter.handle-application.";
 const statusPath = basePath + "status.";
 const actionsPath = statusPath + "actions.";
 const undoMsgPath = statusPath + "undo-message.";
 
-const status = ref(statuses.pending);
-const isHandled = computed(() => status.value.i18nPath !== statuses.pending.i18nPath);
+const applicantStatus = ref(statuses[status.value.charAt(0).toLowerCase() + status.value.slice(1) as keyof Statuses]);
+const isHandled = computed(() => applicantStatus.value.i18nPath !== statuses.pending.i18nPath);
 const dialogIsVisible = ref(false);
 const undoMsgBody = computed(() => t(undoMsgPath + "body"));
 
 function accept() {
-  submitStatus(statuses.accepted.i18nPath as keyof Statuses);
+  submitStatus(statuses.accept.i18nPath as keyof Statuses);
 }
 
 function reject() {
-  submitStatus(statuses.rejected.i18nPath as keyof Statuses);
+  submitStatus(statuses.reject.i18nPath as keyof Statuses);
 }
 
 function undo() {
@@ -44,8 +45,7 @@ function hideDialog() {
 }
 
 function submitStatus(statusKey: StatusKeys) {
-  console.log(JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) }))
-  fetch("https://application-status-service-e3dff919c7c0.herokuapp.com/api/applicant", {
+  fetch(BASE_URL.APPLICATION_STATUS + "/api/applicant", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,11 +54,11 @@ function submitStatus(statusKey: StatusKeys) {
     body: JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) })
   }).then((response) => {
     if (response.status !== 200) {
-      throw "could not set status. error code: " + response.status
+      showGenericErrorMsg();
     } else {
-      status.value = statuses[statusKey]
+      applicantStatus.value = statuses[statusKey]
     }
-  });
+  }).catch(_ => showGenericErrorMsg());
   
   function captializeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -72,8 +72,8 @@ function submitStatus(statusKey: StatusKeys) {
       {{ $t(statusPath + "header") }}
     </template>
     <v-card-item>
-      <v-chip :color="status.color" :append-icon="status.icon">
-        {{ $t(statusPath + status.i18nPath) }}
+      <v-chip :color="applicantStatus.color" :append-icon="applicantStatus.icon">
+        {{ $t(statusPath + applicantStatus.i18nPath) }}
       </v-chip>
     </v-card-item>
     <v-card-actions>

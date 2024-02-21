@@ -3,7 +3,10 @@ import { ApplicationTestId } from "@/util/enums";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
+import { useErrorStore } from "@/stores/error";
+import { BASE_URL } from "@/util/api";
 const { loginToken, role } = storeToRefs(useAuthStore());
+const { showGenericErrorMsg } = useErrorStore();
 const props = defineProps({
   basePath: {
     type: String,
@@ -34,18 +37,18 @@ function getPersonalInformation() {
     params = props.personId;
   }
 
-  const url = "https://personal-info-service-f25ca556a7c9.herokuapp.com/api/applicant/personal-info/" + params;
+  const url = BASE_URL.PERSONAL_INFORMATION + "/api/applicant/personal-info/" + params;
   let options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${loginToken.value}`
+      "Authorization": `Bearer ${loginToken.value}`
     }
   };
 
   fetch(url, options).then((response) => {
     if (response.status !== 200) {
-      throw "could not get personal information, status code: " + response.status;
+      showGenericErrorMsg();
     } else {
       response.json().then((result) => {
         firstNameInput.value = result.name;
@@ -54,7 +57,7 @@ function getPersonalInformation() {
         emailInput.value = result.email;
       });
     }
-  });
+  }).catch(_ => showGenericErrorMsg("cannot-fetch-data"));
 }
 </script>
 

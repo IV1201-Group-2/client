@@ -16,6 +16,15 @@
       "password": "password"
     }
   },
+  "generic-error": {
+    "header": "Warning!",
+    "generic-msg": "Something went wrong. <br> Please come back later.",
+    "specific-msg": {
+      "cannot-fetch-data": "Retrieval of information required for processing your request failed. <br> Please try again later.",
+      "cannot-fetch-applications": "Applications could not be retrieved. <br> Please contact technical support."
+    },
+    "take-me-back": "Take me back"
+  },
   "applicant": {
     "login-page": {
       "header": "Welcome",

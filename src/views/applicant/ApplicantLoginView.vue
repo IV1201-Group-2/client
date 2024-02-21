@@ -49,7 +49,7 @@ const onResetPassword = async (password: string) => {
       <br />
       <v-form @submit.prevent>
         <v-text-field v-model="username" :label="$t(fieldsPath + 'username')" />
-        <v-text-field v-model="password" :label="$t(fieldsPath + 'password')" />
+        <v-text-field v-model="password" type="password" :label="$t(fieldsPath + 'password')" />
         <v-btn type="submit" @click="onLogin(username, password)" block>{{ $t(buttonsPath + "login") }}</v-btn>
       </v-form>
     </v-sheet>

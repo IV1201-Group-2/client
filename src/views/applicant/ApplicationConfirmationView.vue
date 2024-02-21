@@ -2,16 +2,20 @@
 import { storeToRefs } from "pinia";
 import { useApplicationStore } from "@/stores/applicationForm";
 import { useAuthStore } from "@/stores/auth";
+import { useErrorStore } from "@/stores/error";
 import { useI18n } from "vue-i18n";
 import ItemList from "@/components/generic/ItemList.vue";
 import PersonalInformation from "@/components/generic/PersonalInformation.vue";
 import { ref } from "vue";
 import type { AvailabilityList } from "@/components/generic/types";
+import type { CompetenceIdAndYears } from "@/util/types";
+import { BASE_URL, getSelectableCompetences } from "@/util/api";
 const applicationStore = useApplicationStore();
 const authStore = useAuthStore();
 const { competenceList, availabilityList } = storeToRefs(applicationStore);
 const { loginToken } = storeToRefs(authStore);
 const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore;
+const { showGenericErrorMsg } = useErrorStore();
 const { t } = useI18n();
 
 const confirmationPath = basePath + "confirmation.";
@@ -27,7 +31,7 @@ const dialogMsg = ref("");
 
 function submit() {
   isWaitingForResponse();
-  const competencesPromise = getSelectableCompetences();
+  const competencesPromise = getSelectableCompetences(loginToken);
   competencesPromise.then((response) => {
     if (response.status !== 200) {
       dialogMsg.value = t(dialogPath + "failure");
@@ -35,10 +39,7 @@ function submit() {
       noLongerWaitingForResponse();
     } else {
       response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
-        interface CompetenceIdAndYears {
-          competence_id: number;
-          years_of_experience: number;
-        }
+        
 
         const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
         const selectedCompetenceIdsAndAreas = result.filter((competence) =>
@@ -59,10 +60,10 @@ function submit() {
         storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
       });
     }
-  });
+  }).catch(_ => showGenericErrorMsg());
 
   function storeApplication(selectedCompetenceIdsAndYears: any, availabilities: AvailabilityList) {
-    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/submit/";
+    const url = BASE_URL.APPLICATION_FORM + "/api/application-form/submit/";
     const options = {
       method: "POST",
       headers: {
@@ -77,10 +78,8 @@ function submit() {
         }))
       })
     };
-    console.log(options);
 
     fetch(url, options).then(async (response) => {
-      console.log(response.statusText);
       const result = await response.json();
 
       if (result?.error === "ALREADY_APPLIED_BEFORE") {
@@ -92,20 +91,7 @@ function submit() {
       }
       showDialog();
       noLongerWaitingForResponse();
-    });
-  }
-
-  function getSelectableCompetences() {
-    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/competences/";
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${loginToken.value}`
-      }
-    };
-
-    return fetch(url, options);
+    }).catch(_ => showGenericErrorMsg());
   }
 
   function showDialog() {

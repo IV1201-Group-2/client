@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("auth", () => {
   const loginToken = ref("");
   const resetToken = ref("");
   const isAuthenticated = computed(() => !!loginToken.value);
-  const role: Ref<Role> = ref("Recruiter");
+  const role: Ref<Role> = ref("");
 
   async function register(registrationForm: RegistrationForm): Promise<RESTError> {
     const response = await fetch("https://register-service-c7bdd87bf7fd.herokuapp.com/api/register", {
