@@ -40,6 +40,9 @@ const onResetPassword = async (password: string) => {
   loginErrorTranslation.value = i18n.t(`error.${loginError.value}`);
   showResetDialog.value = false;
 };
+
+const loginDisabled = computed(() => username.value.length === 0 || password.value.length === 0);
+const resetDisabled = computed(() => newPassword.value.length === 0);
 </script>
 
 <template>
@@ -50,7 +53,9 @@ const onResetPassword = async (password: string) => {
       <v-form @submit.prevent>
         <v-text-field v-model="username" :label="$t(fieldsPath + 'username')" />
         <v-text-field v-model="password" type="password" :label="$t(fieldsPath + 'password')" />
-        <v-btn type="submit" @click="onLogin(username, password)" block>{{ $t(buttonsPath + "login") }}</v-btn>
+        <v-btn type="submit" :disabled="loginDisabled" @click="onLogin(username, password)" block>{{
+          $t(buttonsPath + "login")
+        }}</v-btn>
       </v-form>
     </v-sheet>
     <v-dialog v-model="showErrorDialog" width="auto">
@@ -64,7 +69,7 @@ const onResetPassword = async (password: string) => {
       <v-card :text="$t(formPath + 'resetRequired')">
         <v-text-field class="mx-6" v-model="newPassword" :label="$t(fieldsPath + 'password')" />
         <v-card-actions class="justify-center">
-          <v-btn color="primary" :disabled="newPassword.length == 0" @click="onResetPassword(password)">Reset</v-btn>
+          <v-btn color="primary" :disabled="resetDisabled" @click="onResetPassword(password)">Reset</v-btn>
           <v-btn color="primary" @click="showResetDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
