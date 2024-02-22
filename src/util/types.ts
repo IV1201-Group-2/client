@@ -46,11 +46,17 @@ export interface ApplicantRow {
   actions: "mdi-eye";
 }
 
+/**
+ * Specifies a competence item in a format persistable by the database
+ */
 export interface CompetenceIdAndYears {
   competence_id: number;
   years_of_experience: number;
 }
 
+/**
+ * Specifies a competence item in a format that can be rendered on the client
+ */
 export interface CompetenceIdAndI18nKey extends Omit<CompetenceIdAndYears, "years_of_experience"> {
   i18n_key: string;
 }
