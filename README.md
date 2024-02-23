@@ -1,25 +1,22 @@
-# client
+# Client Service
 
-This template should help get you started developing with Vue 3 in Vite.
+## Table of Contents
+* [General Info](#general-info)
+* [Project Setup](#project-setup)
+* [Recommended IDE Setup](#recommended-ide-setup)
+* [File and Directory Semantics](#file-and-directory-semantics)
+* [Technologies](#technologies)
+
+## General info
+This repository contains all files relevant to the client:
+* The Vue project files
+* A lightweight Spring Boot server that serves the Vue build files.
+* A Dockerfile that builds and containerizes the Vue and Spring Boot build files.
+* A YAML file that enables the Docker container to run on Heroku.
 
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
@@ -31,6 +28,11 @@ npm install
 
 ```sh
 npm run dev
+```
+
+### Simulate how Heroku containerizes and launches the app with the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+```sh
+heroku local
 ```
 
 ### Type-Check, Compile and Minify for Production
@@ -45,8 +47,76 @@ npm run build
 npm run test:unit
 ```
 
+### Run Prettier Formatting
+```sh
+npm run format
+```
+
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
 ```
+
+## File and Directory Semantics
+- service
+  - src
+    - main
+      - java
+        - com
+          - iv1201
+            - clientservice
+              - ClientServiceApplication.java -> initiates spring boot server
+              - ServerController.java -> contains GET mapping to the client root
+      - ...
+    - ...
+  - mwnw -> build tool
+  - system.properties -> required Heroku settings
+  - ...
+- src
+  - assets
+    - base.css -> defines color system
+    - main.css -> defines meta css
+  - components
+    - __tests__
+      - custom_test_utils
+        - enums.ts -> defines enums for testing
+        - functions.ts -> defines custom functions for testing
+      - unit.setup.ts -> defines global plugins and mocks
+      - ... -> test files
+  - i18n
+    - locales
+      - en.json -> contains English translations
+      - sv.json -> contains Swedish translations
+    - index.ts -> exports configured instance of I18n
+  - router
+    - index.ts -> exports configured router
+  - stores
+    - ... -> state management stores
+  - util
+    - api.ts -> exports variables used for communicating with REST API:s
+    - constants.ts -> exports generic constants
+    - enums.ts -> exports generic enums
+    - error.ts -> exports REST API error response messages
+    - types.ts -> exports generic types
+    - validation.ts -> exports validation builder
+  - views
+    - ... -> views rendered by Vue's RouterView
+  - vuetify
+    - index.ts -> exports configured Vuetify instance
+  - App.vue -> root component
+  - main.ts -> initializes and configures root component
+- .env -> defines I18n default and fallback locales
+- Dockerfile -> contains Docker instructions
+- heroku.yml -> contains Heroku instructions for running docker
+
+## Technologies
+* CSS 3
+* HTML 5
+* Java 17
+* TypeScript 5.3
+* Pinia 2.1.7
+* Spring Boot 3.2.2
+* Vitest 1.2.2
+* Vue 3.4
+* Vuetify 3.5
