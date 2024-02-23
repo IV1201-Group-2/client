@@ -78,7 +78,7 @@ npm run lint
     - base.css -> defines color system
     - main.css -> defines meta css
   - components
-    - __tests__
+    - \_\_tests\_\_
       - custom_test_utils
         - enums.ts -> defines enums for testing
         - functions.ts -> defines custom functions for testing
