@@ -25,8 +25,8 @@ export const BASE_URL: ServiceBaseUrls = {
 
 /**
  * Fetches competences that can be selected inside the application form view.
- * 
- * @param loginToken 
+ *
+ * @param loginToken
  * @returns Promise
  */
 export function getSelectableCompetences(loginToken: Ref<string>) {
