@@ -11,6 +11,9 @@ interface ServiceBaseUrls {
 
 const domain = "herokuapp.com";
 
+/**
+ * The base URL:s used to access the server-side API:s
+ */
 export const BASE_URL: ServiceBaseUrls = {
   REGISTRATION: "https://register-service-c7bdd87bf7fd." + domain,
   LOGIN: "https://login-service-afb21392797e." + domain,
@@ -20,6 +23,12 @@ export const BASE_URL: ServiceBaseUrls = {
   APPLICATION_STATUS: "https://application-status-service-e3dff919c7c0." + domain
 };
 
+/**
+ * Fetches competences that can be selected inside the application form view.
+ *
+ * @param loginToken
+ * @returns Promise
+ */
 export function getSelectableCompetences(loginToken: Ref<string>) {
   const url = BASE_URL.APPLICATION_FORM + "/api/application-form/competences/";
   const options = {
