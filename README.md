@@ -111,4 +111,6 @@ npm run lint
 - heroku.yml -> contains Heroku instructions for running docker
 
 ## How to Handle API Calls
-Each API base URL:s is stored as a property of the object `BASE_URL` declared in `src/util/api.ts`. When making an API call, the appropriate property of `BASE_URL` should be concatenated with the endpoint.
+- Each API base URL is stored as a property of the object `BASE_URL` declared in and exported from `src/util/api.ts`.
+- When making an API call, the URL should be formed by concatenating the appropriate property of `BASE_URL` with the endpoint.
+- When adding a URL to `BASE_URL`, the property should be named after the service and capitalized.
