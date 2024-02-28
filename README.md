@@ -5,7 +5,7 @@
 * [Project Setup](#project-setup)
 * [Recommended IDE Setup](#recommended-ide-setup)
 * [File and Directory Semantics](#file-and-directory-semantics)
-* [Technologies](#technologies)
+* [How to Handle API Calls](#how-to-handle-api-calls)
 
 ## General info
 This repository contains all files relevant to the client:
@@ -110,13 +110,5 @@ npm run lint
 - Dockerfile -> contains Docker instructions
 - heroku.yml -> contains Heroku instructions for running docker
 
-## Technologies
-* CSS 3
-* HTML 5
-* Java 17
-* TypeScript 5.3
-* Pinia 2.1.7
-* Spring Boot 3.2.2
-* Vitest 1.2.2
-* Vue 3.4
-* Vuetify 3.5
+## How to Handle API Calls
+Each API base URL:s is stored as a property of the object `BASE_URL` declared in `src/util/api.ts`. When making an API call, the appropriate property of `BASE_URL` should be concatenated with the endpoint.
