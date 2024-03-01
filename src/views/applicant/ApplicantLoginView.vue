@@ -60,9 +60,13 @@ const loginDisabled = computed(() => username.value.length === 0 || password.val
     </v-dialog>
     <v-dialog v-model="showResetDialog" width="auto">
       <v-card :text="$t(formPath + 'resetEmail')">
-        <a :style="{fontSize: '12px', marginLeft: '40px', marginRight: '40px'}" :href="authStoreRefs.resetLink.value">{{ authStoreRefs.resetLink }}</a>
+        <a
+          :style="{ fontSize: '12px', marginLeft: '40px', marginRight: '40px' }"
+          :href="authStoreRefs.resetLink.value"
+          >{{ authStoreRefs.resetLink }}</a
+        >
         <v-card-actions class="justify-center">
-          <v-btn color="primary" @click="showResetDialog = false">{{ $t(buttonsPath + 'cancel') }}</v-btn>
+          <v-btn color="primary" @click="showResetDialog = false">{{ $t(buttonsPath + "cancel") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

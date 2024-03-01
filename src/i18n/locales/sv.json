@@ -30,12 +30,14 @@
       "header": "Välkommen",
       "form": {
         "resetEmail": "Ditt lösenord behöver återställas. Vänligen klicka på länken nedan för att välja ett nytt lösenord.",
+        "resetTitle": "Välj ett nytt lösenord för {user} nedan.",
         "fields": {
           "username": "Användarnamn",
           "password": "Lösenord"
         },
         "buttons": {
           "login": "Logga in",
+          "reset": "Byt lösenord",
           "cancel": "Avbryt"
         }
       }

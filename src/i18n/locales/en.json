@@ -30,12 +30,14 @@
       "header": "Welcome",
       "form": {
         "resetEmail": "Your password needs to be reset. Please click the link below to reset your password.",
+        "resetTitle": "Enter a new password for {user} below.",
         "fields": {
           "username": "Username",
           "password": "Password"
         },
         "buttons": {
           "login": "Log in",
+          "reset": "Reset password",
           "cancel": "Cancel"
         }
       }
