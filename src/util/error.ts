@@ -6,6 +6,7 @@ export enum RESTError {
   None = "none",
   Unknown = "UNKNOWN",
   MissingParameters = "MISSING_PARAMETERS",
+  InvalidToken = "INVALID_TOKEN",
 
   /* Registration */
   InvalidEmail = "INVALID_EMAIL",
