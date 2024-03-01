@@ -29,13 +29,14 @@
     "login-page": {
       "header": "Välkommen",
       "form": {
-        "resetRequired": "Ditt lösenord behöver återställas. Vänligen ange ett nytt lösenord.",
+        "resetEmail": "Ditt lösenord behöver återställas. Vänligen klicka på länken nedan för att välja ett nytt lösenord.",
         "fields": {
           "username": "Användarnamn",
           "password": "Lösenord"
         },
         "buttons": {
-          "login": "Logga in"
+          "login": "Logga in",
+          "cancel": "Avbryt"
         }
       }
     },
@@ -183,11 +184,12 @@
     "USERNAME_TAKEN": "Användarnamnet är upptaget",
     "EMAIL_TAKEN": "E-postadress är upptaget",
     "PNR_TAKEN": "Personnummer är upptaget",
-    "WRONG_IDENTITY": "Användaren kunde inte hittas",
-    "WRONG_PASSWORD": "Fel lösenord angett",
+    "WRONG_IDENTITY": "Fel användarnamn, e-postaddress eller lösenord angivet",
     "MISSING_PASSWORD": "Lösenord hittades inte i databasen",
     "ALREADY_LOGGED_IN": "Redan inloggad",
+    "INVALID_TOKEN": "Åtkomst nekad",
     "TOKEN_NOT_PROVIDED": "Åtkomst nekad",
+    "INVALID_ROUTE": "Okänd API",
     "UNKNOWN": "Okänt fel"
   }
 }

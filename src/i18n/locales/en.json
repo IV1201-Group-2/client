@@ -29,13 +29,14 @@
     "login-page": {
       "header": "Welcome",
       "form": {
-        "resetRequired": "Your password needs to be reset. Please enter a new password.",
+        "resetEmail": "Your password needs to be reset. Please click the link below to reset your password.",
         "fields": {
           "username": "Username",
           "password": "Password"
         },
         "buttons": {
-          "login": "Log in"
+          "login": "Log in",
+          "cancel": "Cancel"
         }
       }
     },
@@ -183,11 +184,12 @@
     "USERNAME_TAKEN": "That username is already taken",
     "EMAIL_TAKEN": "That email address is already taken",
     "PNR_TAKEN": "That person number is already taken",
-    "WRONG_IDENTITY": "User not found",
-    "WRONG_PASSWORD": "Wrong password provided",
+    "WRONG_IDENTITY": "Wrong username, email or password provided",
     "MISSING_PASSWORD": "No password in database",
     "ALREADY_LOGGED_IN": "Already logged in",
+    "INVALID_TOKEN": "Access denied",
     "TOKEN_NOT_PROVIDED": "Access denied",
+    "INVALID_ROUTE": "Invalid API route",
     "UNKNOWN": "Unknown error occured"
   }
 }
