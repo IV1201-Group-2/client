@@ -1,12 +1,4 @@
 # Client Service
-
-## Table of Contents
-* [General Info](#general-info)
-* [Project Setup](#project-setup)
-* [Recommended IDE Setup](#recommended-ide-setup)
-* [File and Directory Semantics](#file-and-directory-semantics)
-* [How to Handle API Calls](#how-to-handle-api-calls)
-
 ## General info
 This repository contains all files relevant to the client:
 * The Vue project files
@@ -58,6 +50,11 @@ npm run format
 npm run lint
 ```
 
+### How to Handle API Calls
+- Each API base URL is stored as a property of the object `BASE_URL` declared in and exported from `src/util/api.ts`.
+- When making an API call, the URL should be formed by concatenating the appropriate property of `BASE_URL` with the endpoint.
+- When adding a URL to `BASE_URL`, the property should be named after the service and capitalized.
+
 ## File and Directory Semantics
 ```
 ├───.github
@@ -87,7 +84,3 @@ npm run lint
     │   └───recruiter        - contains all views relevant for recruiters
     └───vuetify              - contains Vuetify (UI library) configurations
 ```
-## How to Handle API Calls
-- Each API base URL is stored as a property of the object `BASE_URL` declared in and exported from `src/util/api.ts`.
-- When making an API call, the URL should be formed by concatenating the appropriate property of `BASE_URL` with the endpoint.
-- When adding a URL to `BASE_URL`, the property should be named after the service and capitalized.
