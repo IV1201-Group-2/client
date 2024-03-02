@@ -59,57 +59,34 @@ npm run lint
 ```
 
 ## File and Directory Semantics
-- service
-  - src
-    - main
-      - java
-        - com
-          - iv1201
-            - clientservice
-              - ClientServiceApplication.java -> initiates spring boot server
-              - ServerController.java -> contains GET mapping to the client root
-      - ...
-    - ...
-  - mwnw -> build tool
-  - system.properties -> required Heroku settings
-  - ...
-- src
-  - assets
-    - base.css -> defines color system
-    - main.css -> defines meta css
-  - components
-    - \_\_tests\_\_
-      - custom_test_utils
-        - enums.ts -> defines enums for testing
-        - functions.ts -> defines custom functions for testing
-      - unit.setup.ts -> defines global plugins and mocks
-      - ... -> test files
-  - i18n
-    - locales
-      - en.json -> contains English translations
-      - sv.json -> contains Swedish translations
-    - index.ts -> exports configured instance of I18n
-  - router
-    - index.ts -> exports configured router
-  - stores
-    - ... -> state management stores
-  - util
-    - api.ts -> exports variables used for communicating with REST API:s
-    - constants.ts -> exports generic constants
-    - enums.ts -> exports generic enums
-    - error.ts -> exports REST API error response messages
-    - types.ts -> exports generic types
-    - validation.ts -> exports validation builder
-  - views
-    - ... -> views rendered by Vue's RouterView
-  - vuetify
-    - index.ts -> exports configured Vuetify instance
-  - App.vue -> root component
-  - main.ts -> initializes and configures root component
-- .env -> defines I18n default and fallback locales
-- Dockerfile -> contains Docker instructions
-- heroku.yml -> contains Heroku instructions for running docker
-
+```
+├───.github
+│   └───workflows            - contains GitHub action workflows for CI/CD
+├───dist                     - contains Vue build files after the project has been built
+├───public                   - contains favicon
+├───service
+│   ├───src
+│   │   ├───main
+│   │   │   ├───java         - contains the lightweight server serving the Vue build files
+│   │   │   └───resources
+│   │   │       └───static   - Vue build files must be put in here in order for the server to serve the files
+│   └───target               - contains the JAR file after the server has been compiled
+└───src
+    ├───assets               - contains meta CSS that affects the entire app
+    ├───components           - contains components used by the views defined in src/views
+    │   ├───generic          - contains components used by multiple views
+    │   ├───__tests__        - contains component tests
+    │   └───...              - remaining directories contain view-specific components
+    ├───i18n                 - contains internationalization related files
+    │   └───locales          - contains translations for each available language
+    ├───router               - contains routing configurations
+    ├───stores               - contains state management stores
+    ├───util                 - contains utility files
+    ├───views                - contains all views rendered by Vue's <RouterView> component
+    │   ├───applicant        - contains all views relevant for applicants
+    │   └───recruiter        - contains all views relevant for recruiters
+    └───vuetify              - contains Vuetify (UI library) configurations
+```
 ## How to Handle API Calls
 - Each API base URL is stored as a property of the object `BASE_URL` declared in and exported from `src/util/api.ts`.
 - When making an API call, the URL should be formed by concatenating the appropriate property of `BASE_URL` with the endpoint.
