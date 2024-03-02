@@ -96,10 +96,10 @@ function view(applicant: ApplicantRow) {
   <main style="height: 30rem">
     <div class="text-h3 text-center mb-10">{{ header }}</div>
     <v-data-table :items="rows" :headers="headers" :items-per-page-text="itemsPerPageText">
-      <template #item.actions="{ value, index }">
+      <template #item.actions="{ value, internalItem }">
         <v-tooltip :text="viewTooltip">
           <template #activator="{ props }">
-            <v-icon :icon="value" v-bind="props" @click="view(rows[index])" />
+            <v-icon :icon="value" v-bind="props" @click="view(internalItem.raw)" />
           </template>
         </v-tooltip>
       </template>
