@@ -2,16 +2,20 @@
 import { storeToRefs } from "pinia";
 import { useApplicationStore } from "@/stores/applicationForm";
 import { useAuthStore } from "@/stores/auth";
+import { useErrorStore } from "@/stores/error";
 import { useI18n } from "vue-i18n";
 import ItemList from "@/components/generic/ItemList.vue";
 import PersonalInformation from "@/components/generic/PersonalInformation.vue";
 import { ref } from "vue";
 import type { AvailabilityList } from "@/components/generic/types";
+import type { CompetenceIdAndYears } from "@/util/types";
+import { BASE_URL, getSelectableCompetences } from "@/util/api";
 const applicationStore = useApplicationStore();
 const authStore = useAuthStore();
 const { competenceList, availabilityList } = storeToRefs(applicationStore);
 const { loginToken } = storeToRefs(authStore);
 const { basePath, availabilityPath, competencePath, itemListPath } = applicationStore;
+const { showGenericErrorMsg } = useErrorStore();
 const { t } = useI18n();
 
 const confirmationPath = basePath + "confirmation.";
@@ -27,42 +31,39 @@ const dialogMsg = ref("");
 
 function submit() {
   isWaitingForResponse();
-  const competencesPromise = getSelectableCompetences();
-  competencesPromise.then((response) => {
-    if (response.status !== 200) {
-      dialogMsg.value = t(dialogPath + "failure");
-      showDialog();
-      noLongerWaitingForResponse();
-    } else {
-      response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
-        interface CompetenceIdAndYears {
-          competence_id: number;
-          years_of_experience: number;
-        }
+  const competencesPromise = getSelectableCompetences(loginToken);
+  competencesPromise
+    .then((response) => {
+      if (response.status !== 200) {
+        dialogMsg.value = t(dialogPath + "failure");
+        showDialog();
+        noLongerWaitingForResponse();
+      } else {
+        response.json().then((result: Array<{ competence_id: number; i18n_key: string }>) => {
+          const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
+          const selectedCompetenceIdsAndAreas = result.filter((competence) =>
+            selectedCompetenceAreas.includes(competence.i18n_key)
+          );
+          const selectedCompetenceIdsAndYears: CompetenceIdAndYears[] = selectedCompetenceIdsAndAreas.map(
+            (competenceWithId) => {
+              const competenceAreaAndYears = competenceList.value.data.find(
+                (competenceWithYear) => competenceWithId.i18n_key === competenceWithYear.areaOfExpertise
+              );
+              return {
+                competence_id: competenceWithId.competence_id,
+                years_of_experience: competenceAreaAndYears!.yearsOfExperience
+              };
+            }
+          );
 
-        const selectedCompetenceAreas = competenceList.value.data.map((competence) => competence.areaOfExpertise);
-        const selectedCompetenceIdsAndAreas = result.filter((competence) =>
-          selectedCompetenceAreas.includes(competence.i18n_key)
-        );
-        const selectedCompetenceIdsAndYears: CompetenceIdAndYears[] = selectedCompetenceIdsAndAreas.map(
-          (competenceWithId) => {
-            const competenceAreaAndYears = competenceList.value.data.find(
-              (competenceWithYear) => competenceWithId.i18n_key === competenceWithYear.areaOfExpertise
-            );
-            return {
-              competence_id: competenceWithId.competence_id,
-              years_of_experience: competenceAreaAndYears!.yearsOfExperience
-            };
-          }
-        );
-
-        storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
-      });
-    }
-  });
+          storeApplication(selectedCompetenceIdsAndYears, availabilityList.value);
+        });
+      }
+    })
+    .catch(() => showGenericErrorMsg());
 
   function storeApplication(selectedCompetenceIdsAndYears: any, availabilities: AvailabilityList) {
-    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/submit/";
+    const url = BASE_URL.APPLICATION_FORM + "/api/application-form/submit/";
     const options = {
       method: "POST",
       headers: {
@@ -77,35 +78,22 @@ function submit() {
         }))
       })
     };
-    console.log(options);
 
-    fetch(url, options).then(async (response) => {
-      console.log(response.statusText);
-      const result = await response.json();
+    fetch(url, options)
+      .then(async (response) => {
+        const result = await response.json();
 
-      if (result?.error === "ALREADY_APPLIED_BEFORE") {
-        dialogMsg.value = t(dialogPath + "already-applied");
-      } else if (response.status !== 201) {
-        dialogMsg.value = t(dialogPath + "failure");
-      } else {
-        dialogMsg.value = t(dialogPath + "success");
-      }
-      showDialog();
-      noLongerWaitingForResponse();
-    });
-  }
-
-  function getSelectableCompetences() {
-    const url = "https://application-form-service-8e764787209b.herokuapp.com/api/application-form/competences/";
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${loginToken.value}`
-      }
-    };
-
-    return fetch(url, options);
+        if (result?.error === "ALREADY_APPLIED_BEFORE") {
+          dialogMsg.value = t(dialogPath + "already-applied");
+        } else if (response.status !== 201) {
+          dialogMsg.value = t(dialogPath + "failure");
+        } else {
+          dialogMsg.value = t(dialogPath + "success");
+        }
+        showDialog();
+        noLongerWaitingForResponse();
+      })
+      .catch(() => showGenericErrorMsg());
   }
 
   function showDialog() {

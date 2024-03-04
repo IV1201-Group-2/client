@@ -16,17 +16,29 @@
       "password": "lösenord"
     }
   },
+  "generic-error": {
+    "header": "Varning!",
+    "generic-msg": "Något gick snett. <br> Vänligen försök igen senare.",
+    "specific-msg": {
+      "cannot-fetch-data": "Hämtning av uppgifter som krävs för att slutföra din förfrågan misslyckades. <br> Vänligen försök igen senare.",
+      "cannot-fetch-applications": "Kunde ej hämta ansökningarna. <br> Vänligen kontakta teknisk support."
+    },
+    "take-me-back": "Ta mig tillbaka"
+  },
   "applicant": {
     "login-page": {
       "header": "Välkommen",
       "form": {
-        "resetRequired": "Ditt lösenord behöver återställas. Vänligen ange ett nytt lösenord.",
+        "resetEmail": "Ditt lösenord behöver återställas. Vänligen klicka på länken nedan för att välja ett nytt lösenord.",
+        "resetTitle": "Välj ett nytt lösenord för {user} nedan.",
         "fields": {
           "username": "Användarnamn",
           "password": "Lösenord"
         },
         "buttons": {
-          "login": "Logga in"
+          "login": "Logga in",
+          "reset": "Byt lösenord",
+          "cancel": "Avbryt"
         }
       }
     },
@@ -151,8 +163,8 @@
       "status": {
         "header": "Status",
         "pending": "Bearbetas",
-        "accepted": "Accepterad",
-        "rejected": "Nekad",
+        "accept": "Accepterad",
+        "reject": "Nekad",
         "actions": {
           "accept": "Acceptera",
           "reject": "Neka",
@@ -174,11 +186,12 @@
     "USERNAME_TAKEN": "Användarnamnet är upptaget",
     "EMAIL_TAKEN": "E-postadress är upptaget",
     "PNR_TAKEN": "Personnummer är upptaget",
-    "WRONG_IDENTITY": "Användaren kunde inte hittas",
-    "WRONG_PASSWORD": "Fel lösenord angett",
+    "WRONG_IDENTITY": "Fel användarnamn, e-postaddress eller lösenord angivet",
     "MISSING_PASSWORD": "Lösenord hittades inte i databasen",
     "ALREADY_LOGGED_IN": "Redan inloggad",
+    "INVALID_TOKEN": "Åtkomst nekad",
     "TOKEN_NOT_PROVIDED": "Åtkomst nekad",
+    "INVALID_ROUTE": "Okänd API",
     "UNKNOWN": "Okänt fel"
   }
 }

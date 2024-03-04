@@ -16,17 +16,29 @@
       "password": "password"
     }
   },
+  "generic-error": {
+    "header": "Warning!",
+    "generic-msg": "Something went wrong. <br> Please come back later.",
+    "specific-msg": {
+      "cannot-fetch-data": "Retrieval of information required for processing your request failed. <br> Please try again later.",
+      "cannot-fetch-applications": "Applications could not be retrieved. <br> Please contact technical support."
+    },
+    "take-me-back": "Take me back"
+  },
   "applicant": {
     "login-page": {
       "header": "Welcome",
       "form": {
-        "resetRequired": "Your password needs to be reset. Please enter a new password.",
+        "resetEmail": "Your password needs to be reset. Please click the link below to reset your password.",
+        "resetTitle": "Enter a new password for {user} below.",
         "fields": {
           "username": "Username",
           "password": "Password"
         },
         "buttons": {
-          "login": "Log in"
+          "login": "Log in",
+          "reset": "Reset password",
+          "cancel": "Cancel"
         }
       }
     },
@@ -93,7 +105,7 @@
         "confirm": "I hereby confirm that the information provided is true.",
         "dialog": {
           "header": "Information",
-          "already-taken": "We could not receive your application since the application you previously sent us is still being processed. <br> We will get back to you as soon as possible.",
+          "already-applied": "We could not receive your application since the application you previously sent us is still being processed. <br> We will get back to you as soon as possible.",
           "success": "Thank you for your application! <br> We will get back to you as soon as possible.",
           "failure": "Your application could not be handled. <br> Please try again later."
         }
@@ -151,8 +163,8 @@
       "status": {
         "header": "Status",
         "pending": "Pending",
-        "accepted": "Accepted",
-        "rejected": "Rejected",
+        "accept": "Accepted",
+        "reject": "Rejected",
         "actions": {
           "accept": "Accept",
           "reject": "Reject",
@@ -174,11 +186,12 @@
     "USERNAME_TAKEN": "That username is already taken",
     "EMAIL_TAKEN": "That email address is already taken",
     "PNR_TAKEN": "That person number is already taken",
-    "WRONG_IDENTITY": "User not found",
-    "WRONG_PASSWORD": "Wrong password provided",
+    "WRONG_IDENTITY": "Wrong username, email or password provided",
     "MISSING_PASSWORD": "No password in database",
     "ALREADY_LOGGED_IN": "Already logged in",
+    "INVALID_TOKEN": "Access denied",
     "TOKEN_NOT_PROVIDED": "Access denied",
+    "INVALID_ROUTE": "Invalid API route",
     "UNKNOWN": "Unknown error occured"
   }
 }

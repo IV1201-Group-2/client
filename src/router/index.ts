@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/auth";
 import ApplicationConfirmationView from "@/views/applicant/ApplicationConfirmationView.vue";
 import AdminPanel from "@/views/recruiter/AdminPanel.vue";
 import HandleApplication from "@/views/recruiter/HandleApplication.vue";
+import ApplicantPasswordResetView from "@/views/applicant/ApplicantPasswordResetView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,14 @@ const router = createRouter({
         authenticatedPage: false
       },
       component: ApplicantRegistrationView
+    },
+    {
+      path: "/password-reset",
+      name: "password-reset",
+      meta: {
+        authenticatedPage: false
+      },
+      component: ApplicantPasswordResetView
     },
     {
       path: "/application",

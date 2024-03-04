@@ -8,7 +8,7 @@ type Role = "Applicant" | "Recruiter" | "";
 
 export const useAuthStore = defineStore("auth", () => {
   const loginToken = ref("");
-  const resetToken = ref("");
+  const resetLink = ref("");
   const isAuthenticated = computed(() => !!loginToken.value);
   const role: Ref<Role> = ref("");
 
@@ -20,11 +20,11 @@ export const useAuthStore = defineStore("auth", () => {
       },
       body: JSON.stringify(registrationForm)
     });
-    const jsonResponse = await response.json();
 
     if (response.status === 200) {
       return await login(registrationForm.username, registrationForm.password);
     } else {
+      const jsonResponse = await response.json();
       return jsonResponse.error as RESTError;
     }
   }
@@ -62,24 +62,24 @@ export const useAuthStore = defineStore("auth", () => {
       return RESTError.None;
     } else {
       if (jsonResponse.error === RESTError.MissingPassword) {
-        resetToken.value = jsonResponse.details.reset_token;
+        resetLink.value = window.location.origin + "/password-reset?token=" + jsonResponse.details.reset_token;
       }
       return jsonResponse.error as RESTError;
     }
   }
 
-  async function resetPassword(password: string): Promise<RESTError> {
+  async function resetPassword(token: string, password: string): Promise<RESTError> {
     const response = await fetch("https://login-service-afb21392797e.herokuapp.com/api/reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${resetToken.value}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ password })
     });
     const jsonResponse = await response.json();
 
-    resetToken.value = "";
+    resetLink.value = "";
     if (response.status === 200) {
       loginToken.value = jsonResponse.token;
       role.value = parseJwt(jsonResponse.token).role === 2 ? "Applicant" : "Recruiter";
@@ -92,16 +92,17 @@ export const useAuthStore = defineStore("auth", () => {
 
   function logout() {
     loginToken.value = "";
-    resetToken.value = "";
+    resetLink.value = "";
     role.value = "";
     router.push("/");
   }
 
   return {
     loginToken,
-    resetToken,
+    resetLink,
     isAuthenticated,
     role,
+    parseJwt,
     register,
     login,
     resetPassword,
