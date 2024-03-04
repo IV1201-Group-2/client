@@ -8,14 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 @Slf4j
 @Controller
 public class ServerController {
-    @GetMapping("")
+    @GetMapping("/{path:[^\\.]*}")
     public String acceptConnection(HttpServletRequest request) {
-        log.info("Application requested by {}", request.getRemoteAddr());
+        log.info("{} requested by {}", request.getRequestURI(), request.getRemoteAddr());
         return "index.html";
-    }
-
-    @RequestMapping(value = "/{path:[^\\.]*}")
-    public String redirect() {
-        return "forward:/";
     }
 }

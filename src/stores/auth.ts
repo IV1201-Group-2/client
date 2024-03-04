@@ -62,7 +62,7 @@ export const useAuthStore = defineStore("auth", () => {
       return RESTError.None;
     } else {
       if (jsonResponse.error === RESTError.MissingPassword) {
-        resetLink.value = window.location.origin + "/#/password-reset?token=" + jsonResponse.details.reset_token;
+        resetLink.value = window.location.origin + "/password-reset?token=" + jsonResponse.details.reset_token;
       }
       return jsonResponse.error as RESTError;
     }
