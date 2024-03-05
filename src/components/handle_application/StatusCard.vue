@@ -49,7 +49,7 @@ function submitStatus(statusKey: StatusKeys) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer:${loginToken.value}`
+      Authorization: `Bearer ${loginToken.value}`
     },
     body: JSON.stringify({ person_id: applicantId.value, status: captializeFirstLetter(statuses[statusKey].i18nPath) })
   })
